@@ -2887,6 +2887,7 @@ namespace UI{
 
 		} // End of MainFun
 		
+		//@imyjimmy
 		/// <summary>
 		/// Defines the menu for handling secondary structures (with ribbons)
 		/// </summary>
@@ -3098,7 +3099,7 @@ namespace UI{
 			GUILayout.EndHorizontal ();
 			
 			GUI.DragWindow();
-		}
+		} //SecStructMenu
 		
 		
 		/// <summary>

@@ -18,6 +18,8 @@ TagManager:
   - HBallManager
   - HStickManager
   - Club
+  - RibbonObjA
+  - RibbonObjB
   layers:
   - Default
   - TransparentFX

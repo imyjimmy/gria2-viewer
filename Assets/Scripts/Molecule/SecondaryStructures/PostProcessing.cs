@@ -159,7 +159,7 @@ public class PostProcessing {
 			}
 			mesh.colors32 = colors;
 			*/
-			
+			Debug.Log("tag: " + tag);
 			GameObject ribbObj = new GameObject(gameobj);
 			ribbObj.tag = tag;
 			ribbObj.AddComponent<MeshFilter>();

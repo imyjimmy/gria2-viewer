@@ -178,6 +178,7 @@ GameObject:
   - 4: {fileID: 679438650}
   - 114: {fileID: 679438651}
   - 114: {fileID: 679438652}
+  - 114: {fileID: 679438653}
   m_Layer: 0
   m_Name: LoadBox
   m_TagString: Untagged
@@ -241,9 +242,71 @@ MonoBehaviour:
   m_GameObject: {fileID: 679438649}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61eb414ec087d834b998682564ce970b, type: 3}
+  m_Script: {fileID: 11500000, guid: 42f7a671efa473140bb650b468f81b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &679438653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 679438649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27feb5fee9b398a4fa9a57aff8199aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  automove: 0
+  target: {fileID: 0}
+  targetOffset: {x: 0, y: 0, z: 0}
+  distance: 20
+  maxDistance: 1000
+  minDistance: -1000
+  xSpeed: 400
+  ySpeed: 400
+  yMinLimit: -80
+  yMaxLimit: 80
+  zoomRate: 200
+  panSpeed: 2
+  zoomDampening: 20
+  rotationFactor: 50
+  strength: 0.5
+  reslim: 192
+  originalCamPosition: {x: 0, y: 0, z: 0}
+  centerChanged: 0
+  newposition: {x: 0, y: 0, z: 0}
+  cameraLocalPositionSave: {x: 0, y: 0, z: 0}
+  cameraTranslation: 0
+  weight: 0
+  joypadDeadzone: 0.01
+  nav_speed: 1
+  navigationUp: 0
+  navigationDown: 0
+  guidedzoom: 0
+  checkangle: 0
+  isneg: 0
+  move: {x: 0, y: 0, z: 0}
+  panoramic: 0
+  reset_panoramic: 0
+  isabove: 0
+  isunder: 0
+  dirup: 0
+  dirdown: 0
+  rotation_done: 0
+  monomer_jump: 0
+  next_right: 0
+  next_left: 0
+  ghost_target: {fileID: 0}
+  ghost_target_real: {fileID: 0}
+  cam_pos_optimized: 0
+  angle: 0
+  RemotePhase: 1
+  HeightPhase: 1
+  RotatePhase: 1
+  ApproachPhase: 1
+  smooth: 0
+  FocusPhase: 1
+  transitionDuration: 2.5
 --- !u!1 &946647058
 GameObject:
   m_ObjectHideFlags: 0

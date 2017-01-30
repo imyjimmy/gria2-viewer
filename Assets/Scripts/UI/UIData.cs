@@ -113,7 +113,7 @@ namespace UI
 		public static bool connectivity_PDB = false;
 		public static bool resetDisplay=false;
 		public static bool isCubeToSphere=false;
-		public static bool isSphereToCube=true;
+		public static bool isSphereToCube=false; //true;
 		
 		public static bool resetBondDisplay=false;
 		

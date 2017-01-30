@@ -68,7 +68,7 @@ using System.Collections;
 using UI;
 using ParseData.ParsePDB;
 
-public class ScenePreload_1KX2 : MonoBehaviour {
+public class ScenePreload_5L1B : MonoBehaviour {
 	private float pdb_progress = 0;
 	private string progresses;
 	
@@ -97,8 +97,17 @@ public class ScenePreload_1KX2 : MonoBehaviour {
 		pdb_progress = 1.0f;
 		
 		//requestPDB.LoadPDBResource("1KX2");
-		UIData.atomtype = UIData.AtomType.hyperball;
-		UIData.bondtype = UIData.BondType.hyperstick;
+		// UIData.atomtype = UIData.AtomType.hyperball;
+		// UIData.bondtype = UIData.BondType.hyperstick;
+		UIData.atomtype = UIData.AtomType.noatom;
+		UIData.bondtype = UIData.BondType.nobond;
+		UIData.secondarystruct = true;
+
+		//trying it out
+		Ribbons ribbons = new Ribbons();
+		ribbons.CreateRibbons();
+		// toggle_NA_HIDE = !toggle_NA_HIDE; //GUIMoleculeController.toggle_NA_HIDE
+
 		GUIMoleculeController.showOpenMenu = false;
 		GUIMoleculeController.showAtomMenu = false;
 		GUIMoleculeController.globalRadius = 0.3f;
