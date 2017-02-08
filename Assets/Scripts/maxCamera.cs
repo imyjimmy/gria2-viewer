@@ -117,7 +117,8 @@ public class maxCamera : MonoBehaviour
 	private Vector3 position;
 	private bool guiControl = false;
 	private GameObject LoadBox;
-	public static GameObject LocCamera;
+	// public static GameObject LocCamera;
+	public static GameObject OVRPlayerController;
 	private Molecule3D Molecule3DComp;
 
 	// +------------------------------+
@@ -203,17 +204,19 @@ public class maxCamera : MonoBehaviour
 	public void Init ()
 	{
 		LoadBox = GameObject.Find ("LoadBox");
-		LocCamera = GameObject.Find ("Camera");
+		OVRPlayerController = GameObject.Find ("OVRPlayerController");
+		Debug.Log("OVRPlayerController: " + OVRPlayerController);
 
 		Molecule3DComp = LoadBox.GetComponent<Molecule3D> ();
 		//If there is no target, create a temporary target at 'distance' from the cameras current viewpoint
 		if (!target) {
 			GameObject go = new GameObject ("Cam Target");
-			//transform.position = go.transform.position + (transform.forward * distance);
+			transform.position = go.transform.position + (transform.forward * distance);
 			target = go.transform;
+			Debug.Log("target: " + target);
 		}
         
-		// Debug.Log("Cam distance : " + Vector3.Distance(transform.position, target.position));
+		Debug.Log("Cam distance : " + Vector3.Distance(transform.position, target.position));
 		distance = Vector3.Distance (transform.position, target.position);
 		currentDistance = distance;
 		desiredDistance = distance;
@@ -379,8 +382,8 @@ public class maxCamera : MonoBehaviour
 			nav_speed = SpeedNavigation();
 
 		if(Vector3.Distance(transform.position, new Vector3(0, transform.position.y, 0)) < 2.0 && angle < 180){
-			//Vector3 target = new Vector3(-LocCamera.transform.position.x,LocCamera.transform.position.y,-LocCamera.transform.position.z );
-			//LocCamera.transform.RotateAround(new Vector3(0, LocCamera.transform.position.y, 0), new Vector3(0,1,0), 6);
+			//Vector3 target = new Vector3(-OVRPlayerController.transform.position.x,OVRPlayerController.transform.position.y,-OVRPlayerController.transform.position.z );
+			//OVRPlayerController.transform.RotateAround(new Vector3(0, OVRPlayerController.transform.position.y, 0), new Vector3(0,1,0), 6);
 			transform.RotateAround(new Vector3(0, transform.position.y, 0), new Vector3(0,1,0), nav_speed*6);
 			angle += nav_speed*6;
 			//Debug.Log("Angle: "+angle);
@@ -391,7 +394,7 @@ public class maxCamera : MonoBehaviour
 			angle = 0;
 		}
 
-		else if ((LocCamera.transform.position.y >= MoleculeModel.MaxValue.y)) {
+		else if ((OVRPlayerController.transform.position.y >= MoleculeModel.MaxValue.y)) {
 
 			UIData.up_part = false;
 			UIData.down_part = true;
@@ -421,7 +424,7 @@ public class maxCamera : MonoBehaviour
 
 		}
 
-		else if ((LocCamera.transform.position.y <= MoleculeModel.MinValue.y)){
+		else if ((OVRPlayerController.transform.position.y <= MoleculeModel.MinValue.y)){
 
 			UIData.up_part = true;
 			UIData.down_part = false;
@@ -490,7 +493,7 @@ public class maxCamera : MonoBehaviour
 			nav_speed = SpeedNavigation();
 
 		if(Vector3.Distance(transform.position, new Vector3(0, transform.position.y, 0)) < 2.0 && angle < 180){
-			//Vector3 target = new Vector3(-LocCamera.transform.position.x,LocCamera.transform.position.y,-LocCamera.transform.position.z );
+			//Vector3 target = new Vector3(-OVRPlayerController.transform.position.x,OVRPlayerController.transform.position.y,-OVRPlayerController.transform.position.z );
 			transform.RotateAround(new Vector3(0, transform.position.y, 0), new Vector3(0,1,0), 6);
 			angle += 6;
 			//Debug.Log("Angle: "+angle);
@@ -501,7 +504,7 @@ public class maxCamera : MonoBehaviour
 			angle = 0;
 		}
 
-		else if ((LocCamera.transform.position.y >= MoleculeModel.MaxValue.y)) {
+		else if ((OVRPlayerController.transform.position.y >= MoleculeModel.MaxValue.y)) {
 
 			UIData.down_part = false;
 			UIData.up_part = true;
@@ -530,7 +533,7 @@ public class maxCamera : MonoBehaviour
 			target.position = new Vector3(0, MoleculeModel.MaxValue.y, 0);
 		}
 
-		else if ((LocCamera.transform.position.y <= MoleculeModel.MinValue.y)){
+		else if ((OVRPlayerController.transform.position.y <= MoleculeModel.MinValue.y)){
 
 			UIData.down_part = true;
 			UIData.up_part = false;
@@ -563,7 +566,7 @@ public class maxCamera : MonoBehaviour
 				checkangle = false;
 				isabove = false;
 				isunder = false;
-				transform.eulerAngles = new Vector3 (0, LocCamera.transform.eulerAngles.y, 0);
+				transform.eulerAngles = new Vector3 (0, OVRPlayerController.transform.eulerAngles.y, 0);
 				v.y += nav_speed;
 				transform.position = v;
 				target.position = new Vector3(0, v.y, 0);
@@ -571,7 +574,7 @@ public class maxCamera : MonoBehaviour
 				checkangle = false;
 				isabove = false;
 				isunder = false;
-				transform.eulerAngles = new Vector3 (0, LocCamera.transform.eulerAngles.y, 0);
+				transform.eulerAngles = new Vector3 (0, OVRPlayerController.transform.eulerAngles.y, 0);
 				v.y -= nav_speed;
 				transform.position = v;
 				target.position = new Vector3(0, v.y, 0);
@@ -603,281 +606,7 @@ public class maxCamera : MonoBehaviour
      */
 	void LateUpdate ()
 	{
-		if (cameraStop == false) {
-			keyboardOperate ();
-			if (!guiControl)
-				joypadOperate ();
-
-			// Check if guided navigation is on, if yes, no mouse interactions
-			if (!UIData.guided) {
-						// If Control and Alt and Middle button? ZOOM!
-				if (Input.GetMouseButton (1)) {
-					if (UIData.switchmode)
-						Molecule3DComp.ToParticle ();
-						desiredDistance -= Input.GetAxis ("Mouse Y") * Time.deltaTime * zoomRate;//* Mathf.Abs(desiredDistance);
-					}
-	            // If middle mouse and left alt are selected? ORBIT
-	            else if (Input.GetMouseButton (0) && !guiControl) {
-					if (UIData.switchmode)
-						Molecule3DComp.ToParticle ();
-					if (Input.mousePosition.x < Screen.width * 0.85f && Input.mousePosition.y < Screen.height * 0.85f && Input.mousePosition.y > Screen.height * 0.15f) {	
-						xDeg = Input.GetAxis ("Mouse X") * xSpeed * 0.02f;
-						yDeg = -Input.GetAxis ("Mouse Y") * ySpeed * 0.02f;
-					} else if (Input.mousePosition.x > Screen.width * 0.85f) {
-						yDeg = -Input.GetAxis ("Mouse Y") * xSpeed * 0.02f;
-						xDeg = 0;
-					} else if (Input.mousePosition.y > Screen.height * 0.85f) {
-						xDeg = Input.GetAxis ("Mouse X") * xSpeed * 0.02f;
-						yDeg = 0;
-					} else {
-						zDeg = Input.GetAxis ("Mouse X") * ySpeed * 0.02f;
-						yDeg = 0;  					
-					}
-
-
-				}
-	            // otherwise if middle mouse is selected, we pan by way of transforming the target in screenspace
-	            else if (Input.GetMouseButton (2)) {
-					if (UIData.switchmode)
-						Molecule3DComp.ToParticle ();
-						Vector3 v = LocCamera.transform.localPosition;
-						v.x -= Input.GetAxis ("Mouse X") * panSpeed;
-						v.y -= Input.GetAxis ("Mouse Y") * panSpeed;
-						LocCamera.transform.localPosition = v;
-					} else {
-						if (UIData.switchmode)
-						Molecule3DComp.ToNotParticle ();
-					}
-				} //End if guided
-
-				// get the desired Zoom distance if we roll the scrollwheel
-				if (!UIData.hiddenCamera)
-				if (!Camera.main.orthographic){ // only if the camera is in perspective mode
-					desiredDistance -= Input.GetAxis ("Mouse ScrollWheel") * Time.deltaTime * zoomRate;// * Mathf.Abs(desiredDistance);
-					if(UIData.guided && (desiredDistance != currentDistance)){
-						//currentDistance = Vector3.Distance (transform.position, target.position);
-						guidedzoom = true;
-				}
-				}else { // otherwise (orthographic mode) we can achieve the same effet by making the camera bigger/smaller
-					float tmp_size = Camera.main.orthographicSize - Input.GetAxis ("Mouse ScrollWheel") * Time.deltaTime * zoomRate;
-					if (tmp_size <= LoadTypeGUI.maxOrthoSize && tmp_size >= LoadTypeGUI.minOrthoSize)
-						Camera.main.orthographicSize = tmp_size;
-				}
-
-				if (automove == true) {
-					if (UIData.switchmode)
-						Molecule3DComp.ToParticle ();
-					xDeg += Mathf.Lerp (0.0F, 100.0F, Time.deltaTime * 0.8f);
-					yDeg = 0;
-				}
-	
-				if (centerChanged) {
-					//if we reach the position (for camera sliding) we stop!
-	
-					//otherwise we continue the translation.
-					if (cameraTranslation) {
-	
-						weight += Time.deltaTime * 1;
-						target.localPosition = Vector3.Lerp (target.localPosition, newposition, weight);
-	
-						LocCamera.transform.localPosition = Vector3.Lerp (LocCamera.transform.localPosition, Vector3.zero, weight);
-
-						//LocCamera.transform.eulerAngles = Vector3.Lerp (LocCamera.transform.eulerAngles, Vector3.zero, weight);
-	
-					if (cameraTranslation && target.position == newposition && LocCamera.transform.localPosition== Vector3.zero) {
-	
-							weight = 0;
-							cameraTranslation = false;
-							centerChanged = false;
-						}
-					}
-				}
-				//Camera rotation
-				desiredRotation *= Quaternion.Euler (yDeg, xDeg, zDeg);
-				currentRotation = transform.rotation;
-				rotation = Quaternion.Lerp (currentRotation, desiredRotation, Time.deltaTime * zoomDampening);
-				if(!UIData.guided || reset_panoramic){
-					transform.rotation = rotation;
-				}
-
-				//Camera movement
-				currentDistance = Mathf.Lerp (currentDistance, desiredDistance, Time.deltaTime * zoomDampening);
-				position = target.position - (rotation * Vector3.forward * currentDistance + targetOffset);
-				if(!UIData.guided || reset_panoramic){
-					transform.position = position;
-					reset_panoramic = false;
-				}
-
-				// Temporary
-				if(guidedzoom){
-					//Dive into the channel if zoom above or under the structure
-					if((Vector3.Distance(transform.position , target.position) < 100) && isabove){
-						near_spread = false;
-						if(transform.position.y <= target.position.y+20)
-							target.position = new Vector3(0, target.position.y-1, 0);
-						transform.LookAt(target.position);
-						transform.Translate(new Vector3(0, 0, Input.GetAxis ("Mouse ScrollWheel") * Time.deltaTime * zoomRate));
-					}
-					else if (Vector3.Distance (transform.position, target.position) < 100 && isunder){
-						near_spread = false;
-						if(transform.position.y >= target.position.y-20)
-							target.position = new Vector3(0, target.position.y+1, 0);
-						transform.LookAt (target.position);
-						transform.Translate (new Vector3(0, 0, Input.GetAxis ("Mouse ScrollWheel") * Time.deltaTime * zoomRate));
-					}
-					else
-						transform.Translate(new Vector3(0, 0, Input.GetAxis ("Mouse ScrollWheel") * Time.deltaTime * zoomRate));
-				guidedzoom = false;
-				}
-	
-				xDeg = 0;
-				yDeg = 0;
-				zDeg = 0;
-				guiControl = false; 
-			}
-		//}
-
-		if (navigationUp) 
-				goUpConstrained();	
-
-		if(navigationDown)
-				goDownConstrained();
-
-		if(panoramic){
-			Vector3 v = transform.position;
-			weight += Time.deltaTime * 1;
-			transform.position = Vector3.Lerp (v, new Vector3(0, v.y, 0), weight);
-		}
 		
-		if(UIData.optim_view)
-		{
-			if(!ghost_target_instantiate){
-				Debug.LogWarning("CREATE TARGET OBJECT");
-				ghost_target_real = (GameObject) GameObject.Instantiate(ghost_target, optim_target, Quaternion.identity);
-				ghost_target_real.name = "Target";
-				ghost_target_real.GetComponent<Renderer>().material.color = Color.magenta;
-				ghost_target_real.transform.localScale = new Vector3(4.0f, 4.0f, 4.0f);
-				ghost_target_real.SetActive(true);
-				ghost_target_instantiate = true;
-			}
-			if(LocCamera.transform.position != optim_cam_position)
-			{
-				Debug.Log("optim: " + optim_cam_position);
-				Debug.Log("camera: " + LocCamera.transform.position);
-				float distance = Vector3.Distance(LocCamera.transform.position, new Vector3(0,0,0));
-//				Debug.Log("initial camera location z ++: " + (-MoleculeModel.cameraLocation.z) * 1.05);
-//				Debug.Log("initial camera location z --: " + (-MoleculeModel.cameraLocation.z) * 0.95);
-//				Debug.Log ("height comparison: "+ !Mathf.Approximately(LocCamera.transform.position.y, optim_cam_position.y) + " smooth: " + smooth);
-				
-				
-				if(RemotePhase){
-					LocCamera.transform.position = Vector3.SmoothDamp(LocCamera.transform.position, optim_cam_position, ref velocity, 5.0f);
-					LocCamera.transform.LookAt(optim_target);
-				}
-				
-				
-//				if(distance < (- MoleculeModel.cameraLocation.z * 0.95) && RemotePhase){
-//					Debug.Log ("Remote Phase zoom out");
-////					float distCovered = (Time.time - UIData.start_time) * 1.0F;
-////					float fracJourney = distCovered / 4.0F;
-////					LocCamera.transform.position = Vector3.Lerp(UIData.optim_view_start_point, new Vector3(LocCamera.transform.position.x, LocCamera.transform.position.y, MoleculeModel.cameraLocation.z), fracJourney);
-////					LocCamera.transform.LookAt(new Vector3(0,LocCamera.transform.position.y,0));
-//					LocCamera.transform.position = Vector3.SmoothDamp(LocCamera.transform.position, new Vector3(LocCamera.transform.position.x, LocCamera.transform.position.y, MoleculeModel.cameraLocation.z), ref velocity, 0.5f);
-//					//LocCamera.transform.Translate((LocCamera.transform.position - new Vector3(0,LocCamera.transform.position.y, 0)) * Time.deltaTime * 0.5f, Space.World);
-//				}
-//				else if(distance > (-MoleculeModel.cameraLocation.z * 1.05) && RemotePhase){
-//					Debug.Log ("Remote Phase zoom in");
-//					float distCovered = (Time.time - UIData.start_time) * 1.0F;
-//					float fracJourney = distCovered / 2.0F;
-//					LocCamera.transform.position = Vector3.Lerp(UIData.optim_view_start_point, new Vector3(LocCamera.transform.position.x, LocCamera.transform.position.y, MoleculeModel.cameraLocation.z), fracJourney);
-//					//LocCamera.transform.Translate((new Vector3(0,LocCamera.transform.position.y, 0) - LocCamera.transform.position) * Time.deltaTime * 0.5f, Space.World);
-//				}
-////				else if(smooth){
-////					RemotePhase = false;
-////					HeightPhase = false;
-////					RotatePhase = false;
-////					ApproachPhase = false;
-////					if(FocusPhase && Quaternion.Angle(LocCamera.transform.rotation, Quaternion.LookRotation(optim_target - LocCamera.transform.position)) < 1.0F){
-////						Quaternion lookat = Quaternion.LookRotation(optim_target - LocCamera.transform.position);
-////						Debug.Log("Rotation : "+LocCamera.transform.rotation+" "+lookat);
-////						LocCamera.transform.rotation = Quaternion.Slerp(LocCamera.transform.rotation, lookat, Time.deltaTime);
-////					}
-////					else if (Vector3.Distance(LocCamera.transform.position, optim_cam_position) < 0.5){
-////						FocusPhase = false;
-////						Debug.Log("MoveTowards");
-////						float step = 1.0F * Time.deltaTime;
-////						LocCamera.transform.position = Vector3.SmoothDamp(LocCamera.transform.position, optim_cam_position, ref velocity, 2.0f);
-////						LocCamera.transform.LookAt(optim_target);
-////					}
-////					//float step = 1.0F * Time.deltaTime;
-////				}
-//				else if(!Mathf.Approximately(LocCamera.transform.position.y, optim_cam_position.y) && HeightPhase){
-//					RemotePhase = false;
-//					Debug.Log ("Height Phase");
-//					LocCamera.transform.position = Vector3.SmoothDamp(LocCamera.transform.position, new Vector3(LocCamera.transform.position.x, optim_cam_position.y, LocCamera.transform.position.z), ref velocity, 0.3f);
-//					UIData.start_time = Time.time;
-//					UIData.optim_view_start_point = LocCamera.transform.position - new Vector3(0, LocCamera.transform.position.y, 0);
-//				}
-//				else if(Vector3.Angle( (LocCamera.transform.position - new Vector3(0, LocCamera.transform.position.y, 0)), (optim_cam_position - new Vector3(0, LocCamera.transform.position.y, 0))) > 2 && RotatePhase){
-//					HeightPhase = false;
-//					Debug.Log ("Rotate Phase");
-//					Debug.Log (Vector3.Angle( (LocCamera.transform.position - new Vector3(0, LocCamera.transform.position.y, 0)), (optim_cam_position - new Vector3(0, LocCamera.transform.position.y, 0))));
-////					Vector3 center = (UIData.optim_view_start_point + (optim_cam_position - new Vector3(0, LocCamera.transform.position.y, 0))) * 0.5F;
-////					center -= new Vector3(0, 1, 0);
-////					Vector3 riseRelCenter = UIData.optim_view_start_point - center;
-////					Vector3 setRelCenter = (optim_cam_position - new Vector3(0, LocCamera.transform.position.y, 0)) - center;
-////					float fracComplete = (Time.time - UIData.start_time) / 2.0F;
-////					LocCamera.transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, fracComplete);
-////					LocCamera.transform.position += center;
-//					float angle = Vector3.Angle( (LocCamera.transform.position - new Vector3(0, LocCamera.transform.position.y, 0)), (optim_cam_position - new Vector3(0, LocCamera.transform.position.y, 0)));
-//					LocCamera.transform.RotateAround(Vector3.zero, Vector3.up, angle * Time.deltaTime);
-//				}
-//				else if(LocCamera.transform.position != optim_cam_position && ApproachPhase){
-//					Debug.Log("Approach phase");
-//					RotatePhase = false;
-//					LocCamera.transform.position = Vector3.SmoothDamp(LocCamera.transform.position, optim_cam_position, ref velocity, 0.5f);
-//				}
-////				Debug.Log ("Distance: "+distance);
-//				//LocCamera.transform.position = Vector3.SmoothDamp(LocCamera.transform.position, optim_cam_position, ref velocity, 0.3f);	
-			}
-			else{
-				Debug.Log ("LookAt phase");
-				ApproachPhase = false;
-				Quaternion lookat = Quaternion.LookRotation(optim_target - LocCamera.transform.position);
-				LocCamera.transform.rotation = Quaternion.Slerp(LocCamera.transform.rotation, lookat, Time.deltaTime);
-			}
-//			LocCamera.transform.position = optim_cam_position;
-//			GameObject ghost_target = new GameObject();
-//			ghost_target.name = "TARGET";
-//			ghost_target.transform.position = optim_target;
-//			ghost_target.SetActive(true);
-//			LocCamera.transform.LookAt(ghost_target.transform);
-		}
-		if(UIData.guided){		
-			if (next_right && rotation_done < 360/MoleculeModel.existingChain.Count){
-				LocCamera.transform.RotateAround(Vector3.zero, Vector3.up, - (360/MoleculeModel.existingChain.Count) * Time.deltaTime);
-				rotation_done += (360/MoleculeModel.existingChain.Count) * Time.deltaTime;
-			}
-			else if (next_left && rotation_done < 360/MoleculeModel.existingChain.Count){
-				LocCamera.transform.RotateAround(Vector3.zero, Vector3.up, (360/MoleculeModel.existingChain.Count) * Time.deltaTime);
-				rotation_done += (360/MoleculeModel.existingChain.Count) * Time.deltaTime;;
-			}
-			else if (rotation_done > 360/MoleculeModel.existingChain.Count){
-				next_right = false;
-				next_left = false;
-				rotation_done = 0.0f;
-			}
-			/*if (next_left && rotation_done < 360/MoleculeModel.existingChain.Count){
-				LocCamera.transform.RotateAround(Vector3.zero, Vector3.up, (360/MoleculeModel.existingChain.Count) * Time.deltaTime);
-				rotation_done += (360/MoleculeModel.existingChain.Count) * Time.deltaTime;
-				Debug.Log("rotation_done " + rotation_done + " next_left " + next_left);
-			}
-			else if (rotation_done > 360/MoleculeModel.existingChain.Count){
-				Debug.Log("STOP left " + next_left);
-				next_right = false;
-				rotation_done = 0.0f;
-			}*/
-		}
 	}
 	
 	private static float ClampAngle (float angle, float min, float max)
@@ -891,10 +620,10 @@ public class maxCamera : MonoBehaviour
     
 	public void ToCenter ()
 	{
-		LocCamera.transform.localPosition = Vector3.zero;
+		OVRPlayerController.transform.localPosition = Vector3.zero;
 		target.transform.localPosition = Vector3.zero;
 		transform.position = new Vector3 (0, 0, MoleculeModel.cameraLocation.z);
-		LocCamera.transform.rotation = new Quaternion (0, 0, 0, 0);
+		OVRPlayerController.transform.rotation = new Quaternion (0, 0, 0, 0);
 		transform.rotation = Quaternion.identity;
 		centerChanged = false;
 		weight = 0;
@@ -907,7 +636,7 @@ public class maxCamera : MonoBehaviour
 	{
 		target.rotation = transform.rotation;
 
-		Vector3 v = LocCamera.transform.localPosition;
+		Vector3 v = OVRPlayerController.transform.localPosition;
 		if (Input.GetAxis ("Axis5") > joypadDeadzone || (Input.GetAxis ("Axis5") < joypadDeadzone))
 			v.x -= Input.GetAxis ("Axis5") * panSpeed;
 		if (Input.GetAxis ("Axis6") > joypadDeadzone || (Input.GetAxis ("Axis6") < joypadDeadzone))
@@ -916,7 +645,7 @@ public class maxCamera : MonoBehaviour
 			v.x -= Input.GetAxis ("AxisX") * panSpeed * 3.0f;
 		if (Input.GetAxis ("AxisY") > joypadDeadzone || (Input.GetAxis ("AxisY") < joypadDeadzone))
 			v.y -= Input.GetAxis ("AxisY") * panSpeed * 3.0f;
-		LocCamera.transform.localPosition = v;
+		OVRPlayerController.transform.localPosition = v;
 
 		if (Input.GetAxis ("Axis3") > joypadDeadzone || (Input.GetAxis ("Axis3") < joypadDeadzone))
 			xDeg = Input.GetAxis ("Axis3") * xSpeed * 0.08f;
@@ -952,19 +681,19 @@ public class maxCamera : MonoBehaviour
 	{
 		//rotation
 		if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.Z)){
-			if(monomer_jump && UIData.guided){
-//				int nb_chains = MoleculeModel.existingChain.Count;
-//				Dictionary<string, Vector3> chains_COM = new Dictionary<string, Vector3>();
-//				for(int c = 0; i<nb_chains; i++){
-//					chains_COM.Add (MoleculeModel.existingChain[c], Vector3.zero);
-//				}
-//				for(int i = 0; i<MoleculeModel.atomsChainList.Count; i++){
-//					chains_COM.Add (MoleculeModel.atomsChainList[i], MoleculeModel.atomsLocationlist[i]);
-//					if(chains_COM[MoleculeModel.atomsChainList[i]] == Vector3.zero)
-//						chains_COM[MoleculeModel.atomsChainList[i]] += MoleculeModel.atomsLocationlist[i];
-//					else
-//						chains_COM[MoleculeModel.atomsChainList[i]] = (chains_COM[MoleculeModel.atomsChainList[i]] + MoleculeModel.atomsLocationlist[i]) / 2;
-//				}
+			if(monomer_jump && UIData.guided) {
+			//				int nb_chains = MoleculeModel.existingChain.Count;
+			//				Dictionary<string, Vector3> chains_COM = new Dictionary<string, Vector3>();
+			//				for(int c = 0; i<nb_chains; i++){
+			//					chains_COM.Add (MoleculeModel.existingChain[c], Vector3.zero);
+			//				}
+			//				for(int i = 0; i<MoleculeModel.atomsChainList.Count; i++){
+			//					chains_COM.Add (MoleculeModel.atomsChainList[i], MoleculeModel.atomsLocationlist[i]);
+			//					if(chains_COM[MoleculeModel.atomsChainList[i]] == Vector3.zero)
+			//						chains_COM[MoleculeModel.atomsChainList[i]] += MoleculeModel.atomsLocationlist[i];
+			//					else
+			//						chains_COM[MoleculeModel.atomsChainList[i]] = (chains_COM[MoleculeModel.atomsChainList[i]] + MoleculeModel.atomsLocationlist[i]) / 2;
+			//				}
 				next_right = true;
 			}
 

@@ -910,7 +910,7 @@ public class Ribbons {
 
 			if(resNb != splits[0]){
 				currentchain = Molecule.Model.MoleculeModel.resChainList2[resNb];
-				ribbontag = "RibbonObj" + currentchain;
+				ribbontag = "RibbonObj"; // + currentchain;
 				tmpDictList.Add(residueDicts[resNb]);
 				if(ssarray.Length != 0){ 
 					tmpSSList.Add (ssarray[resNb]);

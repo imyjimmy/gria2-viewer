@@ -72,6 +72,8 @@ public class ScenePreload_5L1B : MonoBehaviour {
 	private float pdb_progress = 0;
 	private string progresses;
 	
+	private GameObject LoadBox;	//@imyjimmy
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -86,7 +88,7 @@ public class ScenePreload_5L1B : MonoBehaviour {
 	IEnumerator InitScene(RequestPDB requestPDB)
 	{
 		//http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb
-		// StartCoroutine(requestPDB.LoadPDBWWW(UIData.server_url+"Scenes/1KX2/1KX2.pdb"));
+		// StartCoroutine(requestPDB.LoadPDBWWW("http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb"));
 		StartCoroutine(requestPDB.LoadPDBWWW("http://imyjimmy.com/pdb-files/5l1b.pdb"));
 		while(!RequestPDB.isDone)
 		{
@@ -108,10 +110,16 @@ public class ScenePreload_5L1B : MonoBehaviour {
 		ribbons.CreateRibbons();
 		// toggle_NA_HIDE = !toggle_NA_HIDE; //GUIMoleculeController.toggle_NA_HIDE
 
+		LoadBox = GameObject.Find("LoadBox");
+		GameObject[] objs = GameObject.FindGameObjectsWithTag("RibbonObj");
+		foreach(GameObject o in objs) {
+			o.transform.parent = LoadBox.transform;
+		}
+
 		GUIMoleculeController.showOpenMenu = false;
 		GUIMoleculeController.showAtomMenu = false;
 		GUIMoleculeController.globalRadius = 0.3f;
-		GUIMoleculeController.shrink = 0.0001f;
+		GUIMoleculeController.shrink = 0.00001f;//100.00f; //0.000001f;
 		GUIMoleculeController.linkScale = 0.4f;
 		SendMessage("Display",SendMessageOptions.DontRequireReceiver);	
 	}

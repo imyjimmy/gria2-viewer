@@ -20,6 +20,12 @@ TagManager:
   - Club
   - RibbonObjA
   - RibbonObjB
+  - RibbonObjC
+  - RibbonObjD
+  - RibbonObjE
+  - RibbonObjF
+  - SphereManager
+  - RibbonObj
   layers:
   - Default
   - TransparentFX
