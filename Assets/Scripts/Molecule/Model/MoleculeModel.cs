@@ -403,15 +403,15 @@ namespace Molecule.Model {
 		public static Vector3 vp=new Vector3(1.30f,1.30f,1.30f);
 		public static Vector3 vno=new Vector3(1f,1f,1f);
 		
-		public static	float oxygenScale=100f;
-		public static 	float carbonScale=100f;
-		public static 	float nitrogenScale=100f;
-		public static 	float hydrogenScale=100f;		
-		public static	float sulphurScale=100f;
+		public static	float oxygenScale=10f;
+		public static 	float carbonScale=10f;
+		public static 	float nitrogenScale=10f;
+		public static 	float hydrogenScale=10f;		
+		public static	float sulphurScale=10f;
 		//public static	string lodineScale="100";
 		//public static	string chlorineScale="100";
-		public static	float phosphorusScale=100f;
-		public static 	float unknownScale=100f;
+		public static	float phosphorusScale=10f;
+		public static 	float unknownScale=10f;
 		
 		public static long atomsnumber=0;
 		public static long bondsnumber=0;

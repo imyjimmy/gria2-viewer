@@ -160,6 +160,10 @@ public class PostProcessing {
 			mesh.colors32 = colors;
 			*/
 			Debug.Log("tag: " + tag);
+			if ( tag == "" || tag == null || tag == " ") {
+				tag = "RibbonObj"; //catch-all
+			}
+
 			GameObject ribbObj = new GameObject(gameobj);
 			ribbObj.tag = tag;
 			ribbObj.AddComponent<MeshFilter>();
@@ -293,6 +297,9 @@ public class PostProcessing {
 	                                  string tag="RibbonObj", string gameobj="Ribbons") {
 	//	DuplicateVertices(vertices, normals, triangles, colors);
 		tag = Ribbons.ribbontag;
+		if (tag == "" || tag == " " || tag == null ) {
+			tag = "RibbonObj";
+		}
 		AddFirstFrontalFace(vertices, normals, triangles, colors, ss);
 		AddLastFrontalFace(vertices, normals, triangles, colors, ss);
 		MeshData mData = new MeshData();

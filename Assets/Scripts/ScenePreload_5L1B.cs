@@ -89,9 +89,10 @@ public class ScenePreload_5L1B : MonoBehaviour {
 	{
 		//http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb
 		// StartCoroutine(requestPDB.LoadPDBWWW("http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb"));
-		StartCoroutine(requestPDB.LoadPDBWWW("http://imyjimmy.com/pdb-files/5l1b.pdb"));
-		while(!RequestPDB.isDone)
-		{
+		// StartCoroutine(requestPDB.LoadPDBWWW("http://imyjimmy.com/pdb-files/5l1b.pdb"));  //5l1b //1l2y
+		StartCoroutine(requestPDB.LoadPDBWWW("http://imyjimmy.com/pdb-files/1l2y.pdb"));  //5l1b //1l2y
+
+		while(!RequestPDB.isDone) {
 			pdb_progress = requestPDB.progress;
 			Debug.Log(pdb_progress);
 			yield return new WaitForEndOfFrame();
@@ -112,15 +113,19 @@ public class ScenePreload_5L1B : MonoBehaviour {
 
 		LoadBox = GameObject.Find("LoadBox");
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("RibbonObj");
-		foreach(GameObject o in objs) {
-			o.transform.parent = LoadBox.transform;
-		}
 
 		GUIMoleculeController.showOpenMenu = false;
 		GUIMoleculeController.showAtomMenu = false;
 		GUIMoleculeController.globalRadius = 0.3f;
 		GUIMoleculeController.shrink = 0.00001f;//100.00f; //0.000001f;
 		GUIMoleculeController.linkScale = 0.4f;
+
+		foreach(GameObject o in objs) {
+			o.transform.parent = LoadBox.transform;
+			o.transform.localScale = LoadBox.transform.localScale;
+			o.transform.localPosition = LoadBox.transform.localPosition;
+		}
+
 		SendMessage("Display",SendMessageOptions.DontRequireReceiver);	
 	}
 	

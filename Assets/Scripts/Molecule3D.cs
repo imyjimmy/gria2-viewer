@@ -334,7 +334,6 @@ public class Molecule3D:MonoBehaviour {
 // 			StartCoroutine(loadLoadFile());
 // 		}
 		
-// 		if(UIData.backGroundIs)
 // 			LocCamera.GetComponent<Skybox>().enabled=true;
 // 		else
 // 			LocCamera.GetComponent<Skybox>().enabled=false;
