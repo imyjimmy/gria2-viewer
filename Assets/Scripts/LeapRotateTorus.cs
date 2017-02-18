@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Leap.Unity {
 
@@ -6,7 +6,7 @@ namespace Leap.Unity {
   /// Use this component on a Game Object to allow it to be manipulated by a pinch gesture.  The component
   /// allows rotation, translation, and scale of the object (RTS).
   /// </summary>
-  public class LeapRTS : MonoBehaviour {
+  public class LeapRotateTorus : MonoBehaviour {
 
     public enum RotationMethod {
       None,
@@ -54,6 +54,8 @@ namespace Leap.Unity {
 
     private Transform _anchor;
 
+    private GameObject torus;
+
     private float _defaultNearClip;
 
     void Start() {
@@ -61,9 +63,22 @@ namespace Leap.Unity {
 //        Debug.LogWarning("Both Pinch Detectors of the LeapRTS component must be assigned. This component has been disabled.");
 //        enabled = false;
 //      }
+      Debug.Log("starting LeapRotateTorus");
 
-      GameObject pinchControl = new GameObject("RTS Anchor");
-      _anchor = pinchControl.transform;
+      GameObject pinchControl = new GameObject("Torus Anchor");
+      
+      torus = GameObject.Find("torus");
+      Debug.Log("torus.transform.forward: " + torus.transform.forward);
+      
+      pinchControl.transform.parent = torus.transform;
+      pinchControl.transform.Translate(0.0f,0.0f,-5.58f);
+
+
+      Debug.Log("pinchControl.transform: " + pinchControl.transform);
+
+      
+      _anchor = pinchControl.transform; 
+      //_anchor = torus.transform;
       _anchor.transform.parent = transform.parent;
       transform.parent = _anchor;
     }
@@ -131,7 +146,9 @@ namespace Leap.Unity {
     }
 
     private void transformDoubleAnchor() {
-      // _anchor.position = (_pinchDetectorA.Position + _pinchDetectorB.Position) / 2.0f;
+      Debug.Log("Inside transformDoubleAnchor");
+
+      _anchor.position = (_pinchDetectorA.Position + _pinchDetectorB.Position) / 2.0f;
 
       switch (_twoHandedRotationMethod) {
         case RotationMethod.None:
@@ -140,6 +157,7 @@ namespace Leap.Unity {
           Vector3 p = _pinchDetectorA.Position;
           p.y = _anchor.position.y;
           _anchor.LookAt(p);
+          torus.transform.LookAt(_anchor);
           break;
         case RotationMethod.Full:
           Quaternion pp = Quaternion.Lerp(_pinchDetectorA.Rotation, _pinchDetectorB.Rotation, 0.5f);
@@ -154,7 +172,8 @@ namespace Leap.Unity {
     }
 
     private void transformSingleAnchor(PinchDetector singlePinch) {
-      // _anchor.position = singlePinch.Position;
+      Debug.Log("Inside transformSingleAnchor");
+      _anchor.position = singlePinch.Position;
 
       switch (_oneHandedRotationMethod) {
         case RotationMethod.None:
@@ -163,6 +182,7 @@ namespace Leap.Unity {
           Vector3 p = singlePinch.Rotation * Vector3.right;
           p.y = _anchor.position.y;
           _anchor.LookAt(p);
+          torus.transform.LookAt(_anchor);
           break;
         case RotationMethod.Full:
           _anchor.rotation = singlePinch.Rotation;

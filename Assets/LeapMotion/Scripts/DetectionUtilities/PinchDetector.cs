@@ -16,12 +16,12 @@ namespace Leap.Unity {
     [MinValue(0)]
     [Units("meters")]
     [FormerlySerializedAs("_activatePinchDist")]
-    public float ActivateDistance = .03f; //meters
+    public float ActivateDistance = .015f; //meters
     [Tooltip("The distance at which to leave the pinching state.")]
     [MinValue(0)]
     [Units("meters")]
     [FormerlySerializedAs("_deactivatePinchDist")]
-    public float DeactivateDistance = .04f; //meters
+    public float DeactivateDistance = .02f; //meters
 
     public bool IsPinching { get { return this.IsHolding; } }
     public bool DidStartPinch { get { return this.DidStartHold; } }
