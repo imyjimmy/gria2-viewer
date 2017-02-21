@@ -252,9 +252,14 @@ namespace  ParseData.ParsePDB
 			WWW www = new WWW(file_name);
 			
 			progress = 0;
+			float oldProgress = 0;
 			isDone = false;
 			while(!www.isDone) {	
-				Debug.Log("*** PDB: "+www.progress);
+				if (www.progress > oldProgress + 0.10) {
+					Debug.Log("*** PDB: "+www.progress);
+					oldProgress = www.progress;
+				}
+				
 				progress = www.progress;
 				yield return new WaitForEndOfFrame();
 			}

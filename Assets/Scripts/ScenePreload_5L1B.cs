@@ -94,7 +94,7 @@ public class ScenePreload_5L1B : MonoBehaviour {
 
 		while(!RequestPDB.isDone) {
 			pdb_progress = requestPDB.progress;
-			Debug.Log(pdb_progress);
+			// Debug.Log(pdb_progress);
 			yield return new WaitForEndOfFrame();
 		}
 		pdb_progress = 1.0f;
