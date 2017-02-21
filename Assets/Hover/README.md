@@ -1,3 +1,5 @@
+imported circa 2/20/2017
+
 ## Hover UI Kit
 
 Latest version: `v2.0.0B (beta)`
