@@ -65,6 +65,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UI;
 using ParseData.ParsePDB;
 
@@ -108,6 +109,8 @@ public class ScenePreload_5L1B : MonoBehaviour {
 
 		//trying it out
 		Ribbons ribbons = new Ribbons();
+		List<string> residueNames = Molecule.Model.MoleculeModel.atomsResnamelist;
+
 		ribbons.CreateRibbons();
 		// toggle_NA_HIDE = !toggle_NA_HIDE; //GUIMoleculeController.toggle_NA_HIDE
 

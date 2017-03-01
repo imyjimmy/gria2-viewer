@@ -475,6 +475,7 @@ namespace  ParseData.ParsePDB
 							type=typestring[0].ToString();
 
 						string resname=s.Substring(17,3).Trim(); //@imyjimmy: residue name
+						Debug.Log("resname: " + resname);
 						int resid = int.Parse(s.Substring(22,4));
 						residueIds.Add(resid);
 						currentRes = resid;
