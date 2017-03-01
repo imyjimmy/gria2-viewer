@@ -248,6 +248,7 @@ namespace  ParseData.ParsePDB
 			}	
 		}
 	
+	//@imyjimmy: How we are currently loading right now.
 		public IEnumerator LoadPDBWWW(string file_name) {
 			WWW www = new WWW(file_name);
 			
@@ -358,6 +359,7 @@ namespace  ParseData.ParsePDB
  
          		// int matchescount=theMatches.Count;
 		
+		//@imyjimmy: where parsing of the pdb file actually happens.
          public static void ReadPDB(TextReader sr,	List<float[]>	alist,
 													List<float[]>	calist,
 													List<float>		BFactorList,
@@ -472,7 +474,7 @@ namespace  ParseData.ParsePDB
 						else
 							type=typestring[0].ToString();
 
-						string resname=s.Substring(17,3).Trim();
+						string resname=s.Substring(17,3).Trim(); //@imyjimmy: residue name
 						int resid = int.Parse(s.Substring(22,4));
 						residueIds.Add(resid);
 						currentRes = resid;
@@ -546,6 +548,7 @@ namespace  ParseData.ParsePDB
 							colorList.Add(aModel.baseColor);
 						}
 						
+						Debug.Log("adding to resnamelist in RequestPDB.ReadPDB: " + resname);
 						resnamelist.Add(resname);
 						
 						if(MoleculeModel.residues.ContainsKey(resid) == false){
@@ -642,7 +645,7 @@ namespace  ParseData.ParsePDB
 			MoleculeModel.atomsNamelist			=	atomsNameList;
 			MoleculeModel.atomsNumberList		= 	atomsNumberList;
 			MoleculeModel.BFactorList			=	BFactorList;
-			MoleculeModel.atomsResnamelist		=	resnamelist;
+			MoleculeModel.atomsResnamelist		=	resnamelist; //@imyjimmy resnamelist assigned
 			MoleculeModel.residueIds			=	residueIds;
 			MoleculeModel.splits				=	splits;
 			MoleculeModel.atomsChainList		=	chainList;

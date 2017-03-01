@@ -114,6 +114,7 @@ namespace Molecule.Control {
 			MoleculeModel.networkLoaded = false ; // protein loaded, network removed if present
 		}
 		
+
 		public static void CreateResidues() {
 			List<float[]>						alist				=	MoleculeModel.atomsLocationlist;
 			List<string>						resNames			=	MoleculeModel.atomsResnamelist;
@@ -601,6 +602,7 @@ namespace Molecule.Control {
 			return bond;
 		}
 		
+		//@imyjimmy method of interest
 		public static string CreateSequenceString() {
 			int nucleotide_count = MoleculeModel.residues.Count;
 			StringBuilder sequence = new StringBuilder(new string('.', nucleotide_count), nucleotide_count);
