@@ -554,8 +554,8 @@ namespace  ParseData.ParsePDB
 						
 						if(MoleculeModel.residues.ContainsKey(resid) == false){
                     		MoleculeModel.residues.Add(resid, new ArrayList());
-							//add the chain name for each residu
-							MoleculeModel.resChainList.Add (s.Substring(21,1));
+							//add the chain name for each residue
+							MoleculeModel.resChainList.Add (s.Substring(21,1)); //@imyjimmy chain name.
 							//If we have a sugar, we add theses informations in some special list
 							if (MoleculeModel.sugarResname.Contains(resname))
 								MoleculeModel.resSugarChainList.Add (s.Substring(21,1));
@@ -565,7 +565,7 @@ namespace  ParseData.ParsePDB
 						if(prevresnb == 0 && curresnb != 0)
 							MoleculeModel.firstresnb = curresnb;
 						if(curresnb != prevresnb){
-							MoleculeModel.resChainList2.Add (s.Substring (21,1));
+							// MoleculeModel.resChainList2.Add (s.Substring (21,1));
 							prevresnb = curresnb;
 						}
 

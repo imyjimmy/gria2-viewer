@@ -156,9 +156,9 @@ namespace Molecule.Control {
 
 				if(currResId != prevResId) {
 					if(residueDict != null && residueDict.Count > 0){
-						Debug.Log("adding a residueDict to residueDictList: ");
+						Debug.Log("adding the residueDict: " + currRes + ", id: " + currResId + " to residueDictList which has the following: ");
 						foreach (KeyValuePair<string, Vector3> pair in residueDict) {
-							Debug.Log("k: " + pair.Key + " v: " + pair.Value); //@imyjimmy
+							Debug.Log("---k: " + pair.Key + " v: " + pair.Value); //@imyjimmy
 						}
 						residueDictList.Add(residueDict);
 					}

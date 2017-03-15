@@ -225,6 +225,34 @@ public class Molecule3D:MonoBehaviour {
 		}
 	}
 
+	public void Test() {
+		Debug.Log("clicked.");
+	}
+
+	public void Test2() {
+		Debug.Log("clicked again!");
+	}
+
+	public void Test3() {
+		Debug.Log("clicked that DNA button I see...");
+		CanvasGroup c;
+
+		GameObject tempObject = GameObject.Find("MinimalPanel_1");
+    	if(tempObject != null){
+        	//If we found the object , get the Canvas component from it.
+        	c = tempObject.GetComponent<CanvasGroup>();
+        	if(c == null){
+            	Debug.Log("Could not locate Canvas component on " + tempObject.name);
+        	} else {
+        		Debug.Log("CanvasGroup: " + c);
+        	}
+
+        	c.alpha = 0.0f;
+        	c.interactable = false;
+        	c.blocksRaycasts = false; //does not allow collision.
+    	}
+	}
+
 // 	void OnGUI() {	
 // 		GUI.skin = mySkin;
 		

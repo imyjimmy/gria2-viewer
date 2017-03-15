@@ -857,7 +857,7 @@ namespace Molecule.View {
 			MoleculeModel.bondCAList=null;
 			MoleculeModel.bondList = null;// The list of the bond by position and rotation.
 			MoleculeModel.resChainList = new List<string> (); //For theses 3, we add directly on the list, so can't "null" them.
-			MoleculeModel.resChainList2 =new List<string> ();
+			// MoleculeModel.resChainList2 =new List<string> ();
 			MoleculeModel.residues = new Dictionary<int, ArrayList> ();
 			MoleculeModel.atomsSugarTypelist = new List<AtomModel>();
 			MoleculeModel.bondEPDict= new Dictionary<int, List<int>>();
