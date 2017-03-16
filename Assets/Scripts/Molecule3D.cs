@@ -70,6 +70,7 @@ using System.Text;
 using System;
 using ParseData.ParsePDB;
 using ParseData.IParsePDB;
+using ParseData.ParseFASTA; //@imyjimmy
 using UI;
 using Molecule.View;
 //using System.Net.Sockets;
