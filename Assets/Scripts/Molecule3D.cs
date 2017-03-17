@@ -71,6 +71,7 @@ using System;
 using ParseData.ParsePDB;
 using ParseData.IParsePDB;
 using ParseData.ParseFASTA; //@imyjimmy
+using View.DNA;
 using UI;
 using Molecule.View;
 //using System.Net.Sockets;
@@ -112,6 +113,11 @@ public class Molecule3D:MonoBehaviour {
 //	private string id="";
 	public GUIDisplay gUIDisplay;
 	private RequestPDB requestPDB=new RequestPDB();
+	
+	//@imyjimmy added
+	private ParseDNA parseDNA = new ParseDNA();
+	private TileDNA tileDNA = new TileDNA();
+	private GameObject DNA_Plane; 
 //	private Boolean flag=false;
 	private Boolean isControl=false;
 	private IPAddress _ipAddr;
@@ -197,6 +203,16 @@ public class Molecule3D:MonoBehaviour {
 		AtomModel.InitAtomic();
 		
 		SendMessage("InitScene",requestPDB,SendMessageOptions.DontRequireReceiver);
+
+		DNA_Plane = GameObject.Find("DNA_Plane");
+		DNA_Plane.SetActive(false);
+		parseDNA.readFile("Assets/Resources/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
+
+		Debug.Log("parseDNA.data.Count: " + parseDNA.data.Count);
+		foreach (DictionaryEntry de in parseDNA.data) {
+			string[] val = (string[]) de.Value;
+			Debug.Log("Key = " + de.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
+		}
 	}
 
 	public void Display() {
@@ -234,24 +250,39 @@ public class Molecule3D:MonoBehaviour {
 		Debug.Log("clicked again!");
 	}
 
-	public void Test3() {
+	public void ToggleDNA() {
 		Debug.Log("clicked that DNA button I see...");
-		CanvasGroup c;
+		if (DNA_Plane.activeInHierarchy) {
+			Debug.Log("hide DNA.");
+			DNA_Plane.SetActive(false);
+		} else {
+			Debug.Log("show DNA");
+			DNA_Plane.SetActive(true);
+			if (!tileDNA.viewGenerated) {
+				Debug.Log("generating the mesh for the first time.");
+				tileDNA.BuildMesh();
+				tileDNA.viewGenerated = true;
+			}
+		}
+		// DNA_Plane.SetActive(true);
+		// tileDNA.BuildMesh();
 
-		GameObject tempObject = GameObject.Find("MinimalPanel_1");
-    	if(tempObject != null){
-        	//If we found the object , get the Canvas component from it.
-        	c = tempObject.GetComponent<CanvasGroup>();
-        	if(c == null){
-            	Debug.Log("Could not locate Canvas component on " + tempObject.name);
-        	} else {
-        		Debug.Log("CanvasGroup: " + c);
-        	}
+		// CanvasGroup c;
 
-        	c.alpha = 0.0f;
-        	c.interactable = false;
-        	c.blocksRaycasts = false; //does not allow collision.
-    	}
+		// GameObject tempObject = GameObject.Find("MinimalPanel_1");
+  //   	if(tempObject != null){
+  //       	//If we found the object , get the Canvas component from it.
+  //       	c = tempObject.GetComponent<CanvasGroup>();
+  //       	if(c == null){
+  //           	Debug.Log("Could not locate Canvas component on " + tempObject.name);
+  //       	} else {
+  //       		Debug.Log("CanvasGroup: " + c);
+  //       	}
+
+  //       	c.alpha = 0.0f;
+  //       	c.interactable = false;
+  //       	c.blocksRaycasts = false; //does not allow collision.
+  //   	}
 	}
 
 // 	void OnGUI() {	

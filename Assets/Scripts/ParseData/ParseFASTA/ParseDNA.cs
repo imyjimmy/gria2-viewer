@@ -30,5 +30,9 @@ namespace ParseData.ParseFASTA {
 		public ParseDNA() : base() {
 
 		}
+
+		// public void readFile(string path) : base readFile(string path) {
+			
+		// }
 	}
 }
