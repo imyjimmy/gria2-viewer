@@ -49954,7 +49954,7 @@ MonoBehaviour:
   _Value: 0
   _LabelFormat: '{0}: {1:N1}%'
   _Ticks: 5
-  _Snaps: 0
+  _Snaps: 20
   _RangeMin: 0
   _RangeMax: 100
   _AllowJump: 0

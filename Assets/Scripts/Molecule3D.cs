@@ -252,15 +252,27 @@ public class Molecule3D:MonoBehaviour {
 
 	public void ToggleDNA() {
 		Debug.Log("clicked that DNA button I see...");
+		MeshRenderer meshRenderer = DNA_Plane.GetComponent<MeshRenderer>();
+		MeshCollider meshCollider = DNA_Plane.GetComponent<MeshCollider>();
+
 		if (DNA_Plane.activeInHierarchy) {
 			Debug.Log("hide DNA.");
 			DNA_Plane.SetActive(false);
+
+			meshRenderer.enabled = false;
+			meshCollider.enabled = false;
 		} else {
 			Debug.Log("show DNA");
 			DNA_Plane.SetActive(true);
+
+			meshRenderer.enabled = true;
+			meshCollider.enabled = true;
+
+			// Debug.Log("meshRenderer.enabled: " + meshRenderer.enabled);
+
 			if (!tileDNA.viewGenerated) {
 				Debug.Log("generating the mesh for the first time.");
-				tileDNA.BuildMesh();
+				tileDNA.BuildMesh(DNA_Plane);
 				tileDNA.viewGenerated = true;
 			}
 		}

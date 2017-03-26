@@ -23,7 +23,8 @@ namespace View.DNA {
 			// gameObject.SetActive(false);
 		}
 		
-		public void BuildMesh() {
+		//called by Molecule3D.ToggleDNA
+		public void BuildMesh(GameObject DNA_Plane) {
 			Debug.Log("BuildMesh DNA_Plane");
 
 			int numTiles = size_x * size_z;
@@ -74,16 +75,39 @@ namespace View.DNA {
 			mesh.uv = uv;
 			
 			// Assign our mesh to our filter/renderer/collider
-			MeshFilter mesh_filter = GetComponent<MeshFilter>();
-			MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
-			MeshCollider mesh_collider = GetComponent<MeshCollider>();
+			// MeshFilter mesh_filter = GetComponent<MeshFilter>();
+			MeshRenderer mesh_renderer = DNA_Plane.GetComponent<MeshRenderer>();
+			MeshCollider mesh_collider = DNA_Plane.GetComponent<MeshCollider>();
 			
-			mesh_filter.mesh = mesh;
+			// mesh_filter.mesh = mesh;
 			mesh_collider.sharedMesh = mesh;
 			Debug.Log ("Done Mesh!");
-			
+
+			BuildTexture(DNA_Plane);
 		}
-		
+
+		public void BuildTexture(GameObject DNA_Plane) {
+			Debug.Log("inside build texture");
+
+			var texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+ 			
+ 			DNA_Plane.GetComponent<Renderer>().material.mainTexture = texture;
+     		
+     		// set the pixel values
+     		// texture.SetPixel(0, 0, Color(1.0, 1.0, 1.0, 0.5));
+    	 	// texture.SetPixel(1, 0, Color.clear);
+    	 	// texture.SetPixel(0, 1, Color.white);
+   	  		// texture.SetPixel(1, 1, Color.black);
+ 			for (int y = 0; y < texture.height; y++) {
+            	for (int x = 0; x < texture.width; x++) {
+                	Color color = Color.red;  //((x & y) != 0 ? Color.red : Color.gray);
+                	texture.SetPixel(x, y, color);
+            	}
+        	}
+ 
+     		// Apply all SetPixel calls
+    	 	texture.Apply();
+		}
 		
 	}
 }
