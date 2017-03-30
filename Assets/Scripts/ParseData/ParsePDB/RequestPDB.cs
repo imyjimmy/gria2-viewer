@@ -565,7 +565,7 @@ namespace  ParseData.ParsePDB
 						if(prevresnb == 0 && curresnb != 0)
 							MoleculeModel.firstresnb = curresnb;
 						if(curresnb != prevresnb){
-							// MoleculeModel.resChainList2.Add (s.Substring (21,1));
+							MoleculeModel.resChainList2.Add (s.Substring (21,1));
 							prevresnb = curresnb;
 						}
 

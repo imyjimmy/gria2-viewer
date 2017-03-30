@@ -911,7 +911,7 @@ public class Ribbons {
 		while(resNb<residueDicts.Count && splits.Count>0) {
 
 			if(resNb != splits[0]){
-				currentchain = Molecule.Model.MoleculeModel.resChainList[resNb]; //resChainList2
+				currentchain = Molecule.Model.MoleculeModel.resChainList2[resNb]; //resChainList2
 				ribbontag = "RibbonObj"; // + currentchain;
 				tmpDictList.Add(residueDicts[resNb]);
 				if(ssarray.Length != 0){ 
@@ -1096,7 +1096,7 @@ public class Ribbons {
 
 	private int ComputeNbRes(string chain){
 
-		List<string> reschain = Molecule.Model.MoleculeModel.resChainList; //resChainList2
+		List<string> reschain = Molecule.Model.MoleculeModel.resChainList2; //resChainList2
 		int nbres = 0;
 
 		for (int i = 0; i < reschain.Count; i++) {

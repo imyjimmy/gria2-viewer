@@ -192,7 +192,7 @@ namespace Molecule.Control {
 
 
 			}
-			residueDictList.Add(residueDict);
+			// residueDictList.Add(residueDict);
 			MoleculeModel.residueDictionaries = residueDictList;
 
 			Debug.Log("residueDictList.Count: " + residueDictList.Count);

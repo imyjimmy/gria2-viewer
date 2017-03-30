@@ -90,8 +90,8 @@ public class ScenePreload_5L1B : MonoBehaviour {
 	{
 		//http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb
 		// StartCoroutine(requestPDB.LoadPDBWWW("http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb"));
-		// StartCoroutine(requestPDB.LoadPDBWWW("http://imyjimmy.com/pdb-files/5l1b.pdb"));  //5l1b //1l2y
-		StartCoroutine(requestPDB.LoadPDBWWW("http://imyjimmy.com/pdb-files/1l2y.pdb"));  //5l1b //1l2y
+		StartCoroutine(requestPDB.LoadPDBWWW("http://imyjimmy.com/pdb-files/5l1b.pdb"));  //5l1b //1l2y
+		// StartCoroutine(requestPDB.LoadPDBWWW("http://imyjimmy.com/pdb-files/1l2y.pdb"));  //5l1b //1l2y
 
 		while(!RequestPDB.isDone) {
 			pdb_progress = requestPDB.progress;

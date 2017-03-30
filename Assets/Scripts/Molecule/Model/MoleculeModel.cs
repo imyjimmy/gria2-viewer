@@ -167,7 +167,7 @@ namespace Molecule.Model {
 		/// <summary>
 		/// The chain of each residue.
 		/// </summary>
-		// public static List<string> resChainList2 = new List<string>();
+		public static List<string> resChainList2 = new List<string>();
 
 		/// <summary>
 		/// First residue number in pdb.
