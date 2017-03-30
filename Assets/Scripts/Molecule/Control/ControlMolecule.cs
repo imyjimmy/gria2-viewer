@@ -138,13 +138,15 @@ namespace Molecule.Control {
 			Vector3 testVector = Vector3.zero;
 
 
-			
+			// Debug.Log("resNames.Count: " + resNames.Count);
 			int index=0;
 			for(int i=0; i<alist.Count; i++) {
 
 				currRes = resNames[i];
 				currResId = residueIds[i];
 				// New residue encountered
+				Debug.Log("currResId: " + residueIds[i] + " prevResId: " + prevResId);
+
 				if(!string.Equals(currRes, prevRes)) {
 					resNamesPerResidue.Add(prevRes);
 					currAtomSum *= (1f/nbAtoms);
@@ -155,7 +157,11 @@ namespace Molecule.Control {
 				prevRes = currRes;
 
 				if(currResId != prevResId) {
-					if(residueDict != null && residueDict.Count > 0){
+					// if(residueDict == null) {
+					// 	residueDict = new Dictionary<string, Vector3>(); //@imyjimmy: bug where first residue is not added.
+					// } 
+					Debug.Log("residueDict.Count: " + residueDict.Count);
+					if (residueDict != null && residueDict.Count > 0){
 						Debug.Log("adding the residueDict: " + currRes + ", id: " + currResId + " to residueDictList which has the following: ");
 						foreach (KeyValuePair<string, Vector3> pair in residueDict) {
 							Debug.Log("---k: " + pair.Key + " v: " + pair.Value); //@imyjimmy
@@ -177,14 +183,19 @@ namespace Molecule.Control {
 				// therefore multiple atoms of the same type. That generates collisions
 				// in the dictionary. C# doesn't like that.
 				if(!residueDict.TryGetValue(aNamesList[i], out testVector)){
+					Debug.Log("did add currAtom. ");
 					residueDict.Add(aNamesList[i], currAtom);
+				} else {
+					Debug.Log("did not add currAtom. ");
 				}
 				nbAtoms +=1f;
 
 
 			}
+			residueDictList.Add(residueDict);
 			MoleculeModel.residueDictionaries = residueDictList;
 
+			Debug.Log("residueDictList.Count: " + residueDictList.Count);
 			/*
 			for(int i=0; i<residues.Count; i++) {
 				Debug.Log("Residue " + resNamesPerResidue[i] + ": " + residues[i].ToString());

@@ -81,6 +81,7 @@ public class Ribbons {
 		return Vector2.Distance(one, two);
 	}
 	
+	//@imyjimmy: creates secondary structures from residueDicts.
 	private void CalculateSecondaryStructures(List<Dictionary<string, Vector3>> residueDicts, int[] ss, int[] handedness) {
 		Debug.Log("Ribbons.cs::CalculateSecondaryStructures > Beginning.");
 		Vector3 c0, n1, ca1, c1, n2;
@@ -188,6 +189,7 @@ public class Ribbons {
 	}
 	
 	// Adds a new control point to the arrays CPCenter, CPRight and CPLeft
+	//@imyjimmy wow it goes here!!
 	private void AddControlPoints(Vector3 ca0, Vector3 ox0, Vector3 ca1, int ss, int handedness) {
 		
 		Vector3 A, B, C, D, p0, cpt0, cpt1, cpt2;
@@ -241,7 +243,7 @@ public class Ribbons {
 		splineSide2.ShiftBSplineCPoints();
 	}
 	
-	
+	//@imyjimmy. the rabbit hole goes here
 	private void ConstructControlPoints(List<Dictionary<string, Vector3>> residueDicts, int res, int ss, int handedness) {
 		//Debug.Log("Ribbons.cs::ConstructControlPoints > Beginning.");
 		Vector3 ca0, ox0, ca1;
@@ -970,8 +972,11 @@ public class Ribbons {
 		int nbRes = residueDicts.Count;
 		int colorOffset = nbRes - 1;
 
+		Debug.Log("ss.Length: " + ss.Length);
+
 		if (createss) { // if ss informations in the pdb file
 			ss = sslist.ToArray ();
+			Debug.Log("ss.Length: " + ss.Length);
 			handedness = handedlist.ToArray ();
 		} else {
 			CalculateSecondaryStructures (residueDicts, ss, handedness);
@@ -1000,13 +1005,16 @@ public class Ribbons {
 			ConstructControlPoints(residueDicts, i, ss[i], handedness[i]);
 			int colorIndex = (i+colorOffset) % nbRes;
 			//int arrowIndex = (i+arrowOffset) % nbRes;
-			isArrow = (ss[colorIndex] == STRAND && ( (colorIndex+1 == nbRes) || (ss[colorIndex+1] != STRAND) ));
+			Debug.Log("ss.Length: " + ss.Length + " colorIndex: " + colorIndex + " nbRes: " + nbRes + " residueDicts.Count: " + residueDicts.Count);
+			isArrow = (ss[colorIndex] == STRAND && ( (colorIndex+1 == nbRes)  )); //|| (ss[colorIndex+1] != STRAND)
 			
 			if(RENDER_MODE == 0) {
+				Debug.Log("RENDER_MODE == 0");
 				GenerateSpline(0, vertices0);
 				GenerateSpline(1, vertices1);
 				GenerateSpline(2, vertices2);
 			} else {
+				Debug.Log("RENDER_MODE != 0");
 				if (isArrow && ARROW_WIDTH > 0f)
 					GenerateArrowRibbon(vertices, normals, triangles);
 				else
@@ -1195,8 +1203,8 @@ public class Ribbons {
 				}
 			}
 		}
-		sslist.RemoveAt (0);
-		handednesslist.RemoveAt (0);
+		// sslist.RemoveAt (0); @imyjimmy part of bug where residueDictList / residueDicts was short by one.
+		// handednesslist.RemoveAt (0);
 
 	}//End CreateSSlist
 
