@@ -207,6 +207,7 @@ public class Molecule3D:MonoBehaviour {
 		DNA_Plane = GameObject.Find("DNA_Plane");
 		DNA_Plane.SetActive(false);
 		parseDNA.readFile("Assets/Resources/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
+		// parseDNA.readFile("Assets/Resources/Gria2_data/test2.fasta");
 
 		Debug.Log("parseDNA.data.Count: " + parseDNA.data.Count);
 		foreach (DictionaryEntry de in parseDNA.data) {
@@ -273,6 +274,7 @@ public class Molecule3D:MonoBehaviour {
 			if (!tileDNA.viewGenerated) {
 				Debug.Log("generating the mesh for the first time.");
 				tileDNA.BuildMesh(DNA_Plane);
+				tileDNA.BuildTexture(DNA_Plane, parseDNA);
 				tileDNA.viewGenerated = true;
 			}
 		}

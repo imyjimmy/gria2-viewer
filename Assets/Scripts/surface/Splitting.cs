@@ -12,6 +12,7 @@ public class Splitting {
 	private List<Mesh> meshes;
 	private int lastIndex;
 	
+	//@imyjimmy fuck.
 	public List<Mesh> Split(MeshData mData) {
 		triangles = mData.triangles;
 		vertices = mData.vertices;
