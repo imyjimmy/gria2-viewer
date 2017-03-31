@@ -3758,7 +3758,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.InterfaceModules.Cast.HovercastInterface+HovercastRowEvent,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
 --- !u!114 &132930668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3806,7 +3806,7 @@ Transform:
   m_Children:
   - {fileID: 397567513}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
 --- !u!114 &139443252 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11462120, guid: 81b9003e7ea5fba4480b8c1fe50dd3dc,
@@ -7649,7 +7649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &321221167
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16614,7 +16614,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row1-ItemC
   _Label: AC
   _IsEnabled: 1
@@ -16622,17 +16622,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
   _DefaultGroupId: Group-Instance-357200
   _GroupId: 
@@ -18592,7 +18592,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: DNA Zoom Slider
   _Label: Zoom
   _IsEnabled: 1
@@ -18600,17 +18600,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableFloat+FloatValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0.5
   _LabelFormat: '{0}: {1:N1}'
   _Ticks: 5
@@ -21513,7 +21513,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row1-ItemBack
   _Label: Back
   _IsEnabled: 1
@@ -21532,12 +21532,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 2
 --- !u!114 &816261515
 MonoBehaviour:
@@ -24711,7 +24711,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row2-ItemC
   _Label: BC
   _IsEnabled: 1
@@ -24719,17 +24719,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
 --- !u!114 &917734201
 MonoBehaviour:
@@ -26651,7 +26651,7 @@ RectTransform:
   m_Father: {fileID: 772530764}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0.000015258789, y: 0}
   m_SizeDelta: {x: 80, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -27582,7 +27582,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row1-ItemBack
   _Label: Back
   _IsEnabled: 1
@@ -27601,12 +27601,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 2
 --- !u!114 &982076910
 MonoBehaviour:
@@ -29850,7 +29850,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row0-ItemB
   _Label: AA
   _IsEnabled: 1
@@ -29869,12 +29869,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 1
 --- !u!114 &1026373657
 MonoBehaviour:
@@ -31167,7 +31167,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row1-ItemD
   _Label: AD
   _IsEnabled: 1
@@ -31175,17 +31175,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
   _DefaultGroupId: Group-Instance-357200
   _GroupId: 
@@ -32601,14 +32601,34 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 483674, guid: 1b19ee4ea1ecb4fb3811be1bc81742c5, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.056250002
+      value: 0.0825
       objectReference: {fileID: 0}
     - target: {fileID: 437686, guid: 1b19ee4ea1ecb4fb3811be1bc81742c5, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.056250002
+      value: -0.03
       objectReference: {fileID: 0}
     - target: {fileID: 189958, guid: 1b19ee4ea1ecb4fb3811be1bc81742c5, type: 2}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 155460, guid: 1b19ee4ea1ecb4fb3811be1bc81742c5, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 448724, guid: 1b19ee4ea1ecb4fb3811be1bc81742c5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.052500002
+      objectReference: {fileID: 0}
+    - target: {fileID: 463442, guid: 1b19ee4ea1ecb4fb3811be1bc81742c5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.030000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 11438250, guid: 1b19ee4ea1ecb4fb3811be1bc81742c5, type: 2}
+      propertyPath: FlipLayoutDimensions
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11402518, guid: 1b19ee4ea1ecb4fb3811be1bc81742c5, type: 2}
+      propertyPath: FlipLayoutDimensions
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -32795,7 +32815,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row0-ItemD
   _Label: User Input Variants
   _IsEnabled: 1
@@ -32803,12 +32823,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 0
 --- !u!114 &1125851758
 MonoBehaviour:
@@ -33953,7 +33973,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row2-ItemB
   _Label: BB
   _IsEnabled: 1
@@ -33961,17 +33981,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
 --- !u!114 &1153998332
 MonoBehaviour:
@@ -38216,7 +38236,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row0-ItemA
   _Label: RNA
   _IsEnabled: 1
@@ -38235,12 +38255,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 1
 --- !u!114 &1252680425
 MonoBehaviour:
@@ -38541,7 +38561,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row0-ItemA
   _Label: DNA
   _IsEnabled: 1
@@ -38560,12 +38580,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 1
 --- !u!114 &1274171690
 MonoBehaviour:
@@ -39249,7 +39269,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row1-ItemE
   _Label: AE
   _IsEnabled: 1
@@ -39257,17 +39277,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
   _DefaultGroupId: Group-Instance-357200
   _GroupId: 
@@ -40644,7 +40664,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: DNA_select
   _Label: Show
   _IsEnabled: 1
@@ -40663,17 +40683,17 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
 --- !u!114 &1317863239
 MonoBehaviour:
@@ -42057,7 +42077,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: HovercastOpenItem
   _Label: 
   _IsEnabled: 1
@@ -42076,12 +42096,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 0
 --- !u!114 &1375341624
 MonoBehaviour:
@@ -44201,22 +44221,22 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Leap.Unity.InputModule.LeapInputModule+PositionEvent, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   onClickUp:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Leap.Unity.InputModule.LeapInputModule+PositionEvent, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   onHover:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Leap.Unity.InputModule.LeapInputModule+PositionEvent, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   whileClickHeld:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Leap.Unity.InputModule.LeapInputModule+PositionEvent, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   ShowExperimentalOptions: 0
   InteractionMode: 1
   ProjectiveToTactileTransitionDistance: 0.4
@@ -44259,7 +44279,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Leap.Unity.InputModule.LeapInputModule+PositionEvent, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   InnerPointer: 0
   InnerPointerOpacityScalar: 0.77
   TriggerHoverOnElementSwitch: 0
@@ -45297,7 +45317,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: DNA CDS Checkbox
   _Label: Coding Region (CDS)
   _IsEnabled: 1
@@ -45305,17 +45325,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
 --- !u!114 &1450596569
 MonoBehaviour:
@@ -45934,7 +45954,7 @@ RectTransform:
   m_Father: {fileID: 1214362626}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 2.4999847, y: 0}
   m_SizeDelta: {x: 5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -46612,7 +46632,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row0-ItemC
   _Label: Species (Homology)
   _IsEnabled: 1
@@ -46620,12 +46640,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 0
 --- !u!114 &1504190894
 MonoBehaviour:
@@ -47390,7 +47410,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row1-ItemF
   _Label: AF
   _IsEnabled: 1
@@ -47398,17 +47418,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
   _DefaultGroupId: Group-Instance-357200
   _GroupId: 
@@ -50801,7 +50821,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: DNA_Position
   _Label: Positon
   _IsEnabled: 1
@@ -50809,17 +50829,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableFloat+FloatValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
   _LabelFormat: '{0}: {1:N1}%'
   _Ticks: 5
@@ -51483,7 +51503,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row1-ItemB
   _Label: AB
   _IsEnabled: 1
@@ -51491,17 +51511,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
   _DefaultGroupId: Group-Instance-357200
   _GroupId: 
@@ -52320,7 +52340,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: HovercastTitleItem
   _Label: Gria2 Viewer Main Menu
   _IsEnabled: 1
@@ -52743,7 +52763,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Item-1
   _Label: Item A
   _IsEnabled: 1
@@ -52751,17 +52771,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
 --- !u!114 &1708110092
 MonoBehaviour:
@@ -58047,7 +58067,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row1-ItemA
   _Label: AA
   _IsEnabled: 1
@@ -58055,17 +58075,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableBool+BoolValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0
   _DefaultGroupId: Group-Instance-357200
   _GroupId: 
@@ -59101,7 +59121,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row2-ItemA
   _Label: BA
   _IsEnabled: 1
@@ -59109,17 +59129,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableFloat+FloatValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Value: 0.825
   _LabelFormat: '{0}: {1:N1}'
   _Ticks: 5
@@ -60612,7 +60632,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: HovercastBackItem
   _Label: 
   _IsEnabled: 0
@@ -60631,12 +60651,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 2
 --- !u!114 &1977586730
 MonoBehaviour:
@@ -64784,18 +64804,19 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2052418083}
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0, z: -0.96}
+  m_LocalRotation: {x: 0.36480477, y: -0, z: -0, w: 0.93108404}
+  m_LocalPosition: {x: 0, y: 0, z: -0.8903}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 42.788002, y: 0, z: 0}
   m_Children:
   - {fileID: 1802808032}
   - {fileID: 321221167}
+  - {fileID: 2091689567}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -0.316}
+  m_AnchoredPosition: {x: 0, y: -0.2800815}
   m_SizeDelta: {x: 1.2, y: 0.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2071750910
@@ -65406,12 +65427,12 @@ GameObject:
   - 114: {fileID: 2091689562}
   - 114: {fileID: 2091689561}
   m_Layer: 0
-  m_Name: SliderItem
+  m_Name: DNA_SliderItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2091689561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65427,33 +65448,33 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Item-4
-  _Label: Item B
+  _Label: Position%
   _IsEnabled: 1
   OnSelectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnValueChangedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectableFloat+FloatValueChangedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
-  _Value: 0.5
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
+  _Value: 0.8
   _LabelFormat: '{0}: {1:N1}'
   _Ticks: 0
   _Snaps: 0
-  _RangeMin: -100
-  _RangeMax: 100
+  _RangeMin: 100
+  _RangeMax: 0
   _AllowJump: 0
-  _FillStartingPoint: 0
+  _FillStartingPoint: 2
   _AllowIdleDeselection: 0
 --- !u!114 &2091689562
 MonoBehaviour:
@@ -65493,9 +65514,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a3563e74098d514782fd9a08368ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CursorDataProvider: {fileID: 0}
+  CursorDataProvider: {fileID: 2111642932}
   ProximityProvider: {fileID: 2091689562}
-  InteractionSettings: {fileID: 0}
+  InteractionSettings: {fileID: 118823044}
 --- !u!114 &2091689565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65526,14 +65547,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2091689560}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.076678395, y: -0.260867, z: 0.027220964}
-  m_LocalScale: {x: 2, y: 2, z: 2}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.31736666, y: -0, z: -0, w: 0.948303}
+  m_LocalPosition: {x: 0.243, y: 0.27, z: -0.057}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: -37.001003, y: 0, z: 0}
   m_Children:
   - {fileID: 164239003}
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_Father: {fileID: 2052418087}
+  m_RootOrder: 2
 --- !u!1 &2093754902
 GameObject:
   m_ObjectHideFlags: 0
@@ -67437,7 +67458,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.HoverItemData+EnabledChangedEventHandler, Assembly-CSharp,
-      Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Id: Row2-ItemBack
   _Label: Back
   _IsEnabled: 1
@@ -67456,12 +67477,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   OnDeselectedEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Hover.Core.Items.Types.HoverItemDataSelectable+SelectedEventHandler,
-      Assembly-CSharp, Version=1.0.6295.20651, Culture=neutral, PublicKeyToken=null
+      Assembly-CSharp, Version=1.0.6299.16967, Culture=neutral, PublicKeyToken=null
   _Action: 2
 --- !u!114 &2143385777
 MonoBehaviour:
