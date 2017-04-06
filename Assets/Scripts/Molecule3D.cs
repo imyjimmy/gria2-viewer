@@ -117,7 +117,9 @@ public class Molecule3D:MonoBehaviour {
 	//@imyjimmy added
 	private ParseDNA parseDNA = new ParseDNA();
 	private TileDNA tileDNA = new TileDNA();
-	private GameObject DNA_Plane; 
+	private GameObject DNA_Plane;
+	private GameObject DNA_Canvas;
+
 //	private Boolean flag=false;
 	private Boolean isControl=false;
 	private IPAddress _ipAddr;
@@ -182,7 +184,13 @@ public class Molecule3D:MonoBehaviour {
 	}
 
 	void Awake() {
-		System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");	
+		System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+		timeleft = updateInterval;	
+//		AtomModel.InitHiRERNA();
+		AtomModel.InitAtomic();
+		SendMessage("InitScene",requestPDB,SendMessageOptions.DontRequireReceiver);
+
+
 	}
 
 	void Start() {		
@@ -197,15 +205,19 @@ public class Molecule3D:MonoBehaviour {
 		// gUIDisplay=new GUIDisplay();
 		// DebugStreamer.message = "new GUIDisplay()";
 		
-		timeleft = updateInterval;
-		
-//		AtomModel.InitHiRERNA();
-		AtomModel.InitAtomic();
-		
-		SendMessage("InitScene",requestPDB,SendMessageOptions.DontRequireReceiver);
+// 		timeleft = updateInterval;	
+// //		AtomModel.InitHiRERNA();
+// 		AtomModel.InitAtomic();
+// 		SendMessage("InitScene",requestPDB,SendMessageOptions.DontRequireReceiver);
 
+		DNA_Canvas = GameObject.Find("DNA_Canvas");
 		DNA_Plane = GameObject.Find("DNA_Plane");
-		DNA_Plane.SetActive(false);
+
+		DNA_Canvas.SetActive(false);
+		foreach (Transform child in DNA_Canvas.transform) {
+			Debug.Log("child: " + child + " isActive: " + child.gameObject.activeInHierarchy);
+		}
+
 		parseDNA.readFile("Assets/Resources/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
 		// parseDNA.readFile("Assets/Resources/Gria2_data/test2.fasta");
 
@@ -253,21 +265,32 @@ public class Molecule3D:MonoBehaviour {
 
 	public void ToggleDNA() {
 		Debug.Log("clicked that DNA button I see...");
-		MeshRenderer meshRenderer = DNA_Plane.GetComponent<MeshRenderer>();
-		MeshCollider meshCollider = DNA_Plane.GetComponent<MeshCollider>();
 
-		if (DNA_Plane.activeInHierarchy) {
+		// MeshRenderer meshRenderer = DNA_Plane.GetComponent<MeshRenderer>();
+		// MeshCollider meshCollider = DNA_Plane.GetComponent<MeshCollider>();
+
+		if (DNA_Canvas.activeInHierarchy) {
 			Debug.Log("hide DNA.");
+			DNA_Canvas.SetActive(false);
 			DNA_Plane.SetActive(false);
 
-			meshRenderer.enabled = false;
-			meshCollider.enabled = false;
+			// meshRenderer.enabled = false;
+			// meshCollider.enabled = false;
 		} else {
 			Debug.Log("show DNA");
-			DNA_Plane.SetActive(true);
+			DNA_Canvas.SetActive(true);
+			foreach (Transform child in DNA_Canvas.transform) {
+				Debug.Log("child: " + child);
+				child.gameObject.SetActive(true);
+				MonoBehaviour[] scripts = child.gameObject.GetComponents<MonoBehaviour>();
+				foreach (MonoBehaviour m in scripts) {
+					m.enabled = true;
+				}
+			}
+			// DNA_Plane.SetActive(true);
 
-			meshRenderer.enabled = true;
-			meshCollider.enabled = true;
+			// meshRenderer.enabled = true;
+			// meshCollider.enabled = true;
 
 			// Debug.Log("meshRenderer.enabled: " + meshRenderer.enabled);
 
