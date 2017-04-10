@@ -71,7 +71,8 @@ using System;
 using ParseData.ParsePDB;
 using ParseData.IParsePDB;
 using ParseData.ParseFASTA; //@imyjimmy
-using View.DNA;
+using View.NucleicAcids;
+using Controller;
 using UI;
 using Molecule.View;
 //using System.Net.Sockets;
@@ -117,6 +118,7 @@ public class Molecule3D:MonoBehaviour {
 	//@imyjimmy added
 	private ParseDNA parseDNA = new ParseDNA();
 	private TileDNA tileDNA = new TileDNA();
+	private DNAPlaneController dnaPlaneController = new DNAPlaneController();
 	private GameObject DNA_Plane;
 	private GameObject DNA_Canvas;
 
@@ -189,8 +191,6 @@ public class Molecule3D:MonoBehaviour {
 //		AtomModel.InitHiRERNA();
 		AtomModel.InitAtomic();
 		SendMessage("InitScene",requestPDB,SendMessageOptions.DontRequireReceiver);
-
-
 	}
 
 	void Start() {		
@@ -218,14 +218,18 @@ public class Molecule3D:MonoBehaviour {
 			Debug.Log("child: " + child + " isActive: " + child.gameObject.activeInHierarchy);
 		}
 
-		parseDNA.readFile("Assets/Resources/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
+		// parseDNA.readFile("Assets/Resources/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
+		Debug.Log(Application.dataPath + "/StreamingAssets/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
+		parseDNA.readFile(Application.dataPath + "/StreamingAssets/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
 		// parseDNA.readFile("Assets/Resources/Gria2_data/test2.fasta");
 
-		Debug.Log("parseDNA.data.Count: " + parseDNA.data.Count);
-		foreach (DictionaryEntry de in parseDNA.data) {
-			string[] val = (string[]) de.Value;
-			Debug.Log("Key = " + de.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
-		}
+		// Debug.Log("parseDNA.data.Count: " + parseDNA.data.Count);
+		// foreach (DictionaryEntry de in parseDNA.data) {
+		// 	string[] val = (string[]) de.Value;
+		// 	Debug.Log("Key = " + de.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
+		// }
+
+		dnaPlaneController.DNA_Model = parseDNA;
 	}
 
 	public void Display() {
@@ -266,16 +270,11 @@ public class Molecule3D:MonoBehaviour {
 	public void ToggleDNA() {
 		Debug.Log("clicked that DNA button I see...");
 
-		// MeshRenderer meshRenderer = DNA_Plane.GetComponent<MeshRenderer>();
-		// MeshCollider meshCollider = DNA_Plane.GetComponent<MeshCollider>();
-
 		if (DNA_Canvas.activeInHierarchy) {
 			Debug.Log("hide DNA.");
 			DNA_Canvas.SetActive(false);
 			DNA_Plane.SetActive(false);
 
-			// meshRenderer.enabled = false;
-			// meshCollider.enabled = false;
 		} else {
 			Debug.Log("show DNA");
 			DNA_Canvas.SetActive(true);
@@ -287,22 +286,15 @@ public class Molecule3D:MonoBehaviour {
 					m.enabled = true;
 				}
 			}
-			// DNA_Plane.SetActive(true);
 
-			// meshRenderer.enabled = true;
-			// meshCollider.enabled = true;
-
-			// Debug.Log("meshRenderer.enabled: " + meshRenderer.enabled);
-
-			if (!tileDNA.viewGenerated) {
+			if (!dnaPlaneController.viewGenerated) {
 				Debug.Log("generating the mesh for the first time.");
-				tileDNA.BuildMesh(DNA_Plane);
-				tileDNA.BuildTexture(DNA_Plane, parseDNA);
-				tileDNA.viewGenerated = true;
+				dnaPlaneController.BuildMesh(DNA_Plane);
+				dnaPlaneController.BuildTexture(DNA_Plane, parseDNA);
+				dnaPlaneController.viewGenerated = true;
 			}
 		}
-		// DNA_Plane.SetActive(true);
-		// tileDNA.BuildMesh();
+	}
 
 		// CanvasGroup c;
 
@@ -320,7 +312,6 @@ public class Molecule3D:MonoBehaviour {
   //       	c.interactable = false;
   //       	c.blocksRaycasts = false; //does not allow collision.
   //   	}
-	}
 
 // 	void OnGUI() {	
 // 		GUI.skin = mySkin;

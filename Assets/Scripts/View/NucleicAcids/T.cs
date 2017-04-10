@@ -1,5 +1,5 @@
 
-namespace View.DNA {
+namespace View.NucleicAcids {
 	using UnityEngine;
 
 	public class T {

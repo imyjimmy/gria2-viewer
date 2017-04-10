@@ -1,5 +1,6 @@
 //@imyjimmy
-namespace View.DNA {
+//Should probably move it to controller...
+namespace View.NucleicAcids {
 	using UnityEngine;
 	using System.Collections;
 
@@ -36,28 +37,25 @@ namespace View.DNA {
 			Mesh mesh = DNA_Plane.GetComponent<MeshFilter>().mesh;
 			Vector2[] uvs = mesh.uv;
 			
-			Vector2 factor = new Vector2(1.0f, 0.0255f);
+			Vector2 factor = new Vector2(1.00f, 0.0255f);
 			for (int i=0; i<uvs.Length; i++) {
 				uvs[i] = Vector2.Scale(uvs[i], factor);
 			}
 
 			mesh.uv = uvs;
 			
-			// // Assign our mesh to our filter/renderer/collider
-			// // MeshFilter mesh_filter = GetComponent<MeshFilter>();
+			// Assign our mesh to our filter/renderer/collider
+			// MeshFilter mesh_filter = GetComponent<MeshFilter>();
 			MeshRenderer mesh_renderer = DNA_Plane.GetComponent<MeshRenderer>();
 			// MeshCollider mesh_collider = DNA_Plane.GetComponent<MeshCollider>();
 			
 			mesh_renderer.material.SetTextureScale("_MainTex", new Vector2(-1,1)); //flips uvs so that 0,0 starts at upper left.
 
 			Debug.Log ("Done Mesh!");
-
-			// BuildTexture(DNA_Plane);
 		}
 
 		public void BuildTexture(GameObject DNA_Plane, ParseDNA parseDNA) {
 			Debug.Log("inside build texture");
-
 			string sequence = "";
 			foreach (DictionaryEntry de in parseDNA.data) {
 				string[] val = (string[]) de.Value;
@@ -93,11 +91,8 @@ namespace View.DNA {
 						break;
 				}
 			}
- 
      		texture.filterMode = FilterMode.Point;
     	 	texture.Apply();
-
-    	 	// DNA_Plane.GetComponent<Renderer>().material.mainTextureOffset = new Vector2(0.00f, 0.00f);
 		}
 
 		// public void setColor(Texture2D texture, int width, int height, Color nucColor) {

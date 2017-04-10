@@ -30,6 +30,7 @@ namespace ParseData.ParseFASTA {
 
 		public void readFile(string path) {
 			Debug.Log("inside readFile for fasta data.");
+			// string newPath = Application.dataPath + "/StreamingAssets";
 			StreamReader reader = new StreamReader(path);
 
 			string key, descr, val;
