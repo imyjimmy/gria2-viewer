@@ -74,7 +74,7 @@ namespace Hover.Core.Items.Managers {
 			for ( int i = 0 ; i < vHighStates.Count ; i++ ) {
 				HoverItemHighlightState item = vHighStates[i];
 
-				if ( !item.isActiveAndEnabled || item.IsHighlightPreventedViaAnyDisplay() ) {
+				if ( item.IsHighlightPreventedViaAnyDisplay() ) { //!item.isActiveAndEnabled || 
 					continue;
 				}
 

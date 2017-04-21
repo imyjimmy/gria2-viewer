@@ -37,7 +37,7 @@ namespace Controller {
 			endIndex = 179584302;
 
 			camera = Camera.main;
-			Debug.Log("camera: " + camera.transform);
+			Debug.Log("DNA Plane camera: " + camera.transform);
 			Look = GameObject.Find("CursorRenderers/Look");
 			DNAUI = GameObject.Find("CursorRenderers/Look/DNA_Letter_UI");
 			DNAUI.SetActive(false);
@@ -50,6 +50,9 @@ namespace Controller {
 
 		public void Update() {
 			// Debug.Log("DNA Letter UI" + DNAUI);
+			// Debug.Log("gameObject: " gameObject.name);
+
+			Debug.DrawRay(camera.transform.position, camera.transform.forward, Color.red);
 			Vector2? uv = raycastLookCursor();
 
 			if (uv != null) {
@@ -93,10 +96,10 @@ namespace Controller {
         	Vector2 uv = raycastHit.textureCoord;
         	Vector2 uv2 = raycastHit.textureCoord2;
         	uv.x = texture.width - uv.x*texture.width;
-        	uv.y = uv.y * 0.0255f * texture.height;
+        	uv.y = uv.y * texture.height; //* 0.0255f 
 
-        	// Debug.Log("textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
-        	// Debug.Log("int coords: " + (int) uv.x + ", " + (int) uv.y);
+        	Debug.Log("textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
+        	Debug.Log("int coords: " + (int) uv.x + ", " + (int) uv.y);
 
         	return uv;		
 		}	
@@ -136,10 +139,11 @@ namespace Controller {
 		//called by Molecule3D.ToggleDNA
 		public void BuildMesh(GameObject DNA_Plane) {
 			Debug.Log("BuildMesh DNA_Plane");
-			Mesh mesh = DNA_Plane.GetComponent<MeshFilter>().mesh;
+			Debug.Log(gameObject.name);
+			Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
 			Vector2[] uvs = mesh.uv;
 			
-			Vector2 factor = new Vector2(1.00f, 0.0255f);
+			Vector2 factor = new Vector2(1.00f, 0.0255f); //0.0255;
 			for (int i=0; i<uvs.Length; i++) {
 				uvs[i] = Vector2.Scale(uvs[i], factor);
 			}
@@ -147,12 +151,14 @@ namespace Controller {
 			mesh.uv = uvs;
 			
 			// Assign our mesh to our filter/renderer/collider
-			// MeshFilter mesh_filter = GetComponent<MeshFilter>();
-			MeshRenderer mesh_renderer = DNA_Plane.GetComponent<MeshRenderer>();
-			// MeshCollider mesh_collider = DNA_Plane.GetComponent<MeshCollider>();
+			MeshFilter mesh_filter = GetComponent<MeshFilter>();
+			MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
+			MeshCollider mesh_collider = GetComponent<MeshCollider>();
 			
 			mesh_renderer.material.SetTextureScale("_MainTex", new Vector2(-1,1)); //flips uvs so that 0,0 starts at upper left.
 
+			mesh_filter.mesh = mesh;
+			mesh_collider.sharedMesh = mesh;
 			Debug.Log ("Done Mesh!");
 		}
 
@@ -169,7 +175,7 @@ namespace Controller {
 			}
 
 			var texture = new Texture2D(textureX, textureY, TextureFormat.BGRA32, true);
- 			DNA_Plane.GetComponent<Renderer>().material.mainTexture = texture;    		
+ 			GetComponent<Renderer>().material.mainTexture = texture;    		
 
    	  		texture.SetPixel(textureX, textureY, Color.black); // mark the end of this texture.
    	  		

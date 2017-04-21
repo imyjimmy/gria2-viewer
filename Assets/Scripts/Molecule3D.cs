@@ -118,9 +118,10 @@ public class Molecule3D:MonoBehaviour {
 	//@imyjimmy added
 	private ParseDNA parseDNA = new ParseDNA();
 	private TileDNA tileDNA = new TileDNA();
-	private DNAPlaneController dnaPlaneController = new DNAPlaneController();
+	private DNAPlaneController dnaPlaneController;
 	private GameObject DNA_Plane;
 	private GameObject DNA_Canvas;
+	private GameObject DNA_Slider;
 
 //	private Boolean flag=false;
 	private Boolean isControl=false;
@@ -191,6 +192,8 @@ public class Molecule3D:MonoBehaviour {
 //		AtomModel.InitHiRERNA();
 		AtomModel.InitAtomic();
 		SendMessage("InitScene",requestPDB,SendMessageOptions.DontRequireReceiver);
+		// ScenePreload_5L1B scene = new ScenePreload_5L1B();
+		// scene.InitScene(requestPDB);
 	}
 
 	void Start() {		
@@ -212,11 +215,15 @@ public class Molecule3D:MonoBehaviour {
 
 		DNA_Canvas = GameObject.Find("DNA_Canvas");
 		DNA_Plane = GameObject.Find("DNA_Plane");
+		DNA_Slider = GameObject.Find("DNA_SliderItem");
 
-		DNA_Canvas.SetActive(false);
-		foreach (Transform child in DNA_Canvas.transform) {
-			Debug.Log("child: " + child + " isActive: " + child.gameObject.activeInHierarchy);
-		}
+		dnaPlaneController = (DNAPlaneController) DNA_Plane.GetComponent(typeof(DNAPlaneController));
+		DNA_Plane.GetComponent<Renderer>().enabled = false;
+		DNA_Slider.SetActive(false);
+		// DNA_Canvas.SetActive(false);
+		// foreach (Transform child in DNA_Canvas.transform) {
+		// 	Debug.Log("child: " + child + " isActive: " + child.gameObject.activeInHierarchy);
+		// }
 
 		// parseDNA.readFile("Assets/Resources/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
 		Debug.Log(Application.dataPath + "/StreamingAssets/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
@@ -270,30 +277,37 @@ public class Molecule3D:MonoBehaviour {
 	public void ToggleDNA() {
 		Debug.Log("clicked that DNA button I see...");
 
-		if (DNA_Canvas.activeInHierarchy) {
-			Debug.Log("hide DNA.");
-			DNA_Canvas.SetActive(false);
-			DNA_Plane.SetActive(false);
+		DNA_Plane.GetComponent<Renderer>().enabled = !DNA_Plane.GetComponent<Renderer>().enabled;
+		DNA_Slider.SetActive(!DNA_Slider.activeInHierarchy);
 
-		} else {
-			Debug.Log("show DNA");
-			DNA_Canvas.SetActive(true);
-			foreach (Transform child in DNA_Canvas.transform) {
-				Debug.Log("child: " + child);
-				child.gameObject.SetActive(true);
-				MonoBehaviour[] scripts = child.gameObject.GetComponents<MonoBehaviour>();
-				foreach (MonoBehaviour m in scripts) {
-					m.enabled = true;
-				}
-			}
-
-			if (!dnaPlaneController.viewGenerated) {
-				Debug.Log("generating the mesh for the first time.");
-				dnaPlaneController.BuildMesh(DNA_Plane);
-				dnaPlaneController.BuildTexture(DNA_Plane, parseDNA);
-				dnaPlaneController.viewGenerated = true;
-			}
+		if (DNA_Plane.GetComponent<Renderer>().enabled) {
+			dnaPlaneController.BuildMesh(DNA_Plane);
+			dnaPlaneController.BuildTexture(DNA_Plane, parseDNA);
 		}
+		// if (DNA_Plane.activeInHierarchy) {
+		// 	Debug.Log("hide DNA.");
+		// 	DNA_Canvas.SetActive(false);
+		// 	DNA_Plane.SetActive(false);
+
+		// } else {
+		// 	Debug.Log("show DNA");
+		// 	DNA_Canvas.SetActive(true);
+		// 	foreach (Transform child in DNA_Canvas.transform) {
+		// 		Debug.Log("child: " + child);
+		// 		child.gameObject.SetActive(true);
+		// 		MonoBehaviour[] scripts = child.gameObject.GetComponents<MonoBehaviour>();
+		// 		foreach (MonoBehaviour m in scripts) {
+		// 			m.enabled = true;
+		// 		}
+		// 	}
+
+		// 	if (!dnaPlaneController.viewGenerated) {
+		// 		Debug.Log("generating the mesh for the first time.");
+		// 		dnaPlaneController.BuildMesh(DNA_Plane);
+		// 		dnaPlaneController.BuildTexture(DNA_Plane, parseDNA);
+		// 		dnaPlaneController.viewGenerated = true;
+		// 	}
+		// }
 	}
 
 		// CanvasGroup c;
