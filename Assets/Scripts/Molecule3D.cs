@@ -225,10 +225,8 @@ public class Molecule3D:MonoBehaviour {
 		// 	Debug.Log("child: " + child + " isActive: " + child.gameObject.activeInHierarchy);
 		// }
 
-		// parseDNA.readFile("Assets/Resources/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
-		Debug.Log(Application.dataPath + "/StreamingAssets/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
-		parseDNA.readFile(Application.dataPath + "/StreamingAssets/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
-		// parseDNA.readFile("Assets/Resources/Gria2_data/test2.fasta");
+		Debug.Log(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
+		parseDNA.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
 
 		// Debug.Log("parseDNA.data.Count: " + parseDNA.data.Count);
 		// foreach (DictionaryEntry de in parseDNA.data) {

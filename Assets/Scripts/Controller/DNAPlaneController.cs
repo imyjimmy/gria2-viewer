@@ -45,7 +45,7 @@ namespace Controller {
 
 			//workaround until I implement singleton model.
 			DNA_Model = new ParseDNA();
-			DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2_data/gria2_dna_rattus_nrovegicus.fasta");
+			DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
 		}
 
 		public void Update() {
