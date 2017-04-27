@@ -137,7 +137,7 @@ namespace Controller {
 		}
 	
 		//called by Molecule3D.ToggleDNA
-		public void BuildMesh(GameObject DNA_Plane) {
+		public void BuildMeshUVs(GameObject DNA_Plane) {
 			Debug.Log("BuildMesh DNA_Plane");
 			Debug.Log(gameObject.name);
 			Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
@@ -156,7 +156,6 @@ namespace Controller {
 			MeshCollider mesh_collider = GetComponent<MeshCollider>();
 			
 			mesh_renderer.material.SetTextureScale("_MainTex", new Vector2(-1,1)); //flips uvs so that 0,0 starts at upper left.
-
 			mesh_filter.mesh = mesh;
 			mesh_collider.sharedMesh = mesh;
 			Debug.Log ("Done Mesh!");

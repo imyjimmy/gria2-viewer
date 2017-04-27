@@ -264,14 +264,6 @@ public class Molecule3D:MonoBehaviour {
 		}
 	}
 
-	public void Test() {
-		Debug.Log("clicked.");
-	}
-
-	public void Test2() {
-		Debug.Log("clicked again!");
-	}
-
 	public void ToggleDNA() {
 		Debug.Log("clicked that DNA button I see...");
 
@@ -279,7 +271,7 @@ public class Molecule3D:MonoBehaviour {
 		DNA_Slider.SetActive(!DNA_Slider.activeInHierarchy);
 
 		if (DNA_Plane.GetComponent<Renderer>().enabled) {
-			dnaPlaneController.BuildMesh(DNA_Plane);
+			dnaPlaneController.BuildMeshUVs(DNA_Plane);
 			dnaPlaneController.BuildTexture(DNA_Plane, parseDNA);
 		}
 		// if (DNA_Plane.activeInHierarchy) {
