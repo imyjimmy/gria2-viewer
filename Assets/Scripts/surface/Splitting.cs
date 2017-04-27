@@ -16,6 +16,9 @@ public class Splitting {
 	public int size_x = 100;
 	public int size_z = 50;
 	public float tileSize = 1.0f;
+
+	private Vector3 CENTER = new Vector3(0f,0f,0f);
+
 	
 	//@imyjimmy fuck.
 	public List<Mesh> Split(MeshData mData) {
@@ -24,8 +27,6 @@ public class Splitting {
 		normals = mData.normals;
 		colors = mData.colors;
 		meshes = new List<Mesh>();
-
-		Mesh m;
 
 		if(UI.UIData.isGLIC)
 			vertexLimit = 59520;
@@ -41,8 +42,6 @@ public class Splitting {
 			mesh.colors32 = colors;
 			meshes.Add(mesh);
 
-			m = this.makeMesh();
-			// meshes.Add(m);
 			return meshes;
 		}
 		
@@ -51,9 +50,6 @@ public class Splitting {
 		while(currentIndex < lastIndex) {
 			FillMesh();
 		}
-		
-		m = this.makeMesh();
-		// meshes.Add(m);
 
 		return meshes;
 	}
@@ -170,7 +166,20 @@ public class Splitting {
 		mesh.triangles = tris.ToArray();
 		mesh.normals = norms.ToArray();
 		mesh.colors32 = cols.ToArray();
-		
-		meshes.Add(mesh);
+	}
+
+	//@imyjimmy proof of concept of adding/ changing the mesh.
+	public void updateSplit() {
+		Debug.Log("inside Splitting.");
+		Mesh m = this.makeMesh();
+		// meshes.Add(m);
+		GameObject ribbObj = new GameObject("Ribbons");
+		ribbObj.tag = "RibbonObj";
+		ribbObj.AddComponent<MeshFilter>();
+		ribbObj.AddComponent<MeshRenderer>();
+		ribbObj.GetComponent<MeshFilter>().mesh = m;
+		ribbObj.GetComponent<Renderer>().material = new Material(Shader.Find("Custom/Ribbons"));
+		ribbObj.transform.position = CENTER;
+		ribbObj.transform.localPosition = CENTER;
 	}
 }

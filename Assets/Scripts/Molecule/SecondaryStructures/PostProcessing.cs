@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PostProcessing {
-	private static Vector3 CENTER = new Vector3(0f,0f,0f);
+	private Vector3 CENTER = new Vector3(0f,0f,0f);
 	
+	public Splitting split = new Splitting();
 	/// <summary>
 	/// First attempt at making ribbons thick. Not used anymore.
 	/// </summary>
@@ -20,7 +21,7 @@ public class PostProcessing {
 	/// <param name='colors'>
 	/// Colors.
 	/// </param>
-	private static void DuplicateVertices(List<Vector3> vertices, List<Vector3> normals,
+	private void DuplicateVertices(List<Vector3> vertices, List<Vector3> normals,
 													List<int> triangles, List<Color32> colors) {
 		int nbVertices = vertices.Count; // we need a constant value, can't iterate with <vertices.Count in the loop
 		float displacement = 0.6f;
@@ -149,7 +150,7 @@ public class PostProcessing {
 	}
 	
 	//@imyjimmy this is here!!!
-	private static void SubGenerateMeshes(List<Mesh> meshes, string tag, string gameobj) {
+	private void SubGenerateMeshes(List<Mesh> meshes, string tag, string gameobj) {
 		foreach(Mesh mesh in meshes) {
 			
 			/*
@@ -176,7 +177,7 @@ public class PostProcessing {
 		}
 	}
 	
-	private static void AddFirstFrontalFace(List<Vector3> vertices, List<Vector3> normals,
+	private void AddFirstFrontalFace(List<Vector3> vertices, List<Vector3> normals,
 										List<int> triangles, List<Color32> colors, int[] ss) {
 		int nbVert = vertices.Count;
 		Vector3 back = (vertices[8] - vertices[7]).normalized;
@@ -232,7 +233,7 @@ public class PostProcessing {
 
 	}
 	
-	private static void AddLastFrontalFace(List<Vector3> vertices, List<Vector3> normals,
+	private void AddLastFrontalFace(List<Vector3> vertices, List<Vector3> normals,
 										List<int> triangles, List<Color32> colors, int[] ss) {
 		int nbVert = vertices.Count;
 		
@@ -293,7 +294,7 @@ public class PostProcessing {
 	}
 	
 
-	public static void GenerateMeshes(List<Vector3> vertices, List<Vector3> normals,
+	public void GenerateMeshes(List<Vector3> vertices, List<Vector3> normals,
 										List<int> triangles, List<Color32> colors, int[] ss,
 	                                  string tag="RibbonObj", string gameobj="Ribbons") {
 	//	DuplicateVertices(vertices, normals, triangles, colors);
@@ -317,7 +318,6 @@ public class PostProcessing {
 		}
 		*/
 		
-		Splitting split = new Splitting();
 		List<Mesh> meshes = split.Split(mData);
 		SubGenerateMeshes(meshes, tag, gameobj);		
 	}

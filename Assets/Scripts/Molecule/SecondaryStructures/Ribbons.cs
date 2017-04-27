@@ -43,6 +43,8 @@ public class Ribbons {
 	
 	public static float[] ribbonWidth = {1.5f, 1.7f, 0.3f}; // Ribbon widths for helix, strand and coil, respectively
 	
+	public PostProcessing postprocessing = new PostProcessing();
+
 	private float CalculateTorsionalAngle(Vector3 at0, Vector3 at1, Vector3 at2, Vector3 at3, bool print) {
 		Vector3 r01 = at0 - at1;
 		Vector3 r32 = at3 - at2;
@@ -1050,7 +1052,7 @@ public class Ribbons {
 		if(RENDER_MODE == 0) {
 			// Forget that for now
 		} else {
-				PostProcessing.GenerateMeshes(vertices, normals, triangles, colors, ss);
+			postprocessing.GenerateMeshes(vertices, normals, triangles, colors, ss);
 		}
 		
 	} // End of CreateRibbons

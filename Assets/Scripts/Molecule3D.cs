@@ -270,9 +270,10 @@ public class Molecule3D:MonoBehaviour {
 		DNA_Plane.GetComponent<Renderer>().enabled = !DNA_Plane.GetComponent<Renderer>().enabled;
 		DNA_Slider.SetActive(!DNA_Slider.activeInHierarchy);
 
-		if (DNA_Plane.GetComponent<Renderer>().enabled) {
+		if (DNA_Plane.GetComponent<Renderer>().enabled && !dnaPlaneController.viewGenerated) {
 			dnaPlaneController.BuildMeshUVs(DNA_Plane);
 			dnaPlaneController.BuildTexture(DNA_Plane, parseDNA);
+			dnaPlaneController.viewGenerated = !dnaPlaneController.viewGenerated;
 		}
 		// if (DNA_Plane.activeInHierarchy) {
 		// 	Debug.Log("hide DNA.");

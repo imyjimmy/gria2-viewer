@@ -75,6 +75,8 @@ public class ScenePreload_5L1B : MonoBehaviour {
 	
 	private GameObject LoadBox;	//@imyjimmy
 
+	public Ribbons ribbons;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -91,7 +93,8 @@ public class ScenePreload_5L1B : MonoBehaviour {
 		//http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb
 		// StartCoroutine(requestPDB.LoadPDBWWW("http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb"));
 		// StartCoroutine(requestPDB.LoadPDBWWW("http://imyjimmy.com/pdb-files/5l1b.pdb"));  //5l1b //1l2y
-		StartCoroutine(requestPDB.LoadPDBWWW("file:///C://Users/imyjimmy-vr/Documents/vr-projects/gria2-viewer/Assets/StreamingAssets/Gria2Data/5l1b_short.pdb"));  //5l1b //1l2y
+		//StartCoroutine(requestPDB.LoadPDBWWW("file:///C://Users/imyjimmy-vr/Documents/vr-projects/gria2-viewer/Assets/StreamingAssets/Gria2Data/5l1b_short.pdb"));  //5l1b //1l2y
+		StartCoroutine(requestPDB.LoadPDBWWW("file:///C://Users/imyjimmy-vr/Documents/vr-projects/gria2-viewer/Assets/StreamingAssets/Gria2Data/1l2y.pdb"));  //5l1b //1l2y
 
 		while(!RequestPDB.isDone) {
 			pdb_progress = requestPDB.progress;
@@ -108,7 +111,7 @@ public class ScenePreload_5L1B : MonoBehaviour {
 		UIData.secondarystruct = true;
 
 		//trying it out
-		Ribbons ribbons = new Ribbons();
+		ribbons = new Ribbons();
 		List<string> residueNames = Molecule.Model.MoleculeModel.atomsResnamelist;
 
 		ribbons.CreateRibbons();
