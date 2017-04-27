@@ -55,7 +55,7 @@ namespace Controller {
 			Debug.DrawRay(camera.transform.position, camera.transform.forward, Color.red);
 			Vector2? uv = raycastLookCursor();
 
-			if (uv != null) {
+			if (uv != null && gameObject.GetComponent<Renderer>().enabled) {
 				DNAUI.SetActive(true);
 				foreach (Transform child in DNAUI.transform) {
 					// Debug.Log("child: " + child);
