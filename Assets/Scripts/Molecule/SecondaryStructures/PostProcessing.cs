@@ -5,7 +5,13 @@ using System.Collections.Generic;
 public class PostProcessing {
 	private Vector3 CENTER = new Vector3(0f,0f,0f);
 	
-	public Splitting split = new Splitting();
+	public Splitting split;
+
+	public PostProcessing() {
+		Debug.Log("PostProcessing constructor.");
+		split = new Splitting();
+	}
+
 	/// <summary>
 	/// First attempt at making ribbons thick. Not used anymore.
 	/// </summary>
@@ -151,6 +157,7 @@ public class PostProcessing {
 	
 	//@imyjimmy this is here!!!
 	private void SubGenerateMeshes(List<Mesh> meshes, string tag, string gameobj) {
+		Debug.Log("inside SubGenerateMeshes. meshes.length: " + meshes.Count);
 		foreach(Mesh mesh in meshes) {
 			
 			/*
@@ -179,6 +186,7 @@ public class PostProcessing {
 	
 	private void AddFirstFrontalFace(List<Vector3> vertices, List<Vector3> normals,
 										List<int> triangles, List<Color32> colors, int[] ss) {
+		Debug.Log("inside AddFirstFrontalFace");
 		int nbVert = vertices.Count;
 		Vector3 back = (vertices[8] - vertices[7]).normalized;
 		
@@ -302,8 +310,9 @@ public class PostProcessing {
 		if (tag == "" || tag == " " || tag == null ) {
 			tag = "RibbonObj";
 		}
-		AddFirstFrontalFace(vertices, normals, triangles, colors, ss);
-		AddLastFrontalFace(vertices, normals, triangles, colors, ss);
+		Debug.Log("inside PostProcessing.GenerateMeshes");
+		this.AddFirstFrontalFace(vertices, normals, triangles, colors, ss);
+		this.AddLastFrontalFace(vertices, normals, triangles, colors, ss);
 		MeshData mData = new MeshData();
 
 
@@ -312,6 +321,9 @@ public class PostProcessing {
 		mData.triangles = triangles.ToArray();
 		mData.colors = colors.ToArray();
 
+		Debug.Log("mData.vertices.Length: " + mData.vertices.Length);
+		Debug.Log("mData.normals.Length: " + mData.normals.Length);
+		
 		/*
 		for(int i=0; i<mData.vertices.Length; i++) {
 			mData.vertices[i] += Molecule.Model.MoleculeModel.Offset;
@@ -319,6 +331,6 @@ public class PostProcessing {
 		*/
 		
 		List<Mesh> meshes = split.Split(mData);
-		SubGenerateMeshes(meshes, tag, gameobj);		
+		this.SubGenerateMeshes(meshes, tag, gameobj);		
 	}
 }

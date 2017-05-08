@@ -22,6 +22,8 @@ public class Splitting {
 	
 	//@imyjimmy fuck.
 	public List<Mesh> Split(MeshData mData) {
+		Debug.Log("inside Split(mData);");
+
 		triangles = mData.triangles;
 		vertices = mData.vertices;
 		normals = mData.normals;
@@ -114,6 +116,7 @@ public class Splitting {
 	}
 	
 	private void FillMesh() {
+		Debug.Log("inside FillMesh");
 		List<int> tris = new List<int>();
 		List<Vector3> verts = new List<Vector3>();
 		List<Vector3> norms = new List<Vector3>();
@@ -166,6 +169,7 @@ public class Splitting {
 		mesh.triangles = tris.ToArray();
 		mesh.normals = norms.ToArray();
 		mesh.colors32 = cols.ToArray();
+		this.meshes.Add(mesh);
 	}
 
 	//@imyjimmy proof of concept of adding/ changing the mesh.

@@ -117,7 +117,7 @@ public class Molecule3D:MonoBehaviour {
 	
 	//@imyjimmy added
 	private ParseDNA parseDNA = new ParseDNA();
-	private TileDNA tileDNA = new TileDNA();
+	// private TileDNA tileDNA = new TileDNA();
 	private DNAPlaneController dnaPlaneController;
 	private GameObject DNA_Plane;
 	private GameObject DNA_Canvas;
