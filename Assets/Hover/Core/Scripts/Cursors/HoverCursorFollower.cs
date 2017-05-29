@@ -32,7 +32,11 @@ namespace Hover.Core.Cursors {
 		[DisableWhenControlled]
 		public float CursorSizeMultiplier = 1;
 
-
+		//@imyjimmy
+		public Transform t;
+		public Vector3 cursorVec;
+		public Vector3 rcWorldPos;
+		public RaycastHit? raycastHit;
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		/*--------------------------------------------------------------------------------------------*/
 		public HoverCursorFollower() {
@@ -102,10 +106,18 @@ namespace Hover.Core.Cursors {
 					Vector3 fromLocalVec = invCastRot*(castUpPos-rc.WorldPosition);
 					Vector3 toLocalVec = invCastRot*(cursorUpOnPlanePos-rc.WorldPosition);
 					Quaternion applyRot = Quaternion.FromToRotation(fromLocalVec, toLocalVec);
-					//Debug.DrawLine(rc.WorldPosition, castUpPos, Color.red);
-					//Debug.DrawLine(rc.WorldPosition, cursorUpOnPlanePos, Color.blue);
+					
+					Debug.DrawLine(rc.WorldPosition, castUpPos, Color.red);
+					Debug.DrawLine(rc.WorldPosition, cursorUpOnPlanePos, Color.blue);
+					// Debug.DrawLine(new Vector3(0.0f,-.25f,-1.2f), rc.WorldPosition, Color.cyan);
+					cursorVec = cursorUpOnPlanePos;
+					rcWorldPos = rc.WorldPosition;
 
 					tx.rotation = rc.WorldRotation*applyRot;
+
+					Debug.Log("HoverCursorFollower rc.WorldPosition: " + rc.WorldPosition);
+					// raycastHit = raycastHitLookCursor(rc.WorldPosition);
+					// Debug.DrawLine(new Vector3(0.0f,-.25f,-1.2f) , t.position, Color.white);
 				}
 			}
 
@@ -113,8 +125,21 @@ namespace Hover.Core.Cursors {
 				Controllers.Set(SettingsControllerMap.TransformLocalScale, this, 0);
 				tx.localScale = Vector3.one*(cursor.Size*CursorSizeMultiplier);
 			}
+
+			t = tx;
 		}
 
+	
+		public RaycastHit? raycastHitLookCursor(Vector3 rcWorldPos) {
+			Debug.DrawLine(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.cyan);
+			Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
+
+			RaycastHit raycastHit;
+			if (!Physics.Linecast(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, out raycastHit)) {
+				return null;
+			}
+			return raycastHit;
+		}
 	}
 
 }

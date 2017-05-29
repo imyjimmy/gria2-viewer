@@ -4,6 +4,7 @@ namespace Controller {
 	using UnityEngine.UI;
 	using System.Collections;
 	using Hover.Core.Items.Types;
+	using Hover.Core.Cursors;
 
 	//todo: consider putting ParseDNA in model, rename it DNAModel?
 	using ParseData.ParseFASTA;
@@ -12,10 +13,14 @@ namespace Controller {
 	public class DNAPlaneController : MonoBehaviour {
 		//GRIA2 DNA: 179704629-179584302
 
-		private Camera camera;
-		private GameObject Look;
+		/* UI elements */		
+		private GameObject Center;
 		private GameObject DNAUI;
+		private GameObject Look;
+		private HoverCursorFollower h;
+		// public FollowCursor Look; 
 
+		/* DNA start, end indices */
 		private int startIndex;
 		private int endIndex;
 
@@ -29,19 +34,21 @@ namespace Controller {
 		public float uvPos = 0.0f;
 
 		public void Awake() {
+			Center = GameObject.Find("CenterEyeAnchor");
+			Look = GameObject.Find("CursorRenderers/Look");
 
-		}
-
-		public void Start() {
 			startIndex = 179704629; //hard coded for now.
 			endIndex = 179584302;
+		}
 
-			camera = Camera.main;
-			Debug.Log("DNA Plane camera: " + camera.transform);
-			Look = GameObject.Find("CursorRenderers/Look");
+		//
+		public void Start() {
 			DNAUI = GameObject.Find("CursorRenderers/Look/DNA_Letter_UI");
 			DNAUI.SetActive(false);
 			Debug.Log("DNAUI is active?: " + DNAUI.activeInHierarchy);
+
+			h = Look.GetComponent<HoverCursorFollower>();
+			
 
 			//workaround until I implement singleton model.
 			DNA_Model = new ParseDNA();
@@ -51,8 +58,10 @@ namespace Controller {
 		public void Update() {
 			// Debug.Log("DNA Letter UI" + DNAUI);
 			// Debug.Log("gameObject: " gameObject.name);
+			
+			Debug.Log("h.transform: " + h.t.position);
+			Debug.Log("h.rcWorldPos: " + h.rcWorldPos);
 
-			Debug.DrawRay(camera.transform.position, camera.transform.forward, Color.red);
 			Vector2? uv = raycastLookCursor();
 
 			if (uv != null && gameObject.GetComponent<Renderer>().enabled) {
@@ -74,14 +83,16 @@ namespace Controller {
 		}
 
 		public Vector2? raycastLookCursor() {
-			RaycastHit raycastHit;
-			if (!Physics.Raycast(camera.transform.position, camera.transform.forward, out raycastHit)) {
+			RaycastHit? raycastHit = raycastHitLookCursor(h.rcWorldPos);
+
+			if (raycastHit == null) {
             	return null;
 			}
 
-			Renderer renderer = raycastHit.transform.GetComponent<Renderer>();
-			MeshCollider meshCollider = raycastHit.transform.GetComponent<MeshCollider>();
-			MeshFilter mf = raycastHit.transform.GetComponent<MeshFilter>();
+			RaycastHit hit = raycastHit.Value;
+			Renderer renderer = hit.transform.GetComponent<Renderer>();
+			MeshCollider meshCollider = hit.transform.GetComponent<MeshCollider>();
+			MeshFilter mf = hit.transform.GetComponent<MeshFilter>();
 
 			//mf.uv;
 
@@ -93,8 +104,8 @@ namespace Controller {
 			// Debug.Log("got meshRenderer, meshCollider");
 
 			Texture2D texture = renderer.material.mainTexture as Texture2D;
-        	Vector2 uv = raycastHit.textureCoord;
-        	Vector2 uv2 = raycastHit.textureCoord2;
+        	Vector2 uv = hit.textureCoord;
+        	Vector2 uv2 = hit.textureCoord2;
         	uv.x = texture.width - uv.x*texture.width;
         	uv.y = uv.y * texture.height; //* 0.0255f 
 
@@ -103,6 +114,17 @@ namespace Controller {
 
         	return uv;		
 		}	
+
+		public RaycastHit? raycastHitLookCursor(Vector3 rcWorldPos) {
+			Debug.DrawLine(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.cyan);
+			Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
+
+			RaycastHit raycastHit;
+			if (!Physics.Linecast(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, out raycastHit)) {
+				return null;
+			}
+			return raycastHit;
+		}
 
 		public void updateLabel(GameObject label, Vector2 uv) {
 			// Debug.Log("in nucleic Acid bruh");
