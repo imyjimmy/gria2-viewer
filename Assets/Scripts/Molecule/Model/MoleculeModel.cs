@@ -184,6 +184,9 @@ namespace Molecule.Model {
 		/// </summary>
 		public static List<Color> atomsColorList = new List<Color>();
 
+		//imyjimmy
+		// public static List<Tuple<string, List<int[]>>> residueRibbonMapping = new List<Tuple<string, List<int[]>>>();
+
 		public static List<float> atomsLocalScaleList = new List<float>();
 
 		/// <summary>

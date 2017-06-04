@@ -10,7 +10,7 @@ namespace Controller {
 	using ParseData.ParseFASTA;
 	using View.NucleicAcids;
 
-	public class DNAPlaneController : MonoBehaviour {
+	public class DNAPanelController : MonoBehaviour {
 		//GRIA2 DNA: 179704629-179584302
 
 		/* UI elements */		
@@ -37,8 +37,11 @@ namespace Controller {
 			Center = GameObject.Find("CenterEyeAnchor");
 			Look = GameObject.Find("CursorRenderers/Look");
 
-			startIndex = 179704629; //hard coded for now.
-			endIndex = 179584302;
+			//@todo: should be in the DNAModel.
+			startIndex = 0;
+			endIndex = 79;
+			//startIndex = 179704629; //hard coded for now. gria2 rattus nrovegicus.
+			//endIndex = 179584302;
 		}
 
 		//
@@ -52,15 +55,16 @@ namespace Controller {
 
 			//workaround until I implement singleton model.
 			DNA_Model = new ParseDNA();
-			DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
+			// DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
+			DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/1L2Y_nuc.fasta");
 		}
 
 		public void Update() {
 			// Debug.Log("DNA Letter UI" + DNAUI);
 			// Debug.Log("gameObject: " gameObject.name);
 			
-			Debug.Log("h.transform: " + h.t.position);
-			Debug.Log("h.rcWorldPos: " + h.rcWorldPos);
+			// Debug.Log("h.transform: " + h.t.position);
+			// Debug.Log("h.rcWorldPos: " + h.rcWorldPos);
 
 			Vector2? uv = raycastLookCursor();
 
@@ -141,9 +145,10 @@ namespace Controller {
 
 			int pos = ((int) uv.y) * textureX + (int) uv.x;
 
-			string[] values = (string[]) DNA_Model.data[">NC_005101.4:c179704629-179584302"];
+			// string[] values = (string[]) DNA_Model.data[">NC_005101.4:c179704629-179584302"];
+			string[] values = (string[]) DNA_Model.data[">TC5b"];
 			string seq = values[1];
-			// Debug.Log("sequence: " + seq.Length + " pos: " + pos);
+			Debug.Log("sequence: " + seq.Length + " pos: " + pos);
 
 			char code = seq[pos];
 
@@ -183,12 +188,12 @@ namespace Controller {
 			Debug.Log ("Done Mesh!");
 		}
 
-		public void BuildTexture(GameObject DNA_Plane, ParseDNA parseDNA) {
-			this.DNA_Model = parseDNA;
+		public void BuildTexture(GameObject DNA_Plane) { //, ParseDNA parseDNA) {
+			//this.DNA_Model = parseDNA;
 
 			Debug.Log("inside build texture");
 			string sequence = "";
-			foreach (DictionaryEntry de in parseDNA.data) {
+			foreach (DictionaryEntry de in DNA_Model.data) {
 				string[] val = (string[]) de.Value;
 				Debug.Log("Key = " + de.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
 				Debug.Log("dna.length: " + val[1].Length);

@@ -116,10 +116,9 @@ public class Molecule3D:MonoBehaviour {
 	private RequestPDB requestPDB=new RequestPDB();
 	
 	//@imyjimmy added
-	private ParseDNA parseDNA = new ParseDNA();
 	// private TileDNA tileDNA = new TileDNA();
-	private DNAPlaneController dnaPlaneController;
-	private GameObject DNA_Plane;
+	private DNAPanelController dnaPanelController;
+	private GameObject DNA_Panel;
 	private GameObject DNA_Canvas;
 	private GameObject DNA_Slider;
 
@@ -198,6 +197,7 @@ public class Molecule3D:MonoBehaviour {
 
 	void Start() {		
 		Debug.Log("Hello world!");
+		Debug.Log(typeof(string).Assembly.ImageRuntimeVersion);
 		// LocCamera=GameObject.Find("Camera");
 		// DebugStreamer.message = "Find Camera";
 		// LocCamera.GetComponent<Skybox>().enabled=false;
@@ -214,19 +214,20 @@ public class Molecule3D:MonoBehaviour {
 // 		SendMessage("InitScene",requestPDB,SendMessageOptions.DontRequireReceiver);
 
 		DNA_Canvas = GameObject.Find("DNA_Canvas");
-		DNA_Plane = GameObject.Find("DNA_Plane");
+		DNA_Panel = GameObject.Find("DNA_Plane");
 		DNA_Slider = GameObject.Find("DNA_SliderItem");
 
-		dnaPlaneController = (DNAPlaneController) DNA_Plane.GetComponent(typeof(DNAPlaneController));
-		DNA_Plane.GetComponent<Renderer>().enabled = false;
+		dnaPanelController = (DNAPanelController) DNA_Panel.GetComponent(typeof(DNAPanelController));
+		DNA_Panel.GetComponent<Renderer>().enabled = false;
 		DNA_Slider.SetActive(false);
 		// DNA_Canvas.SetActive(false);
 		// foreach (Transform child in DNA_Canvas.transform) {
 		// 	Debug.Log("child: " + child + " isActive: " + child.gameObject.activeInHierarchy);
 		// }
 
-		Debug.Log(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
-		parseDNA.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
+		// Debug.Log(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
+		// parseDNA.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
+		// parseDNA.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/1L2Y_nuc.fasta");
 
 		// Debug.Log("parseDNA.data.Count: " + parseDNA.data.Count);
 		// foreach (DictionaryEntry de in parseDNA.data) {
@@ -234,7 +235,7 @@ public class Molecule3D:MonoBehaviour {
 		// 	Debug.Log("Key = " + de.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
 		// }
 
-		dnaPlaneController.DNA_Model = parseDNA;
+		//dnaPanelController.DNA_Model = parseDNA;
 	}
 
 	public void Display() {
@@ -265,20 +266,22 @@ public class Molecule3D:MonoBehaviour {
 	}
 
 	public void ToggleDNA() {
-		Debug.Log("clicked that DNA button I see...");
+		Debug.Log("clicked that DNA button. DNA_Panel: " + DNA_Panel);
 
-		DNA_Plane.GetComponent<Renderer>().enabled = !DNA_Plane.GetComponent<Renderer>().enabled;
+		DNA_Panel.GetComponent<Renderer>().enabled = !DNA_Panel.GetComponent<Renderer>().enabled;
 		DNA_Slider.SetActive(!DNA_Slider.activeInHierarchy);
 
-		if (DNA_Plane.GetComponent<Renderer>().enabled && !dnaPlaneController.viewGenerated) {
-			dnaPlaneController.BuildMeshUVs(DNA_Plane);
-			dnaPlaneController.BuildTexture(DNA_Plane, parseDNA);
-			dnaPlaneController.viewGenerated = !dnaPlaneController.viewGenerated;
+		Debug.Log("dnaPanelController: " + dnaPanelController);
+		
+		if (DNA_Panel.GetComponent<Renderer>().enabled && !dnaPanelController.viewGenerated) {
+			dnaPanelController.BuildMeshUVs(DNA_Panel);
+			dnaPanelController.BuildTexture(DNA_Panel); //, parseDNA);
+			dnaPanelController.viewGenerated = !dnaPanelController.viewGenerated;
 		}
-		// if (DNA_Plane.activeInHierarchy) {
+		// if (DNA_Panel.activeInHierarchy) {
 		// 	Debug.Log("hide DNA.");
 		// 	DNA_Canvas.SetActive(false);
-		// 	DNA_Plane.SetActive(false);
+		// 	DNA_Panel.SetActive(false);
 
 		// } else {
 		// 	Debug.Log("show DNA");
@@ -292,11 +295,11 @@ public class Molecule3D:MonoBehaviour {
 		// 		}
 		// 	}
 
-		// 	if (!dnaPlaneController.viewGenerated) {
+		// 	if (!dnaPanelController.viewGenerated) {
 		// 		Debug.Log("generating the mesh for the first time.");
-		// 		dnaPlaneController.BuildMesh(DNA_Plane);
-		// 		dnaPlaneController.BuildTexture(DNA_Plane, parseDNA);
-		// 		dnaPlaneController.viewGenerated = true;
+		// 		dnaPanelController.BuildMesh(DNA_Panel);
+		// 		dnaPanelController.BuildTexture(DNA_Panel, parseDNA);
+		// 		dnaPanelController.viewGenerated = true;
 		// 	}
 		// }
 	}

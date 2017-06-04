@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Molecule.Model;
 
 public class PostProcessing {
 	private Vector3 CENTER = new Vector3(0f,0f,0f);
@@ -315,12 +316,15 @@ public class PostProcessing {
 		this.AddLastFrontalFace(vertices, normals, triangles, colors, ss);
 		MeshData mData = new MeshData();
 
+		//imyjimmy
+		//MoleculeModel.ribbonColors = colors;
 
 		mData.vertices = vertices.ToArray();
 		mData.normals = normals.ToArray();
 		mData.triangles = triangles.ToArray();
 		mData.colors = colors.ToArray();
 
+		Debug.Log("mData.colors.Length: " + mData.colors.Length);
 		Debug.Log("mData.vertices.Length: " + mData.vertices.Length);
 		Debug.Log("mData.normals.Length: " + mData.normals.Length);
 		

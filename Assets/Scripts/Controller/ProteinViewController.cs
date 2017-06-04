@@ -31,7 +31,7 @@ namespace Controller {
 			// Debug.Log("splitting script: " + split); 
 		}
 
-		//updates the protein. somehow...
+		//updates the protein. @todo: make this an event called via delegate.
 		public void showOnModel() {
 			Debug.Log("inside ProteinViewController. Clicked Button.");
 			split.updateSplit();

@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Molecule.Model;
+using Hover.InputModules.Follow;
 
 public class Splitting {
 	private static int vertexLimit = 65000;
@@ -19,8 +21,12 @@ public class Splitting {
 
 	private Vector3 CENTER = new Vector3(0f,0f,0f);
 
-	
-	//@imyjimmy fuck.
+	//get residue names from molecule model.
+	public List<string> resNames;
+
+	//@imyjimmy called by PostProcessing.GenerateMeshes(List<Vector3> vertices, List<Vector3> normals, 
+		//List<int> triangles, List<Color32> colors, int[] ss,
+	    //string tag="RibbonObj", string gameobj="Ribbons")
 	public List<Mesh> Split(MeshData mData) {
 		Debug.Log("inside Split(mData);");
 
@@ -30,9 +36,16 @@ public class Splitting {
 		colors = mData.colors;
 		meshes = new List<Mesh>();
 
+		resNames = MoleculeModel.atomsResnamelist;
+
 		if(UI.UIData.isGLIC)
 			vertexLimit = 59520;
 		
+		Debug.Log("inside split.Split(mData). resNames.Count: " + resNames.Count + " colors.length: " + colors.Length);
+		// foreach (string s in resNames) {
+		// 	Debug.Log("residue: " + s);
+		// }
+
 		// Small meshes don't need to be split
 		if(mData.vertices.Length < vertexLimit) {
 			Debug.Log("Vertices size : "+vertices.Length);
@@ -116,7 +129,7 @@ public class Splitting {
 	}
 	
 	private void FillMesh() {
-		Debug.Log("inside FillMesh");
+		Debug.Log("inside FillMesh()");
 		List<int> tris = new List<int>();
 		List<Vector3> verts = new List<Vector3>();
 		List<Vector3> norms = new List<Vector3>();

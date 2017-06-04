@@ -69,9 +69,12 @@ namespace Molecule.Control {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
-	using Molecule.Model;
+	using MM = Molecule.Model;
 	using ParseData.ParsePDB;
 	using UI;
+
+	//imyjimmy: allows access to Model.Residue
+	using Model;
 	
 	public class ControlMolecule {
 	
@@ -126,6 +129,8 @@ namespace Molecule.Control {
 			List<Dictionary<string, Vector3>>	residueDictList		=	new List<Dictionary<string, Vector3>>();
 			Dictionary<string, Vector3>			residueDict			=	new Dictionary<string, Vector3>();
 			
+			List<Model.Residue> residueGeometry = new List<Model.Residue>();
+
 			string currRes = "";
 			string prevRes = "";
 			float nbAtoms = 0f;

@@ -107,15 +107,15 @@ namespace Hover.Core.Cursors {
 					Vector3 toLocalVec = invCastRot*(cursorUpOnPlanePos-rc.WorldPosition);
 					Quaternion applyRot = Quaternion.FromToRotation(fromLocalVec, toLocalVec);
 					
-					Debug.DrawLine(rc.WorldPosition, castUpPos, Color.red);
-					Debug.DrawLine(rc.WorldPosition, cursorUpOnPlanePos, Color.blue);
+					// Debug.DrawLine(rc.WorldPosition, castUpPos, Color.red);
+					// Debug.DrawLine(rc.WorldPosition, cursorUpOnPlanePos, Color.blue);
 					// Debug.DrawLine(new Vector3(0.0f,-.25f,-1.2f), rc.WorldPosition, Color.cyan);
 					cursorVec = cursorUpOnPlanePos;
 					rcWorldPos = rc.WorldPosition;
 
 					tx.rotation = rc.WorldRotation*applyRot;
 
-					Debug.Log("HoverCursorFollower rc.WorldPosition: " + rc.WorldPosition);
+					// Debug.Log("HoverCursorFollower rc.WorldPosition: " + rc.WorldPosition);
 					// raycastHit = raycastHitLookCursor(rc.WorldPosition);
 					// Debug.DrawLine(new Vector3(0.0f,-.25f,-1.2f) , t.position, Color.white);
 				}
@@ -131,8 +131,8 @@ namespace Hover.Core.Cursors {
 
 	
 		public RaycastHit? raycastHitLookCursor(Vector3 rcWorldPos) {
-			Debug.DrawLine(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.cyan);
-			Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
+			// Debug.DrawLine(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.cyan);
+			// Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
 
 			RaycastHit raycastHit;
 			if (!Physics.Linecast(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, out raycastHit)) {
