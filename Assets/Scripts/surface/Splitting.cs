@@ -42,7 +42,7 @@ public class Splitting {
 		residueSeq = mData.residueSeq;
 
 		//register a method to DNAPanel's UVChanged event.
-
+		DNAPanelController.UVCoordChangedEvent += getResidueForUV;
 
 		if(UI.UIData.isGLIC)
 			vertexLimit = 59520;
@@ -199,5 +199,9 @@ public class Splitting {
 		ribbObj.GetComponent<Renderer>().material = new Material(Shader.Find("Custom/Ribbons"));
 		ribbObj.transform.position = CENTER;
 		ribbObj.transform.localPosition = CENTER;
+	}
+
+	public void getResidueForUV(Vector2 uv) {
+		Debug.Log("getResidueForUV(uv): " + uv);
 	}
 }

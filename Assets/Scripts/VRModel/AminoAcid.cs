@@ -3,8 +3,18 @@ namespace VRModel {
 	
 	using UnityEngine;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	public static class AminoAcid {
+
+		//@imyjimmy todo
+		public static readonly Dictionary<string, string> GetOneLetterCode = new Dictionary<string, string> {
+
+		};
+
+		public static readonly Dictionary<string, string> GetFullName = new Dictionary<string, string> {
+
+		};
 
 		public static string Glycine = "GLY";
 		public static string GLY = "G";

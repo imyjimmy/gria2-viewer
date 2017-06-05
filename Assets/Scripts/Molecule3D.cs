@@ -217,7 +217,8 @@ public class Molecule3D:MonoBehaviour {
 		DNA_Panel = GameObject.Find("DNA_Plane");
 		DNA_Slider = GameObject.Find("DNA_SliderItem");
 
-		dnaPanelController = (DNAPanelController) DNA_Panel.GetComponent(typeof(DNAPanelController));
+		// dnaPanelController = (DNAPanelController) DNA_Panel.GetComponent(typeof(DNAPanelController));
+		dnaPanelController = DNAPanelController.Instance;
 		DNA_Panel.GetComponent<Renderer>().enabled = false;
 		DNA_Slider.SetActive(false);
 		// DNA_Canvas.SetActive(false);

@@ -11,6 +11,18 @@ namespace Controller {
 	using View.NucleicAcids;
 
 	public class DNAPanelController : MonoBehaviour {
+		private static DNAPanelController _instance;
+		public static DNAPanelController Instance { 
+			get { 
+				if (_instance == null) {
+					GameObject g = new GameObject("test");
+					g.AddComponent<DNAPanelController>(); 
+				}
+
+				return _instance;
+			}
+		}
+
 		//GRIA2 DNA: 179704629-179584302
 
 		/* UI elements */		
@@ -40,6 +52,8 @@ namespace Controller {
 		public static event OnUVCoordChange UVCoordChangedEvent;
 
 		public void Awake() {
+			_instance = this;
+
 			Center = GameObject.Find("CenterEyeAnchor");
 			Look = GameObject.Find("CursorRenderers/Look");
 
@@ -146,6 +160,10 @@ namespace Controller {
 			// Debug.Log("in nucleic Acid bruh");
 			Text t = label.GetComponent<Text>();
 			t.text = getNucAcidForUV(uv);
+		}
+
+		public string getSequencePosForUV(Vector2 uv) {
+			return ((int) uv.y) * textureX + (int) uv.x;
 		}
 
 		public string getNucAcidForUV(Vector2 uv) {
