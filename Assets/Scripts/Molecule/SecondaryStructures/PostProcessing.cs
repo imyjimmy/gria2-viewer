@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Molecule.Model;
+using VRModel;
 
 public class PostProcessing {
 	private Vector3 CENTER = new Vector3(0f,0f,0f);
@@ -304,7 +305,7 @@ public class PostProcessing {
 	
 
 	public void GenerateMeshes(List<Vector3> vertices, List<Vector3> normals,
-										List<int> triangles, List<Color32> colors, int[] ss,
+										List<int> triangles, List<Color32> colors, int[] ss, List<Residue> residueSeq,
 	                                  string tag="RibbonObj", string gameobj="Ribbons") {
 	//	DuplicateVertices(vertices, normals, triangles, colors);
 		tag = Ribbons.ribbontag;
@@ -312,6 +313,7 @@ public class PostProcessing {
 			tag = "RibbonObj";
 		}
 		Debug.Log("inside PostProcessing.GenerateMeshes");
+		Debug.Log("adding first and last frontal faces.");
 		this.AddFirstFrontalFace(vertices, normals, triangles, colors, ss);
 		this.AddLastFrontalFace(vertices, normals, triangles, colors, ss);
 		MeshData mData = new MeshData();
@@ -323,7 +325,8 @@ public class PostProcessing {
 		mData.normals = normals.ToArray();
 		mData.triangles = triangles.ToArray();
 		mData.colors = colors.ToArray();
-
+		mData.residueSeq = residueSeq;
+		
 		Debug.Log("mData.colors.Length: " + mData.colors.Length);
 		Debug.Log("mData.vertices.Length: " + mData.vertices.Length);
 		Debug.Log("mData.normals.Length: " + mData.normals.Length);

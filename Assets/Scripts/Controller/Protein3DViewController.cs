@@ -8,7 +8,7 @@ namespace Controller {
 	using Molecule;
 	using Molecule.Model;
 
-	public class ProteinViewController : MonoBehaviour {
+	public class Protein3DViewController : MonoBehaviour {
 		public GameObject loadBox;
 		public ScenePreload_5L1B scene;
 		public Ribbons ribbons;
@@ -33,7 +33,7 @@ namespace Controller {
 
 		//updates the protein. @todo: make this an event called via delegate.
 		public void showOnModel() {
-			Debug.Log("inside ProteinViewController. Clicked Button.");
+			Debug.Log("inside Protein3DViewController. Clicked Button.");
 			split.updateSplit();
 		}
 	}

@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+using Molecule.Model;
+using VRModel;
+
 public class Ribbons {
 	// For handling multiple chains.
 	public static bool mustSplitDictList = false;
@@ -907,7 +910,7 @@ public class Ribbons {
 		List<int> tmpHandednessList = new List<int> ();
 		List<int> tmpSSList = new List<int>();
 
-		//Debug.Log ("resdict " + Molecule.Model.MoleculeModel.residueDictionaries.Count);
+		Debug.Log ("resNb: " + resNb);
 
 		//Split chains
 		while(resNb<residueDicts.Count && splits.Count>0) {
@@ -1002,7 +1005,8 @@ public class Ribbons {
 		List<int> triangles = new List<int>();
 		vIndex = 0;
 		bool isArrow;
-		for(int i=0; i<nbRes; i++) {
+		for(int i=0; i<nbRes; i++) { // i == index of current Residue.
+			Residue r = MoleculeModel.residueSeq[i];
 
 			ConstructControlPoints(residueDicts, i, ss[i], handedness[i]);
 			int colorIndex = (i+colorOffset) % nbRes;
@@ -1015,12 +1019,42 @@ public class Ribbons {
 				GenerateSpline(0, vertices0);
 				GenerateSpline(1, vertices1);
 				GenerateSpline(2, vertices2);
-			} else {
+			} else { //vertices, normals, triangles are added.
 				Debug.Log("RENDER_MODE != 0");
-				if (isArrow && ARROW_WIDTH > 0f)
+				if (isArrow && ARROW_WIDTH > 0f) {
+					int vBefore = vertices.Count;
+					int nBefore = normals.Count;
+					int tBefore = triangles.Count;
+
+					Debug.Log("before vertices.Count: " + vertices.Count);
 					GenerateArrowRibbon(vertices, normals, triangles);
-				else
+					Debug.Log("after vertices.Count: " + vertices.Count);
+
+					int vAfter = vertices.Count;
+					int nAfter = normals.Count;
+					int tAfter = triangles.Count;
+
+					r.vertices = new int[2] {vBefore, vAfter};
+					r.normals = new int[2] {nBefore, nAfter};
+					r.triangles = new int[2] {tBefore, tAfter};
+				}
+				else {
+					int vBefore = vertices.Count;
+					int nBefore = normals.Count;
+					int tBefore = triangles.Count;
+
+					Debug.Log("before vertices.Count: " + vertices.Count);
 					GenerateFlatRibbon(vertices, normals, triangles);
+					Debug.Log("after vertices.Count: " + vertices.Count);
+
+					int vAfter = vertices.Count;
+					int nAfter = normals.Count;
+					int tAfter = triangles.Count;
+
+					r.vertices = new int[2] {vBefore, vAfter};
+					r.normals = new int[2] {nBefore, nAfter};
+					r.triangles = new int[2] {tBefore, tAfter};
+				}
 				Color32 color;
 
 				if (UI.UIData.ssColChain) {
@@ -1042,17 +1076,20 @@ public class Ribbons {
 						break;
 					}
 				}
-				for(int j=0; j<320; j++)
+				for(int j=0; j<320; j++) {
 					colors.Add(color);
+				}
 
+				r.colors = new int[2] {0, 320};
 				ssglic.Add(ss[i]);
 			}
-		}
+			MoleculeModel.residueSeq[i] = r;
+		} //end for loop
 
 		if(RENDER_MODE == 0) {
 			// Forget that for now
 		} else {
-			postprocessing.GenerateMeshes(vertices, normals, triangles, colors, ss);
+			postprocessing.GenerateMeshes(vertices, normals, triangles, colors, ss, MoleculeModel.residueSeq);
 		}
 		
 	} // End of CreateRibbons

@@ -2,7 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Molecule.Model;
-using Hover.InputModules.Follow;
+using Controller;
+using VRModel;
+//using Hover.InputModules.Follow;
 
 public class Splitting {
 	private static int vertexLimit = 65000;
@@ -14,15 +16,15 @@ public class Splitting {
 	private List<Mesh> meshes;
 	private int lastIndex;
 
-	//from catlike coding
+	//proof of concept, from catlike coding.
 	public int size_x = 100;
 	public int size_z = 50;
 	public float tileSize = 1.0f;
 
-	private Vector3 CENTER = new Vector3(0f,0f,0f);
+	//imyjimmy
+	private List<Residue> residueSeq;
 
-	//get residue names from molecule model.
-	public List<string> resNames;
+	private Vector3 CENTER = new Vector3(0f,0f,0f);
 
 	//@imyjimmy called by PostProcessing.GenerateMeshes(List<Vector3> vertices, List<Vector3> normals, 
 		//List<int> triangles, List<Color32> colors, int[] ss,
@@ -36,16 +38,15 @@ public class Splitting {
 		colors = mData.colors;
 		meshes = new List<Mesh>();
 
-		resNames = MoleculeModel.atomsResnamelist;
+		//get the mapping of each individual residue to its associated normals, triangles, vertices, colors.
+		residueSeq = mData.residueSeq;
+
+		//register a method to DNAPanel's UVChanged event.
+
 
 		if(UI.UIData.isGLIC)
 			vertexLimit = 59520;
 		
-		Debug.Log("inside split.Split(mData). resNames.Count: " + resNames.Count + " colors.length: " + colors.Length);
-		// foreach (string s in resNames) {
-		// 	Debug.Log("residue: " + s);
-		// }
-
 		// Small meshes don't need to be split
 		if(mData.vertices.Length < vertexLimit) {
 			Debug.Log("Vertices size : "+vertices.Length);
@@ -187,7 +188,7 @@ public class Splitting {
 
 	//@imyjimmy proof of concept of adding/ changing the mesh.
 	public void updateSplit() {
-		Debug.Log("inside Splitting.");
+		Debug.Log("inside Splitting. Proof of concept.");
 		Mesh m = this.makeMesh();
 		// meshes.Add(m);
 		GameObject ribbObj = new GameObject("Ribbons");

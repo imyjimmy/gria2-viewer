@@ -68,6 +68,7 @@ namespace Molecule.Model {
 	using System.Collections;
 	using System.Collections.Generic;
 	using Config;
+	using VRModel;
 
 	public class MoleculeModel : MonoBehaviour {
 		public static string sequence = "";
@@ -185,7 +186,7 @@ namespace Molecule.Model {
 		public static List<Color> atomsColorList = new List<Color>();
 
 		//imyjimmy
-		// public static List<Tuple<string, List<int[]>>> residueRibbonMapping = new List<Tuple<string, List<int[]>>>();
+		public static List<Residue> residueSeq = new List<Residue>();
 
 		public static List<float> atomsLocalScaleList = new List<float>();
 

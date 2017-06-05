@@ -69,12 +69,12 @@ namespace Molecule.Control {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
-	using MM = Molecule.Model;
+	using Molecule.Model;
 	using ParseData.ParsePDB;
 	using UI;
 
 	//imyjimmy: allows access to Model.Residue
-	using Model;
+	using VRModel;
 	
 	public class ControlMolecule {
 	
@@ -129,7 +129,7 @@ namespace Molecule.Control {
 			List<Dictionary<string, Vector3>>	residueDictList		=	new List<Dictionary<string, Vector3>>();
 			Dictionary<string, Vector3>			residueDict			=	new Dictionary<string, Vector3>();
 			
-			List<Model.Residue> residueGeometry = new List<Model.Residue>();
+			List<Residue> residueSeq = new List<Residue>();
 
 			string currRes = "";
 			string prevRes = "";
@@ -168,6 +168,9 @@ namespace Molecule.Control {
 					Debug.Log("residueDict.Count: " + residueDict.Count);
 					if (residueDict != null && residueDict.Count > 0){
 						Debug.Log("adding the residueDict: " + currRes + ", id: " + currResId + " to residueDictList which has the following: ");
+						Residue r = new Residue();
+						r.name = currRes;
+						residueSeq.Add(r);
 						foreach (KeyValuePair<string, Vector3> pair in residueDict) {
 							Debug.Log("---k: " + pair.Key + " v: " + pair.Value); //@imyjimmy
 						}
@@ -201,11 +204,12 @@ namespace Molecule.Control {
 			MoleculeModel.residueDictionaries = residueDictList;
 
 			Debug.Log("residueDictList.Count: " + residueDictList.Count);
-			/*
-			for(int i=0; i<residues.Count; i++) {
-				Debug.Log("Residue " + resNamesPerResidue[i] + ": " + residues[i].ToString());
+
+			foreach (Residue r in residueSeq) {
+				Debug.Log("residue: " + r.name);
 			}
-			*/
+
+			MoleculeModel.residueSeq = residueSeq;
 		}
 
 		public static void CreateResiduesSugar2(){

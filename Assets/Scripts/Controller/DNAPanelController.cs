@@ -33,6 +33,12 @@ namespace Controller {
 		public bool viewGenerated = false;
 		public float uvPos = 0.0f;
 
+		public Vector2 oldUV;
+
+		//event handing via delegates
+		public delegate void OnUVCoordChange(Vector2 uv);
+		public static event OnUVCoordChange UVCoordChangedEvent;
+
 		public void Awake() {
 			Center = GameObject.Find("CenterEyeAnchor");
 			Look = GameObject.Find("CursorRenderers/Look");
@@ -48,15 +54,16 @@ namespace Controller {
 		public void Start() {
 			DNAUI = GameObject.Find("CursorRenderers/Look/DNA_Letter_UI");
 			DNAUI.SetActive(false);
-			Debug.Log("DNAUI is active?: " + DNAUI.activeInHierarchy);
+			Debug.Log("DNAUI is active?: " + DNAUI.activeInHierarchy);			
 
-			h = Look.GetComponent<HoverCursorFollower>();
-			
-
-			//workaround until I implement singleton model.
+			//load DNA data. Workaround until I implement singleton model.
 			DNA_Model = new ParseDNA();
 			// DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
 			DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/1L2Y_nuc.fasta");
+
+			//figure out where the user is looking
+			h = Look.GetComponent<HoverCursorFollower>();
+			UVCoordChangedEvent += updateUV; //subscribe updateUV method to UVCoordChangedEvent.
 		}
 
 		public void Update() {
@@ -66,9 +73,14 @@ namespace Controller {
 			// Debug.Log("h.transform: " + h.t.position);
 			// Debug.Log("h.rcWorldPos: " + h.rcWorldPos);
 
-			Vector2? uv = raycastLookCursor();
+			Vector2? _uv = raycastLookCursor();
 
-			if (uv != null && gameObject.GetComponent<Renderer>().enabled) {
+			if (_uv != null && gameObject.GetComponent<Renderer>().enabled) {
+				Vector2 uv = _uv.Value;
+				if (uv != oldUV && UVCoordChangedEvent != null) {
+					UVCoordChangedEvent(uv);
+				}
+
 				DNAUI.SetActive(true);
 				foreach (Transform child in DNAUI.transform) {
 					// Debug.Log("child: " + child);
@@ -80,7 +92,7 @@ namespace Controller {
 				}
 				GameObject label = GameObject.Find("CursorRenderers/Look/DNA_Letter_UI/Canvas/Label");
 				label.SetActive(true);
-				updateLabel(label, uv.Value);
+				updateLabel(label, uv);
 			} else {
 				DNAUI.SetActive(false);
 			}
@@ -163,6 +175,11 @@ namespace Controller {
 			return result;
 		}
 	
+		public void updateUV(Vector2 uv) {
+			Debug.Log("inside update UV. oldUV: " + oldUV + " new uv: " + uv);
+			oldUV = uv;
+		}
+
 		//called by Molecule3D.ToggleDNA
 		public void BuildMeshUVs(GameObject DNA_Plane) {
 			Debug.Log("BuildMesh DNA_Plane");
