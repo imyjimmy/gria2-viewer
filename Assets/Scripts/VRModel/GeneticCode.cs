@@ -1,6 +1,6 @@
 
 namespace VRModel {
-	using TnityEngine;
+	using UnityEngine;
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -86,8 +86,8 @@ namespace VRModel {
 			{"GGC", "GLY"},
 			{"GGA", "GLY"},
 			{"GGG", "GLY"}
-
 		};
+		
 		public static readonly Dictionary<string, string> RNAToAA = new Dictionary<string, string> {
 			{"AUG", "MET"},
 			{"AUA", "ILE"},

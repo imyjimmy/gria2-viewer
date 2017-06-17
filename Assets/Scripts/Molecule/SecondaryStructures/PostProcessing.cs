@@ -338,6 +338,8 @@ public class PostProcessing {
 		*/
 		
 		List<Mesh> meshes = split.Split(mData);
+		Debug.Log("PostProcessing, number of meshes: " + meshes.Count);
+
 		this.SubGenerateMeshes(meshes, tag, gameobj);		
 	}
 }

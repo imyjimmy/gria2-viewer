@@ -166,7 +166,7 @@ namespace Molecule.Control {
 					// 	residueDict = new Dictionary<string, Vector3>(); //@imyjimmy: bug where first residue is not added.
 					// } 
 					Debug.Log("residueDict.Count: " + residueDict.Count);
-					if (residueDict != null && residueDict.Count > 0){
+					if (residueDict != null && residueDict.Count > 0 && !currRes.Equals("NAG")){
 						Debug.Log("adding the residueDict: " + currRes + ", id: " + currResId + " to residueDictList which has the following: ");
 						Residue r = new Residue();
 						r.name = currRes;

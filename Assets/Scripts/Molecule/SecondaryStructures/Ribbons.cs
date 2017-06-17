@@ -1034,9 +1034,9 @@ public class Ribbons {
 					int nAfter = normals.Count;
 					int tAfter = triangles.Count;
 
-					r.vertices = new int[2] {vBefore, vAfter};
-					r.normals = new int[2] {nBefore, nAfter};
-					r.triangles = new int[2] {tBefore, tAfter};
+					r.vertices = new List<int>(new int[] {vBefore, vAfter-1});
+					r.normals = new List<int>(new int[] {nBefore, nAfter-1});
+					r.triangles = new List<int>(new int[] {tBefore, tAfter-1});
 				}
 				else {
 					int vBefore = vertices.Count;
@@ -1051,9 +1051,9 @@ public class Ribbons {
 					int nAfter = normals.Count;
 					int tAfter = triangles.Count;
 
-					r.vertices = new int[2] {vBefore, vAfter};
-					r.normals = new int[2] {nBefore, nAfter};
-					r.triangles = new int[2] {tBefore, tAfter};
+					r.vertices = new List<int>(new int[] {vBefore, vAfter-1});
+					r.normals = new List<int>(new int[] {nBefore, nAfter-1});
+					r.triangles = new List<int>(new int[] {tBefore, tAfter-1});
 				}
 				Color32 color;
 
@@ -1080,7 +1080,7 @@ public class Ribbons {
 					colors.Add(color);
 				}
 
-				r.colors = new int[2] {0, 320};
+				r.colors = new List<int>(new int[] {0, 320});
 				ssglic.Add(ss[i]);
 			}
 			MoleculeModel.residueSeq[i] = r;

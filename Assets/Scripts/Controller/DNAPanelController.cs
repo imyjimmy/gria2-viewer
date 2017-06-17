@@ -29,6 +29,7 @@ namespace Controller {
 		private GameObject Center;
 		private GameObject DNAUI;
 		private GameObject Look;
+		private GameObject RightIndex;
 		private HoverCursorFollower h;
 		// public FollowCursor Look; 
 
@@ -56,12 +57,12 @@ namespace Controller {
 
 			Center = GameObject.Find("CenterEyeAnchor");
 			Look = GameObject.Find("CursorRenderers/Look");
-
-			//@todo: should be in the DNAModel.
-			startIndex = 0;
-			endIndex = 79;
-			//startIndex = 179704629; //hard coded for now. gria2 rattus nrovegicus.
-			//endIndex = 179584302;
+			RightIndex = GameObject.Find("CursorRenderers/RightIndex");
+			//@todo: this should be in the DNAModel.
+			// startIndex = 0;
+			// endIndex = 79;
+			startIndex = 179704629; //hard coded for now. gria2 rattus nrovegicus.
+			endIndex = 179584302;
 		}
 
 		//
@@ -72,8 +73,8 @@ namespace Controller {
 
 			//load DNA data. Workaround until I implement singleton model.
 			DNA_Model = new ParseDNA();
-			// DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
-			DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/1L2Y_nuc.fasta");
+			DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
+			// DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/1L2Y_nuc.fasta");
 
 			//figure out where the user is looking
 			h = Look.GetComponent<HoverCursorFollower>();
@@ -162,8 +163,10 @@ namespace Controller {
 			t.text = getNucAcidForUV(uv);
 		}
 
-		public string getSequencePosForUV(Vector2 uv) {
-			return ((int) uv.y) * textureX + (int) uv.x;
+		public int getSeqPos(Vector2 uv) {
+			int toReturn = ((int) uv.y) * textureX + (int) uv.x;
+			Debug.Log("getSeqPos(uv): " + uv + " pos: " + toReturn);
+			return toReturn;
 		}
 
 		public string getNucAcidForUV(Vector2 uv) {
@@ -175,10 +178,10 @@ namespace Controller {
 
 			int pos = ((int) uv.y) * textureX + (int) uv.x;
 
-			// string[] values = (string[]) DNA_Model.data[">NC_005101.4:c179704629-179584302"];
-			string[] values = (string[]) DNA_Model.data[">TC5b"];
+			string[] values = (string[]) DNA_Model.data[">NC_005101.4:c179704629-179584302"];
+			// string[] values = (string[]) DNA_Model.data[">TC5b"];
 			string seq = values[1];
-			Debug.Log("sequence: " + seq.Length + " pos: " + pos);
+			Debug.Log("sequence length: " + seq.Length + " pos: " + pos);
 
 			char code = seq[pos];
 
