@@ -5,6 +5,7 @@ namespace Controller {
 	using System.Collections;
 	using Hover.Core.Items.Types;
 	using Hover.Core.Cursors;
+	using Hover.Core.Renderers;
 
 	//todo: consider putting ParseDNA in model, rename it DNAModel?
 	using ParseData.ParseFASTA;
@@ -27,10 +28,16 @@ namespace Controller {
 
 		/* UI elements */		
 		private GameObject Center;
-		private GameObject DNAUI;
+
 		private GameObject Look;
 		private GameObject RightIndex;
-		private HoverCursorFollower h;
+
+		private GameObject DNAUI;
+		private GameObject RightIndexUI;
+		private GameObject RightIndexSelection;
+
+		private HoverCursorFollower HoverLookCursor;
+		private Transform HoverRightIndexTransform;
 		// public FollowCursor Look; 
 
 		/* DNA start, end indices */
@@ -46,7 +53,8 @@ namespace Controller {
 		public bool viewGenerated = false;
 		public float uvPos = 0.0f;
 
-		public Vector2 oldUV;
+		public Vector2 oldLookUV = new Vector2(-100.0f, -100.0f);
+		public Vector2 oldUVRightIndex = new Vector2(-100.0f, -100.0f);
 
 		//event handing via delegates
 		public delegate void OnUVCoordChange(Vector2 uv);
@@ -57,8 +65,10 @@ namespace Controller {
 
 			Center = GameObject.Find("CenterEyeAnchor");
 			Look = GameObject.Find("CursorRenderers/Look");
-			RightIndex = GameObject.Find("CursorRenderers/RightIndex");
+			RightIndex = GameObject.Find("HoverKit/Cursors/RightHand/RightIndex");
+			
 			//@todo: this should be in the DNAModel.
+			//ex: startIndex = DNAModel.startIndex("rattus nrovegicus");
 			// startIndex = 0;
 			// endIndex = 79;
 			startIndex = 179704629; //hard coded for now. gria2 rattus nrovegicus.
@@ -69,52 +79,60 @@ namespace Controller {
 		public void Start() {
 			DNAUI = GameObject.Find("CursorRenderers/Look/DNA_Letter_UI");
 			DNAUI.SetActive(false);
-			Debug.Log("DNAUI is active?: " + DNAUI.activeInHierarchy);			
+			RightIndexUI = GameObject.Find("CursorRenderers/RightIndex/DNA_Letter_UI");
+			RightIndexUI.SetActive(false);
+
+			RightIndexSelection = GameObject.Find("CursorRenderers/RightIndex/HoverOpaqueCursorArcRenderer-Default");
+			// Debug.Log("DNAUI is active?: " + DNAUI.activeInHierarchy);			
 
 			//load DNA data. Workaround until I implement singleton model.
 			DNA_Model = new ParseDNA();
 			DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
 			// DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/1L2Y_nuc.fasta");
 
-			//figure out where the user is looking
-			h = Look.GetComponent<HoverCursorFollower>();
-			UVCoordChangedEvent += updateUV; //subscribe updateUV method to UVCoordChangedEvent.
+			//figure out where the user is looking and pointing.
+			HoverLookCursor = Look.GetComponent<HoverCursorFollower>();
+			HoverRightIndexTransform = RightIndex.transform;
+
+			//subscribe updateUV method to UVCoordChangedEvent.
+			// UVCoordChangedEvent += updateUVs;
+			// UVCoordChangedEvent += updateLookUV;
+			UVCoordChangedEvent += updateRightIndexUV; 
 		}
 
+		// Debug.Log("DNA Letter UI" + DNAUI);
+		// Debug.Log("gameObject: " gameObject.name);
+		// Debug.Log("rightindex.transform: " + HoverRightIndexCursor.t.position);
+		// Debug.Log("rightindex.rcWorldPos: " + HoverRightIndexCursor.rcWorldPos);
 		public void Update() {
-			// Debug.Log("DNA Letter UI" + DNAUI);
-			// Debug.Log("gameObject: " gameObject.name);
-			
-			// Debug.Log("h.transform: " + h.t.position);
-			// Debug.Log("h.rcWorldPos: " + h.rcWorldPos);
+			// Vector2? _uvLook = getUVFromCursor(HoverLookCursor);
 
-			Vector2? _uv = raycastLookCursor();
+			Vector2? _uvRightIndex = getUVFromCursor(HoverRightIndexTransform);
+			if (_uvRightIndex != null && gameObject.GetComponent<Renderer>().enabled && isPanelSelected()) {
+				Vector2 uvRightIndex = _uvRightIndex.Value;
 
-			if (_uv != null && gameObject.GetComponent<Renderer>().enabled) {
-				Vector2 uv = _uv.Value;
-				if (uv != oldUV && UVCoordChangedEvent != null) {
-					UVCoordChangedEvent(uv);
+				if (uvRightIndex != oldUVRightIndex && UVCoordChangedEvent != null) {
+					UVCoordChangedEvent(uvRightIndex);
 				}
-
-				DNAUI.SetActive(true);
-				foreach (Transform child in DNAUI.transform) {
-					// Debug.Log("child: " + child);
-					child.gameObject.SetActive(true);
-					MonoBehaviour[] scripts = child.gameObject.GetComponents<MonoBehaviour>();
-					foreach (MonoBehaviour m in scripts) {
-						m.enabled = true;
-					}
-				}
-				GameObject label = GameObject.Find("CursorRenderers/Look/DNA_Letter_UI/Canvas/Label");
-				label.SetActive(true);
-				updateLabel(label, uv);
 			} else {
-				DNAUI.SetActive(false);
+				Invoke("turnOffUI",2);
 			}
 		}
 
-		public Vector2? raycastLookCursor() {
-			RaycastHit? raycastHit = raycastHitLookCursor(h.rcWorldPos);
+		public bool isPanelSelected() {
+			HoverIndicator hi = RightIndexSelection.GetComponent<HoverIndicator>();
+			return (hi.SelectionProgress >= 0.8f);
+		}
+
+		public void turnOffUI() {
+			HoverIndicator hi = RightIndexSelection.GetComponent<HoverIndicator>();
+			if (hi.SelectionProgress < 0.05f) {
+				RightIndexUI.SetActive(false);
+			}
+		}
+
+		public Vector2? getUVFromCursor(Transform t) {
+			RaycastHit? raycastHit = raycastHitCursor(t.position);
 
 			if (raycastHit == null) {
             	return null;
@@ -125,18 +143,9 @@ namespace Controller {
 			MeshCollider meshCollider = hit.transform.GetComponent<MeshCollider>();
 			MeshFilter mf = hit.transform.GetComponent<MeshFilter>();
 
-			//mf.uv;
-
-			// if (meshRenderer == null || meshRenderer.sharedMaterial == null || 
-			// 	meshRenderer.sharedMaterial.mainTexture == null || meshCollider == null){
-			// 	return null;
-			// }
-
-			// Debug.Log("got meshRenderer, meshCollider");
-
 			Texture2D texture = renderer.material.mainTexture as Texture2D;
         	Vector2 uv = hit.textureCoord;
-        	Vector2 uv2 = hit.textureCoord2;
+        	
         	uv.x = texture.width - uv.x*texture.width;
         	uv.y = uv.y * texture.height; //* 0.0255f 
 
@@ -146,42 +155,38 @@ namespace Controller {
         	return uv;		
 		}	
 
-		public RaycastHit? raycastHitLookCursor(Vector3 rcWorldPos) {
-			Debug.DrawLine(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.cyan);
-			Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
+		public RaycastHit? raycastHitCursor(Vector3 rcWorldPos) {
+			Vector3 offset = new Vector3(0.0f, 1.0f, -1.5f); //new Vector3(0.0f,-.25f,-1.2f), 
+			Vector3 result = rcWorldPos - offset;
+			Debug.DrawLine(rcWorldPos, result ,Color.cyan);
+			// Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
 
 			RaycastHit raycastHit;
-			if (!Physics.Linecast(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, out raycastHit)) {
+			if (!Physics.Linecast(rcWorldPos, result, out raycastHit)) {
 				return null;
 			}
 			return raycastHit;
 		}
 
 		public void updateLabel(GameObject label, Vector2 uv) {
-			// Debug.Log("in nucleic Acid bruh");
+			Debug.Log("updating label.");
 			Text t = label.GetComponent<Text>();
 			t.text = getNucAcidForUV(uv);
 		}
 
 		public int getSeqPos(Vector2 uv) {
 			int toReturn = ((int) uv.y) * textureX + (int) uv.x;
-			Debug.Log("getSeqPos(uv): " + uv + " pos: " + toReturn);
+			// Debug.Log("getSeqPos(uv): " + uv + " pos: " + toReturn);
 			return toReturn;
 		}
 
 		public string getNucAcidForUV(Vector2 uv) {
-			// foreach (DictionaryEntry de in DNA_Model.data) {
-			// 	string[] val = (string[]) de.Value;
-			// 	Debug.Log("Key = " + de.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
-			// }
-			// Debug.Log((int) uv.x + "," + (int) uv.y);
-
 			int pos = ((int) uv.y) * textureX + (int) uv.x;
 
 			string[] values = (string[]) DNA_Model.data[">NC_005101.4:c179704629-179584302"];
 			// string[] values = (string[]) DNA_Model.data[">TC5b"];
 			string seq = values[1];
-			Debug.Log("sequence length: " + seq.Length + " pos: " + pos);
+			// Debug.Log("sequence length: " + seq.Length + " pos: " + pos);
 
 			char code = seq[pos];
 
@@ -195,16 +200,36 @@ namespace Controller {
 			string result = code + ":" + dnaPos.ToString();
 			return result;
 		}
-	
-		public void updateUV(Vector2 uv) {
-			Debug.Log("inside update UV. oldUV: " + oldUV + " new uv: " + uv);
-			oldUV = uv;
+
+		public void updateLookUV(Vector2 uv) {
+			Debug.Log("inside update UV. oldUV: " + oldLookUV + " new uv: " + uv);
+			oldLookUV = uv;
+		}
+
+		public void updateRightIndexUV(Vector2 uv) {
+			oldUVRightIndex = uv;
+			
+			RightIndexUI.SetActive(true);
+			foreach (Transform child in RightIndexUI.transform) {
+				// Debug.Log("child: " + child);
+				child.gameObject.SetActive(true);
+				MonoBehaviour[] scripts = child.gameObject.GetComponents<MonoBehaviour>();
+				foreach (MonoBehaviour m in scripts) {
+					m.enabled = true;
+				}
+			}
+
+			Canvas c = RightIndexUI.GetComponentInChildren(typeof(Canvas)) as Canvas; //GameObject.Find("CursorRenderers/Look/DNA_Letter_UI/Canvas/Label");
+			GameObject label = (GameObject) c.transform.FindChild("Label").gameObject;
+			label.SetActive(true);
+
+			updateLabel(label, uv);
 		}
 
 		//called by Molecule3D.ToggleDNA
 		public void BuildMeshUVs(GameObject DNA_Plane) {
-			Debug.Log("BuildMesh DNA_Plane");
-			Debug.Log(gameObject.name);
+			// Debug.Log("BuildMesh DNA_Plane");
+			// Debug.Log(gameObject.name);
 			Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
 			Vector2[] uvs = mesh.uv;
 			
@@ -223,7 +248,7 @@ namespace Controller {
 			mesh_renderer.material.SetTextureScale("_MainTex", new Vector2(-1,1)); //flips uvs so that 0,0 starts at upper left.
 			mesh_filter.mesh = mesh;
 			mesh_collider.sharedMesh = mesh;
-			Debug.Log ("Done Mesh!");
+			// Debug.Log ("Done Mesh!");
 		}
 
 		public void BuildTexture(GameObject DNA_Plane) { //, ParseDNA parseDNA) {
