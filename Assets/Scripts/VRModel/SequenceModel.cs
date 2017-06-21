@@ -17,7 +17,12 @@ namespace VRModel {
 		}
 
 		public SequenceModel() {
+			//blah blah...
+		}
 
+		public Nuc getDNA() {
+			//
+			return Nuc.A;
 		}
 	}
 }

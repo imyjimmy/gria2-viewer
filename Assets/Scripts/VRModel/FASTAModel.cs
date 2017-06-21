@@ -11,18 +11,20 @@ namespace VRModel {
 
 	public class FASTAModel {
 
-		public Hashtable data; //key: ">NM_001001775.3" 
+		public Dictionary<string, string[]> data; //key: ">NM_001001775.3" 
 								//value : [descr, sequence]
-								//@todo: [descr, [indexStart, indexEnd], sequence]
+								//@todo: [descr, indexStart, indexEnd, sequence]
 								//value example: ["Gallus gallus glutamate ionot...subunit 2 (GRIA2),...mRNA",
 								// ATTATCCC...]
-		public Hashtable niceNameMap;
+		//public string niceName;
+		public Dictionary<string, string> niceName;
 
 		public FASTAModel() {
-			data = new Hashtable();
-			niceNameMap = new Hashtable();
+			data = new Dictionary<string, string[]>();
+			niceName = new Dictionary<string, string>();
 		}
 
+		//Note: nice name mapping is seperate from reading the file, which just populates the data hashtable.
 		public void readFile(string path) {
 			Debug.Log("inside readFile for fasta data.");
 			// string newPath = Application.dataPath + "/StreamingAssets";

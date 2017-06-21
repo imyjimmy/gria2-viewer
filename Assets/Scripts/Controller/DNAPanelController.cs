@@ -3,13 +3,12 @@ namespace Controller {
 	using UnityEngine;
 	using UnityEngine.UI;
 	using System.Collections;
+	using System.Collections.Generic;
 	using Hover.Core.Items.Types;
 	using Hover.Core.Cursors;
 	using Hover.Core.Renderers;
 
-	//todo: consider putting ParseDNA in model, rename it DNAModel?
-	using ParseData.ParseFASTA;
-	using View.NucleicAcids;
+	using VRModel;
 
 	public class DNAPanelController : MonoBehaviour {
 		private static DNAPanelController _instance;
@@ -44,7 +43,7 @@ namespace Controller {
 		private int startIndex;
 		private int endIndex;
 
-		public ParseDNA DNA_Model;
+		public DNAModel DNA_Model;
 
 		//textures...
 		public int textureX = 128;
@@ -77,17 +76,16 @@ namespace Controller {
 
 		//
 		public void Start() {
+			DNA_Model = DNAModel.Instance;	//get the DNA Model.
+
+			//Load UIs
 			DNAUI = GameObject.Find("CursorRenderers/Look/DNA_Letter_UI");
 			DNAUI.SetActive(false);
 			RightIndexUI = GameObject.Find("CursorRenderers/RightIndex/DNA_Letter_UI");
 			RightIndexUI.SetActive(false);
-
 			RightIndexSelection = GameObject.Find("CursorRenderers/RightIndex/HoverOpaqueCursorArcRenderer-Default");
-			// Debug.Log("DNAUI is active?: " + DNAUI.activeInHierarchy);			
 
-			//load DNA data. Workaround until I implement singleton model.
-			DNA_Model = new ParseDNA();
-			DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
+
 			// DNA_Model.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/1L2Y_nuc.fasta");
 
 			//figure out where the user is looking and pointing.
@@ -95,8 +93,6 @@ namespace Controller {
 			HoverRightIndexTransform = RightIndex.transform;
 
 			//subscribe updateUV method to UVCoordChangedEvent.
-			// UVCoordChangedEvent += updateUVs;
-			// UVCoordChangedEvent += updateLookUV;
 			UVCoordChangedEvent += updateRightIndexUV; 
 		}
 
@@ -252,9 +248,9 @@ namespace Controller {
 
 			Debug.Log("inside build texture");
 			string sequence = "";
-			foreach (DictionaryEntry de in DNA_Model.data) {
-				string[] val = (string[]) de.Value;
-				Debug.Log("Key = " + de.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
+			foreach (KeyValuePair<string, string[]> entry in DNA_Model.data) {
+				string[] val = (string[]) entry.Value;
+				Debug.Log("Key = " + entry.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
 				Debug.Log("dna.length: " + val[1].Length);
 				sequence = val[1];
 			}
@@ -267,25 +263,10 @@ namespace Controller {
 			Debug.Log("sequence: " + sequence);
 
 			for (int i=0; i< sequence.Length; i++) {
-				switch(sequence[i]) {
-					case 'A':
-						//something
-						texture.SetPixel(i % textureX, i / textureX, A.color);
-						break;
-					case 'T':
-						texture.SetPixel(i % textureX, i / textureX, T.color);
-						break;
-					case 'C':
-						texture.SetPixel(i % textureX, i / textureX, C.color);
-						break;
-					case 'G':
-						texture.SetPixel(i % textureX, i / textureX, G.color);
-						break;
-					case 'X':
-						texture.SetPixel(i % textureX, i / textureX, Color.black);
-						break;
-				}
+				Nuc n = Nucleotide.charToNuc(sequence[i]);
+				texture.SetPixel(i % textureX, i / textureX, Nucleotide.defaultColor[n]);
 			}
+
      		texture.filterMode = FilterMode.Point;
     	 	texture.Apply();
 		}

@@ -22,21 +22,17 @@ namespace VRModel {
 			get {
 				if (_instance == null) {
 					DNAModel dnaModel = new DNAModel();
+					//load the default file for this DNAModel.
+					dnaModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
 					_instance = dnaModel;
 				}
 				return _instance;
 			}
 		}
 	
-		public Hashtable exons; // key, value where value = array of exon start, stop coordinates in tuples
-		public Hashtable cds; //coding regions, in the same format above.
+		// public Hashtable exons; // key, value where value = array of exon start, stop coordinates in tuples
+		// public Hashtable cds; //coding regions, in the same format above.
 
-		/*Tuple<int, int>[] tuples =
-			{
-			    Tuple.Create(50, 350),
-			    Tuple.Create(50, 650),
-			    ...
-			}; */
 
 		public DNAModel() : base() {
 
