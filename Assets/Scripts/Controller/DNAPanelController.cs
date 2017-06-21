@@ -100,10 +100,6 @@ namespace Controller {
 			UVCoordChangedEvent += updateRightIndexUV; 
 		}
 
-		// Debug.Log("DNA Letter UI" + DNAUI);
-		// Debug.Log("gameObject: " gameObject.name);
-		// Debug.Log("rightindex.transform: " + HoverRightIndexCursor.t.position);
-		// Debug.Log("rightindex.rcWorldPos: " + HoverRightIndexCursor.rcWorldPos);
 		public void Update() {
 			// Vector2? _uvLook = getUVFromCursor(HoverLookCursor);
 

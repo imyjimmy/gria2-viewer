@@ -40,14 +40,8 @@ public class Splitting {
 
 		//get the mapping of each individual residue to its associated normals, triangles, vertices, colors.
 		residueSeq = mData.residueSeq;
-
-		Debug.Log("residue info make it to Splitting.cs");
-		foreach (Residue r in residueSeq) {
-			Debug.Log("r: " + r.name
-			+ "," + AminoAcid.OneLetterCode[r.name]
-			+ ", triangles: " + r.triangles[0] + "," + r.triangles[1]
-			+ ", vertices: " + r.vertices[0] + "," + r.vertices[1]);
-		}
+		
+		// debug();
 
 		//register a method to DNAPanel's UVChanged event.
 		DNAPanelController.UVCoordChangedEvent += getResidueForUV;
@@ -73,13 +67,13 @@ public class Splitting {
 		
 		int resNum = 0;
 		while(currentIndex < lastIndex) {
-			resNum = FillMesh(resNum);
+			FillMesh(resNum);
 		}
 
 		return meshes;
 	}
 	
-	private int FillMesh(int resNum) {
+	private void FillMesh(int resNum) {
 		Debug.Log("inside FillMesh()");
 		List<int> tris = new List<int>();
 		List<Vector3> verts = new List<Vector3>();
@@ -101,7 +95,7 @@ public class Splitting {
 			// in the local mesh.
 			if(dict.TryGetValue(triangles[currentIndex], out index)) {
 				tris.Add(index);
-				Debug.Log("FillMesh() while loop, if condition. currentIndex: " + currentIndex + ", out index: " + index);
+				// Debug.Log("FillMesh() while loop, if condition. currentIndex: " + currentIndex + ", out index: " + index);
 			} else {
 				// Debug.Log("FillMesh() while loop, else condition.");
 				// If not, we add it. The index of the vertex in the original
@@ -113,8 +107,7 @@ public class Splitting {
 				verts.Add(vertices[vIndex]);
 				norms.Add(normals[vIndex]);
 				if(useColors)
-					cols.Add(colors[vIndex]);
-				
+					cols.Add(colors[vIndex]);		
 				// But we reference it with the local index.
 				tris.Add(currentVertex);
 				currentVertex++;
@@ -125,14 +118,9 @@ public class Splitting {
 			//if(currentVertex > 10000)
 				vertexLimitReached = true;
 			}
-			
 			// Next item in triangles
-			currentIndex++;
-			
-		} 
-
-		//if kicked out of while loop, because vertex limit reached, find out the current residue number. 
-		//int toReturn = findResidueNumber(currentIndex);
+			currentIndex++;	
+		} 		
 
 		Mesh mesh = new Mesh();
 		mesh.vertices = verts.ToArray();
@@ -140,8 +128,9 @@ public class Splitting {
 		mesh.normals = norms.ToArray();
 		mesh.colors32 = cols.ToArray();
 		this.meshes.Add(mesh);
-		
-		return resNum; //toReturn;
+
+		//fix residue entry at currentIndex.
+		fixResidueEntry(currentIndex, verts.Count, norms.Count);
 	}
 
 	//@imyjimmy proof of concept of adding/ changing the mesh.
@@ -160,32 +149,90 @@ public class Splitting {
 	}
 
 	public void getResidueForUV(Vector2 uv) {
-		Debug.Log("getResidueForUV(uv): " + uv);
-		int DNA = DNAPanelController.Instance.getSeqPos(uv);
-		
+		Debug.Log("Splitting.cs: getResidueForUV(uv): " + uv);
+		int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
+	 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);
+		Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc);
 	}
 
 	public void generateSubMeshes() {
 
 	}
 
-	// public int findResidueNumber(int index) {
-	// 	//List<Residue>
-	// 	while () {
-	// 		if (index > residueSeq[i].triangles[1]) {
-	// 			i++;
-	// 		} else { //index <= residueSeq[i].triangles[1]
-	// 			//index must be less than the value in triangles[1] for the residue at index i.
-	// 			if (residueSeq[i].triangles[0] > index) {
-	// 				//error case. how the fuck can this happen!?
-	// 			} else {
-	// 				//a scenario where the index splits a residue between two meshes.
-	// 			}
-	// 		}
-	// 	}
-	// 	residueSeq
-	// }
+	public void debug() {
+		Debug.Log("triangles length: " + triangles.Length + " normals length: " + normals.Length);
+		for (int i=0; i < triangles.Length; i++) {
+			Debug.Log("triangles[" + i + "]: " + triangles[i] + "\nnormals[" + i + "]: " + normals[i]);
+		}
 
+		Debug.Log("residue info make it to Splitting.cs");
+		foreach (Residue r in residueSeq) {
+			Debug.Log("r: " + r.name
+			+ "," + AminoAcid.OneLetterCode[r.name]
+			+ ", triangles: " + r.triangles[0] + "," + r.triangles[1]
+			+ ", vertices: " + r.vertices[0] + "," + r.vertices[1]
+			+ ", normals: " + r.normals[0] + "," + r.normals[1]
+			+ " triangle value at r.triangles[0]: " + triangles[r.triangles[0]]
+			+ " triangle value at r.triangles[1]: " + triangles[r.triangles[1]]
+			+ " also vertices: " + vertices[r.vertices[0]] + "," + vertices[r.vertices[1]] 
+			+ " normals: " + normals[r.normals[0]] + "," + normals[r.normals[1]]);
+		}
+	}
+
+	//
+	public void fixResidueEntry(int tIndex, int vertLength, int normLength) {
+		Debug.Log("fixResidueEntry: " + vertLength + ", " + normLength);
+		//List<Residue>
+		int i = 0;
+		while (i < residueSeq.Count) {
+			if (tIndex > residueSeq[i].triangles[1]) {
+				//nothing happens, keep going.
+			} else { //tIndex <= residueSeq[i].triangles[1]
+				//tri index must be less than or eq to the value in triangles[1] for the residue at index i.
+				if (residueSeq[i].triangles[0] > tIndex) {
+					//error case. how the fuck can this happen!?
+				} else {
+					//a scenario where the triangle index splits a residue between two meshes.
+					//[0,1,2,3,4,5,6,7,8,9,10], length = 11
+					//         ^
+					//         |
+					//       tIndex
+					//[0,1,2,3],[4,5,6,7,8,9,10]
+					Residue r = residueSeq[i];
+					int last = r.triangles[1];
+
+					r.triangles[1] = tIndex-1;
+					r.triangles.Add(tIndex);
+					r.triangles.Add(last);
+
+					last = r.vertices[1];
+					r.vertices[1] = r.vertices[0]+vertLength-1;
+					r.vertices.Add(0);
+					r.vertices.Add(last - vertLength);
+
+					last = r.normals[1];
+					r.normals[1] = r.normals[0]+normLength-1;
+					r.normals.Add(0);
+					r.normals.Add(last - normLength);
+					
+					r.meshIndices.Add(this.meshes.Count-1);
+					r.meshIndices.Add(this.meshes.Count);
+
+					residueSeq[i] = r;
+
+					//go through all the previous residue Seqs and update their mesh numbers.
+					for (int y = 0; y < i; y++) {
+						residueSeq[y].meshIndices.Add(this.meshes.Count-1);
+					}
+
+					break;
+				}
+
+			}
+			i++;
+		}
+	}
+}
 	// public Mesh makeMesh() {
 	// 	int numTiles = size_x * size_z;
 	// 	int numTris = numTiles * 2;
@@ -244,4 +291,3 @@ public class Splitting {
 	// 	Debug.Log ("Done Mesh!");
 	// 	return mesh;
 	// }
-}

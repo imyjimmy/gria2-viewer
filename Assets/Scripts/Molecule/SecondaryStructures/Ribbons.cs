@@ -1007,7 +1007,6 @@ public class Ribbons {
 		bool isArrow;
 		for(int i=0; i<nbRes; i++) { // i == index of current Residue.
 			Residue r = MoleculeModel.residueSeq[i];
-
 			ConstructControlPoints(residueDicts, i, ss[i], handedness[i]);
 			int colorIndex = (i+colorOffset) % nbRes;
 			//int arrowIndex = (i+arrowOffset) % nbRes;
@@ -1021,40 +1020,29 @@ public class Ribbons {
 				GenerateSpline(2, vertices2);
 			} else { //vertices, normals, triangles are added.
 				Debug.Log("RENDER_MODE != 0");
+				int vBefore = vertices.Count;
+				int nBefore = normals.Count;
+				int tBefore = triangles.Count;		
 				if (isArrow && ARROW_WIDTH > 0f) {
-					int vBefore = vertices.Count;
-					int nBefore = normals.Count;
-					int tBefore = triangles.Count;
-
 					Debug.Log("before vertices.Count: " + vertices.Count);
 					GenerateArrowRibbon(vertices, normals, triangles);
 					Debug.Log("after vertices.Count: " + vertices.Count);
-
-					int vAfter = vertices.Count;
-					int nAfter = normals.Count;
-					int tAfter = triangles.Count;
-
-					r.vertices = new List<int>(new int[] {vBefore, vAfter-1});
-					r.normals = new List<int>(new int[] {nBefore, nAfter-1});
-					r.triangles = new List<int>(new int[] {tBefore, tAfter-1});
 				}
 				else {
-					int vBefore = vertices.Count;
-					int nBefore = normals.Count;
-					int tBefore = triangles.Count;
-
 					Debug.Log("before vertices.Count: " + vertices.Count);
 					GenerateFlatRibbon(vertices, normals, triangles);
 					Debug.Log("after vertices.Count: " + vertices.Count);
-
-					int vAfter = vertices.Count;
-					int nAfter = normals.Count;
-					int tAfter = triangles.Count;
-
-					r.vertices = new List<int>(new int[] {vBefore, vAfter-1});
-					r.normals = new List<int>(new int[] {nBefore, nAfter-1});
-					r.triangles = new List<int>(new int[] {tBefore, tAfter-1});
 				}
+
+				int vAfter = vertices.Count;
+				int nAfter = normals.Count;
+				int tAfter = triangles.Count;
+
+				r.vertices = new List<int>(new int[] {vBefore, vAfter-1});
+				r.normals = new List<int>(new int[] {nBefore, nAfter-1});
+				r.triangles = new List<int>(new int[] {tBefore, tAfter-1});
+				r.meshIndices = new List<int>();
+				
 				Color32 color;
 
 				if (UI.UIData.ssColChain) {

@@ -12,13 +12,13 @@ namespace VRModel {
 			{"ATC", "ILE"},
 			{"ATT", "ILE"},
 			
-			{"CTT", "LET"},
-			{"CTC", "LET"},
-			{"CTA", "LET"},
-			{"CTG", "LET"},
+			{"CTT", "LEU"},
+			{"CTC", "LEU"},
+			{"CTA", "LEU"},
+			{"CTG", "LEU"},
 			
-			{"TTA", "LET"},
-			{"TTG", "LET"},
+			{"TTA", "LEU"},
+			{"TTG", "LEU"},
 			{"TTT", "PHE"},
 			{"TTC", "PHE"},
 			
@@ -64,8 +64,8 @@ namespace VRModel {
 			
 			{"GAT", "ASP"},
 			{"GAC", "ASP"},
-			{"GAA", "GLT"},
-			{"GAG", "GLT"},
+			{"GAA", "GLU"},
+			{"GAG", "GLU"},
 			
 			{"TGT", "CYS"},
 			{"TGC", "CYS"},
@@ -170,9 +170,29 @@ namespace VRModel {
 			{"GGG", "GLY"}
 		};
 
-		public static readonly Dictionary<string, List<string>> AAToDNA = new Dictionary<string, List<string>>();
-		public static readonly Dictionary<string, List<string>> AAToRNA = new Dictionary<string, List<string>>();
-
-		
+		public static readonly Dictionary<string, List<string>> AAToDNA = new Dictionary<string, List<string>>{
+			{"MET", new List<string>{"ATG"}},
+			{"ILE", new List<string>{"ATA", "ATC", "ATT"}},
+			{"LEU", new List<string>{"CTT", "CTC", "CTA", "CTG", "TTA", "TTG"}},
+			{"PHE", new List<string>{"TTT", "TTC"}},
+			{"VAL", new List<string>{"GTT", "GTC", "GTA", "GTG"}},
+			{"SER", new List<string>{"TCT", "TCC", "TCA", "TCG", "AGT", "AGC"}},
+			{"PRO", new List<string>{"CCT", "CCC", "CCA", "CCG"}},
+			{"THR", new List<string>{"ATC", "ACC", "ACA", "ACG"}},
+			{"ALA", new List<string>{"GCT", "GCC", "GCA", "GCG"}},
+			{"TYR", new List<string>{"TAT", "TAC"}},
+			{"STOP", new List<string>{"TAA", "TAG", "TGA"}},
+			{"HIS", new List<string>{"CAT", "CAC"}},
+			{"GLN", new List<string>{"CAA", "CAG"}},
+			{"ASN", new List<string>{"AAT", "AAC"}},
+			{"LYS", new List<string>{"AAA", "AAG"}},
+			{"ASP", new List<string>{"GAT", "GAC"}},
+			{"GLU", new List<string>{"GAA", "GAG"}},
+			{"CYS", new List<string>{"TGT", "TGC"}},
+			{"TRP", new List<string>{"TGG"}},
+			{"ARG", new List<string>{"CGT", "CGC", "CGA", "CGG", "AGA", "AGG"}},
+			{"GLY", new List<string>{"GGT", "GGC", "GGA", "GGG"}}
+		};
+		//public static readonly Dictionary<string, List<string>> AAToRNA = new Dictionary<string, List<string>>();
 	}
 }
