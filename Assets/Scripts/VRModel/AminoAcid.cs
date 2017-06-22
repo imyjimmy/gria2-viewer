@@ -5,6 +5,11 @@ namespace VRModel {
 	using System.Collections;
 	using System.Collections.Generic;
 
+	//enum needed?
+	// public enum AA {
+	// 	G, A, L, M, F, W, K, Q, E, S, P, V, I, C, Y, H, R, N, D, T
+	// };
+
 	public static class AminoAcid {
 
 		public static readonly Dictionary<string, string> OneLetterCode = new Dictionary<string, string> {
