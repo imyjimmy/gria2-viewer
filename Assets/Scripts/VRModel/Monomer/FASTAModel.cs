@@ -63,6 +63,12 @@ namespace VRModel.Monomer {
 		public void addData(ref string key, ref string descr, ref string val) {
 			string[] values = new string[2] {descr, val};
 			this.data.Add(key, values);
+			
+			//adding a nicename mapping. key ==> description which usually has species name, is human readable
+			//also adding description ==> key mapping so we can go back and forth.
+			this.niceName.Add(values[0], key);
+			this.niceName.Add(key, values[0]);
+			
 			key = descr = val = string.Empty;
 		}
 	}

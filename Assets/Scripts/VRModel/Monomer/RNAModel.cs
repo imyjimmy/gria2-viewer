@@ -20,9 +20,9 @@ namespace VRModel.Nucleotides {
 		public static RNAModel Instance {
 			get {
 				if (_instance == null) {
-				RNAModel dnaModel = new RNAModel();
+				RNAModel rnaModel = new RNAModel();
 					//load the default file for this RNAModel.
-					dnaModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_mRNA_rattus_nrovegicus.fasta");
+					rnaModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_mRNA_rattus_nrovegicus.fasta");
 					_instance = dnaModel;
 				}
 				return _instance;
