@@ -14,5 +14,7 @@ namespace VRModel.Algorithms {
 		public Consensus() {
 
 		}
+
+		
 	}
 }
