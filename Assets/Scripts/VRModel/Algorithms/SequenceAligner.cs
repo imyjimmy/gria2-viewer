@@ -7,16 +7,15 @@ namespace VRModel.Algorithms {
   using System.Collections.Generic;
   using System.Text.RegularExpressions;
 
-
   using VRModel;
-  using VRModel.Nucleotides;
+  using VRModel.Monomer;
 
   public class SequenceAligner {
 
-    public int openGapPenalty = { get; set; }
-    public int gapExtPenalty = { get; set; }
-    public int matchScore = { get; set; }
-    public int mismatchPenalty = { get; set; }
+    public int openGapPenalty { get; set; }
+    public int gapExtPenalty { get; set; }
+    public int matchScore { get; set; }
+    public int mismatchPenalty { get; set; }
 
     public Seq seqType { get; set; }
     //public Nuc nucType { get; set; }
@@ -28,7 +27,7 @@ namespace VRModel.Algorithms {
 
     private DNAModel dna;
     private RNAModel rna;
-    private ProteinModel protein;
+    // private ProteinModel protein;
 
     private Dictionary<string, string> niceNameDNA;
     private Dictionary<string, string> niceNameRNA;
@@ -74,12 +73,15 @@ namespace VRModel.Algorithms {
         case Seq.DNA:
           registerDNAModel();
           niceNameDNA = dna.niceName;
+          break;
         case Seq.RNA:
           registerRNAModel();
           niceNameRNA = rna.niceName;
+          break;
         case Seq.AA:
           registerProteinModel();
-          niceNameProtein = protein.niceName;
+          // niceNameProtein = protein.niceName;
+          break;
       }
     }
 
@@ -94,7 +96,7 @@ namespace VRModel.Algorithms {
       StreamReader reader = new StreamReader(Application.dataPath + "/StreamingAssets/100pam.txt");
       int row = 0;
       do {
-        string line = reader.ReadLine();
+        line = reader.ReadLine();
         if ( line.StartsWith(" ")) { //first line
           line = line.Replace(" ", "");
           line = rgx.Replace(line, replacement);
@@ -169,9 +171,9 @@ namespace VRModel.Algorithms {
     }
 
     public void registerProteinModel() {
-      if (protein == null) {
-        protein = ProteinModel.Instance;
-      }
+      // if (protein == null) {
+        // protein = ProteinModel.Instance;
+      // }
     }
 
 

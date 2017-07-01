@@ -11,7 +11,8 @@ namespace VRModel.Monomer {
 
 	public class FASTAModel {
 
-		public Dictionary<string, string[]> data; //key: ">NM_001001775.3" 
+		public Dictionary<string, string[]> data; //key: ">NM_001001775.3"
+								//note: DNAModel key contains: complement, indexStart, indexEnd, etc. 
 								//value : [descr, sequence]
 								//@todo: [descr, indexStart, indexEnd, sequence]
 								//value example: ["Gallus gallus glutamate ionot...subunit 2 (GRIA2),...mRNA",
@@ -45,17 +46,17 @@ namespace VRModel.Monomer {
 					}
 
 					key = m.Value;
-					Debug.Log("matched the key: " + key);
-					descr = line.Substring(m.Length-1, line.Length-(m.Length-1));
+					Debug.Log("matched the key: " + key + " m.Length: " + m.Length + " line.Length: " + line.Length + " key.Length: " + key.Length);
+					descr = line.Substring(m.Length+1, line.Length-(m.Length)-1);
 				} else {
 					line = Regex.Replace(line, @"\t|\n|\r", "");
 					val += line;
 				}
 			}
 
-			Debug.Log("key: " + key + " value: " + val + " descr: " + descr);
+			Debug.Log("key: " + key + " descr: " + descr + " value: " + val);
 			this.addData(ref key, ref descr, ref val);
-			Debug.Log("key: " + key + " value: " + val + " descr: " + descr);
+			Debug.Log("key: " + key + " descr: " + descr + " value: " + val);
 
 			reader.Close();
 		}
@@ -66,8 +67,12 @@ namespace VRModel.Monomer {
 			
 			//adding a nicename mapping. key ==> description which usually has species name, is human readable
 			//also adding description ==> key mapping so we can go back and forth.
-			this.niceName.Add(values[0], key);
-			this.niceName.Add(key, values[0]);
+			string[] temp = values[0].Split(' ');
+			string name = temp[0] + " " + temp[1];
+			Debug.Log("adding nicename: " + name);
+
+			this.niceName.Add(name, key);
+			this.niceName.Add(key, name);
 			
 			key = descr = val = string.Empty;
 		}

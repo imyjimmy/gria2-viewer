@@ -275,8 +275,8 @@ public class Molecule3D:MonoBehaviour {
 		Debug.Log("dnaPanelController: " + dnaPanelController);
 		
 		if (DNA_Panel.GetComponent<Renderer>().enabled && !dnaPanelController.viewGenerated) {
-			dnaPanelController.BuildMeshUVs(DNA_Panel);
-			dnaPanelController.BuildTexture(DNA_Panel); //, parseDNA);
+			dnaPanelController.BuildMeshUVs();
+			dnaPanelController.BuildTexture();
 			dnaPanelController.viewGenerated = !dnaPanelController.viewGenerated;
 		}
 		// if (DNA_Panel.activeInHierarchy) {

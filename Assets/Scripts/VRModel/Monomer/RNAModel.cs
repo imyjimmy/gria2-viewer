@@ -1,4 +1,4 @@
-namespace VRModel.Nucleotides {
+namespace VRModel.Monomer {
 	using UnityEngine;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace VRModel.Nucleotides {
 				RNAModel rnaModel = new RNAModel();
 					//load the default file for this RNAModel.
 					rnaModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_mRNA_rattus_nrovegicus.fasta");
-					_instance = dnaModel;
+					_instance = rnaModel;
 				}
 				return _instance;
 			}
