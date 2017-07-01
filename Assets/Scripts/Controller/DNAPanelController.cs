@@ -9,6 +9,7 @@ namespace Controller {
 	using Hover.Core.Renderers;
 
 	using VRModel;
+	using VRModel.Monomer;
 
 	public class DNAPanelController : MonoBehaviour {
 		private static DNAPanelController _instance;

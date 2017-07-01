@@ -30,9 +30,10 @@ public class Ribbons {
 	private static int RIBBON_DETAIL = 4;           // Ribbon detail: from 1 (lowest) to 4 (highest)
 	private static int RENDER_MODE = 1;             // 0 = lines, 1 = flat ribbons
 	
-	public static ColorObject HELIX_COLOR = new ColorObject(new Color32(255,0,0,255));	// red
-	public static ColorObject STRAND_COLOR = new ColorObject(new Color32(0,0,255,255));	// blue
-	public static ColorObject COIL_COLOR = new ColorObject(new Color32(255,255,255,255));	// light grey
+	public static ColorObject HELIX_COLOR = new ColorObject(new Color32(234,77,63,1));	// red
+	public static ColorObject STRAND_COLOR = new ColorObject(new Color32(66,122,244,1));	// blue
+	public static ColorObject COIL_COLOR = new ColorObject(new Color32(178,166,166,1));	// light grey
+	public static ColorObject SELECTED_COLOR = new ColorObject(new Color32(255,231,99,1)); //yellow
 
 	public static ColorObject ChainColorA = new ColorObject(new Color32( 10,  3,200,50));
 	public static ColorObject ChainColorB = new ColorObject(new Color32( 10,170, 34,50));
@@ -1064,11 +1065,12 @@ public class Ribbons {
 						break;
 					}
 				}
+				r.colors = new List<Color32>();
 				for(int j=0; j<320; j++) {
 					colors.Add(color);
+					r.colors.Add(color);
 				}
 
-				r.colors = new List<int>(new int[] {0, 320});
 				ssglic.Add(ss[i]);
 			}
 			MoleculeModel.residueSeq[i] = r;

@@ -181,6 +181,7 @@ public class PostProcessing {
 			ribbObj.AddComponent<MeshRenderer>();
 			ribbObj.GetComponent<MeshFilter>().mesh = mesh;
 			ribbObj.GetComponent<Renderer>().material = new Material(Shader.Find("Custom/Ribbons"));
+			// ribbObj.GetComponent<Renderer>().material = new Material(Shader.Find("VacuumShaders/The Amazing Wireframe/Standard"));
 			ribbObj.transform.position = CENTER;
 			ribbObj.transform.localPosition = CENTER;
 		}

@@ -1,7 +1,11 @@
 
 namespace VRModel {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
 	using VRModel.Algorithms;
-	using VRModel.Nucleotides;
+	using VRModel.Monomer;
+
 
 	public enum Seq {DNA, RNA, AA};
 
@@ -40,13 +44,14 @@ namespace VRModel {
 		//what kind of output are we trying to get?
 		// position => % consensus as float, List<string> agree, List<string> disagree
 		// consensus class.
-		public Consensus align(List<string> niceName, Seq type) {
+		// public Consensus align(List<string> niceName, Seq type) {
 
-		}
+		// }
 
-		public Consensus crossAlign(string niceName, Seq in, Seq out) {
+		// //DNA, at certain position ==> RNA or AA at another position.
+		// public Consensus crossAlign(string niceName, Seq inSeqType, Seq outSeqType) {
 
-		}
+		// }
 
 
 	}

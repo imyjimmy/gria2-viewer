@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Molecule.Model;
 using Controller;
 using VRModel;
+using VRModel.Monomer;
 //using Hover.InputModules.Follow;
 
 public class Splitting {
@@ -40,8 +41,6 @@ public class Splitting {
 
 		//get the mapping of each individual residue to its associated normals, triangles, vertices, colors.
 		residueSeq = mData.residueSeq;
-		
-		// debug();
 
 		//register a method to DNAPanel's UVChanged event.
 		DNAPanelController.UVCoordChangedEvent += getResidueForUV;
@@ -53,6 +52,7 @@ public class Splitting {
 		if(mData.vertices.Length < vertexLimit) {
 			Debug.Log("Within vertex limit.\nVertices size : "+vertices.Length);
 			Debug.Log("   triangle size : "+ triangles.Length);
+			debug();
 			Mesh mesh = new Mesh();
 			mesh.vertices = vertices;
 			mesh.triangles = triangles;
@@ -134,8 +134,27 @@ public class Splitting {
 	}
 
 	//@imyjimmy proof of concept of adding/ changing the mesh.
+		// Debug.Log("inside Splitting. Proof of concept.");
+		// List<int> vertices = residueSeq[0].vertices;
+		// List<Color32> colors = residueSeq[0].colors;
+		// List<int> mi = residueSeq[0].meshIndices;
+
+		// foreach (int i in mi) {
+		// 	foreach (int vIndex in vertices) {
+		// 		meshes[i].colors[vIndex] = new Color32(255,255,0,255);
+		// 	}
+		// }
 	public void updateSplit() {
-		Debug.Log("inside Splitting. Proof of concept.");
+		Mesh m = meshes[0];
+		Color32[] colors = new Color32[m.colors32.Length];
+		Debug.Log("inside Splitting. Proof of concept. colors length: " + colors.Length + "\n m.colors32.Length: " + m.colors32.Length);
+
+		for (int i = 0; i < m.colors32.Length; i++) {
+			colors[i] = new Color32(255,255,0,255);
+		}
+
+		m.colors32 = colors;
+
 		// Mesh m = this.makeMesh();
 		// meshes.Add(m);
 		// GameObject ribbObj = new GameObject("Ribbons");
@@ -162,21 +181,26 @@ public class Splitting {
 	public void debug() {
 		Debug.Log("triangles length: " + triangles.Length + " normals length: " + normals.Length);
 		for (int i=0; i < triangles.Length; i++) {
-			Debug.Log("triangles[" + i + "]: " + triangles[i] + "\nnormals[" + i + "]: " + normals[i]);
+			Debug.Log("triangles[" + i + "]: " + triangles[i]);
+		}
+
+		Debug.Log("MeshData colors:");
+		for (int i=0; i < colors.Length; i++) {
+			Debug.Log("colors[" + i + "]: " + colors[i]);
 		}
 
 		Debug.Log("residue info make it to Splitting.cs");
-		foreach (Residue r in residueSeq) {
-			Debug.Log("r: " + r.name
-			+ "," + AminoAcid.OneLetterCode[r.name]
-			+ ", triangles: " + r.triangles[0] + "," + r.triangles[1]
-			+ ", vertices: " + r.vertices[0] + "," + r.vertices[1]
-			+ ", normals: " + r.normals[0] + "," + r.normals[1]
-			+ " triangle value at r.triangles[0]: " + triangles[r.triangles[0]]
-			+ " triangle value at r.triangles[1]: " + triangles[r.triangles[1]]
-			+ " also vertices: " + vertices[r.vertices[0]] + "," + vertices[r.vertices[1]] 
-			+ " normals: " + normals[r.normals[0]] + "," + normals[r.normals[1]]);
-		}
+		// foreach (Residue r in residueSeq) {
+		// 	Debug.Log("r: " + r.name
+		// 	+ "," + AminoAcid.OneLetterCode[r.name]
+		// 	+ ", triangles: " + r.triangles[0] + "," + r.triangles[1]
+		// 	+ ", vertices: " + r.vertices[0] + "," + r.vertices[1]
+		// 	+ ", normals: " + r.normals[0] + "," + r.normals[1]
+		// 	+ " triangle value at r.triangles[0]: " + triangles[r.triangles[0]]
+		// 	+ " triangle value at r.triangles[1]: " + triangles[r.triangles[1]]
+		// 	+ " also vertices: " + vertices[r.vertices[0]] + "," + vertices[r.vertices[1]] 
+		// 	+ " normals: " + normals[r.normals[0]] + "," + normals[r.normals[1]]);
+		// }
 	}
 
 	//
@@ -190,7 +214,7 @@ public class Splitting {
 			} else { //tIndex <= residueSeq[i].triangles[1]
 				//tri index must be less than or eq to the value in triangles[1] for the residue at index i.
 				if (residueSeq[i].triangles[0] > tIndex) {
-					//error case. how the fuck can this happen!?
+					//error case. this can't happen;
 				} else {
 					//a scenario where the triangle index splits a residue between two meshes.
 					//[0,1,2,3,4,5,6,7,8,9,10], length = 11
@@ -203,7 +227,7 @@ public class Splitting {
 
 					r.triangles[1] = tIndex-1;
 					r.triangles.Add(tIndex);
-					r.triangles.Add(last);
+					r.triangles.Add(last); //last is now "first"
 
 					last = r.vertices[1];
 					r.vertices[1] = r.vertices[0]+vertLength-1;

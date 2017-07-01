@@ -2,12 +2,13 @@
 namespace VRModel {
 	using System.Collections;
 	using System.Collections.Generic;
+	using UnityEngine;
 
 	public class Residue {
 		public string name { get; set; }
 
 		public List<int> triangles { get; set; }
-		public List<int> colors { get; set; }
+		public List<Color32> colors { get; set; }
 		public List<int> vertices { get; set; }
 		public List<int> normals { get; set; }
 

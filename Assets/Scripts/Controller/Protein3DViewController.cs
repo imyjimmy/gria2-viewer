@@ -1,4 +1,3 @@
-//@todo: this is actually what we refer to as the model.
 namespace Controller {
 	using UnityEngine;
 	using UnityEngine.UI;
@@ -20,8 +19,6 @@ namespace Controller {
 			//dnaPlaneController = (DNAPlaneController) DNA_Plane.GetComponent(typeof(DNAPlaneController));
 			loadBox = GameObject.Find("LoadBox");
 			scene = (ScenePreload_5L1B) loadBox.GetComponent(typeof(ScenePreload_5L1B));
-			
-
 		}
 
 		public void Update() {

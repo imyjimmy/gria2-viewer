@@ -71,7 +71,7 @@ using System;
 using ParseData.ParsePDB;
 using ParseData.IParsePDB;
 using ParseData.ParseFASTA; //@imyjimmy
-using View.NucleicAcids;
+// using View.NucleicAcids;
 using Controller;
 using UI;
 using Molecule.View;

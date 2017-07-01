@@ -2,13 +2,15 @@ Shader "Custom/Ribbons" {
 
 
 	SubShader {
-		Tags { "RenderType"="Opaque" }
+		// Tags { "RenderType"="Opaque" }
+		Tags { "RenderType"="Transparent"}
 	    Pass {
 	    	Cull off
 			Name "BASE"
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+
 			#pragma debug
 			
 			struct appdata {
@@ -20,7 +22,7 @@ Shader "Custom/Ribbons" {
 					  
 			struct v2f {
 				float4 position : POSITION;
-				fixed4 color : COLOR;
+				float4 color : COLOR;
 				float3 normal : TEXCOORD0;
 			};
 	 
@@ -34,17 +36,17 @@ Shader "Custom/Ribbons" {
 			}
 	        
 			float4 frag (v2f i) : COLOR	{
-				float sAmbient = 0.08;
-				float4 ambientLight = float4(sAmbient,sAmbient,sAmbient,1);
+				//float sAmbient = 0.08;
+				//float4 ambientLight = float4(sAmbient,sAmbient,sAmbient,1);
 				float3 pos = i.position.xyz;
 				float3 normal = normalize(i.normal);
 				float4 color = i.color;
 				
-				float3 lightVector = float3(0,0,-1); // light position hard-coded
+				float3 lightVector = float3(0,0,-1.5); // light position hard-coded
 				float dotProduct = abs(dot(normal, lightVector));
 				float4 diffuse = dotProduct * color; // float4(0,0,1,1);
 				
-				return diffuse + ambientLight;
+				return diffuse; // + ambientLight;
 			}
 			ENDCG
 		} // End PASS
