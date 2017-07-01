@@ -1,0 +1,44 @@
+namespace VRModel.Nucleotides {
+	using UnityEngine;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.IO;
+	// using ParseData.IParsePDB;
+	// using System.Net;
+	// using System.Linq;
+	// using System;
+	// using Molecule.Model;
+	// using Molecule.Control;
+	// using System.Xml;
+	// using System.Text;	
+	using System.Text.RegularExpressions;
+	// using UI;
+
+	public class RNAModel : FASTAModel {
+
+		private static RNAModel _instance;
+		public static RNAModel Instance {
+			get {
+				if (_instance == null) {
+				RNAModel dnaModel = new RNAModel();
+					//load the default file for this RNAModel.
+					dnaModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_mRNA_rattus_nrovegicus.fasta");
+					_instance = dnaModel;
+				}
+				return _instance;
+			}
+		}
+	
+		// public Hashtable exons; // key, value where value = array of exon start, stop coordinates in tuples
+		// public Hashtable cds; //coding regions, in the same format above.
+
+
+		public RNAModel() : base() {
+
+		}
+
+		// public void readFile(string path) : base readFile(string path) {
+			
+		// }
+	}
+}
