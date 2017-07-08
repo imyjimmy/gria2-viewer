@@ -6,7 +6,7 @@ namespace VRModel.Algorithms {
 	using System.Collections.Generic;
 	using VRModel.Monomer;
 
-	public class Consensus {
+	public class Consensus { //consensus generator?
 
 		public List<string> comparisons { get; private set; }
 		public Seq type { get; private set; }

@@ -20,7 +20,7 @@ namespace VRModel.Monomer {
 		public static RNAModel Instance {
 			get {
 				if (_instance == null) {
-				RNAModel rnaModel = new RNAModel();
+					RNAModel rnaModel = new RNAModel();
 					//load the default file for this RNAModel.
 					rnaModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_mRNA_rattus_nrovegicus.fasta");
 					_instance = rnaModel;

@@ -16,8 +16,8 @@ namespace Controller {
 		public static RNAPanelController Instance { 
 			get { 
 				if (_instance == null) {
-					GameObject g = new GameObject("test");
-					g.AddComponent<RNAPanelController>(); 
+					RNAPanelController rnaPanel = new RNAPanelController();
+					_instance = rnaPanel;  
 				}
 
 				return _instance;
@@ -42,7 +42,7 @@ namespace Controller {
 		private int seqLength;
 
 		//textures...
-		private int textureX = 128;
+		private int textureX = 64;
 		private int textureY; // must be sequence length / 128.
 		private int numRows; // 18
 		public float tileSize = 1.0f;
@@ -71,16 +71,17 @@ namespace Controller {
 		}
 
 		public void Start() {
-			RNA_Model = RNAModel.Instance;	//get the RNA Model.
-			key = RNA_Model.niceName["Rattus nrovegicus"]; //load the default key on start.
+			Debug.Log("RNAPanelController.Start()");
+			RNA_Model = RNAModel.Instance;	//get the RNA Model.Rattus norvegicus
+			key = RNA_Model.niceName["Rattus norvegicus"]; //load the default key on start.
 			seqLength = RNA_Model.data[key][1].Length;
-			textureY = seqLength / 128;
+			textureY = seqLength / textureX;
 			numRows = 18;
 
 			//Load UIs
-			RNAUI = GameObject.Find("CursorRenderers/Look/RNA_Letter_UI");
+			RNAUI = GameObject.Find("CursorRenderers/Look/DNA_Letter_UI");
 			RNAUI.SetActive(false);
-			RightIndexUI = GameObject.Find("CursorRenderers/RightIndex/RNA_Letter_UI");
+			RightIndexUI = GameObject.Find("CursorRenderers/RightIndex/DNA_Letter_UI");
 			RightIndexUI.SetActive(false);
 			RightIndexSelection = GameObject.Find("CursorRenderers/RightIndex/HoverOpaqueCursorArcRenderer-Default");
 
@@ -112,34 +113,40 @@ namespace Controller {
 		}
 
 		public void turnOffUI() {
-			HoverIndicator hi = RightIndexSelection.GetComponent<HoverIndicator>();
-			if (hi.SelectionProgress < 0.05f) {
-				RightIndexUI.SetActive(false);
+			if (RightIndexSelection != null) {
+				HoverIndicator hi = RightIndexSelection.GetComponent<HoverIndicator>();
+				if (hi.SelectionProgress < 0.05f) {
+					RightIndexUI.SetActive(false);
+				}
 			}
 		}
 
 		public Vector2? getUVFromCursor(Transform t) {
-			RaycastHit? raycastHit = raycastHitCursor(t.position);
+			if (t != null ) {
+				RaycastHit? raycastHit = raycastHitCursor(t.position);
 
-			if (raycastHit == null) {
-            	return null;
-			}
+				if (raycastHit == null) {
+	            	return null;
+				}
 
-			RaycastHit hit = raycastHit.Value;
-			Renderer renderer = hit.transform.GetComponent<Renderer>();
-			MeshCollider meshCollider = hit.transform.GetComponent<MeshCollider>();
-			MeshFilter mf = hit.transform.GetComponent<MeshFilter>();
+				RaycastHit hit = raycastHit.Value;
+				Renderer renderer = hit.transform.GetComponent<Renderer>();
+				MeshCollider meshCollider = hit.transform.GetComponent<MeshCollider>();
+				MeshFilter mf = hit.transform.GetComponent<MeshFilter>();
 
-			Texture2D texture = renderer.material.mainTexture as Texture2D;
-        	Vector2 uv = hit.textureCoord;
-        	
-        	uv.x = texture.width - uv.x*texture.width;
-        	uv.y = uv.y * texture.height; //* 0.0255f 
+				Texture2D texture = renderer.material.mainTexture as Texture2D;
+	        	Vector2 uv = hit.textureCoord;
+	        	
+	        	uv.x = texture.width - uv.x*texture.width;
+	        	uv.y = uv.y * texture.height; //* 0.0255f 
 
-        	// Debug.Log("textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
-        	// Debug.Log("int coords: " + (int) uv.x + ", " + (int) uv.y);
+	        	// Debug.Log("textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
+	        	// Debug.Log("int coords: " + (int) uv.x + ", " + (int) uv.y);
 
-        	return uv;		
+	        	return uv;
+	        } else {
+	        	return null;
+	        }	
 		}	
 
 		public RaycastHit? raycastHitCursor(Vector3 rcWorldPos) {
@@ -218,7 +225,10 @@ namespace Controller {
 		public void BuildMeshUVs() {
 			Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
 			Vector2[] uvs = mesh.uv;
-			
+			Debug.Log("BuildMesh RNA_Plane. numRows: " + numRows + " seqLength: " + seqLength + " textureX: " + textureX);
+			int test = (seqLength / textureX) / numRows;
+			Debug.Log("divide: " + test);
+			Debug.Log("casting to float: " + (float) test);
 			float yFactor = (float) 1.0 / (float) ((seqLength / textureX) / numRows);			
 
 			Vector2 factor = new Vector2(1.00f, yFactor); //0.0255;
@@ -240,15 +250,8 @@ namespace Controller {
 		}
 
 		public void BuildTexture() {
-
-			Debug.Log("inside build texture");
-			string sequence = "";
-			foreach (KeyValuePair<string, string[]> entry in RNA_Model.data) {
-				string[] val = (string[]) entry.Value;
-				Debug.Log("Key = " + entry.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
-				Debug.Log("rna.length: " + val[1].Length);
-				sequence = val[1];
-			}
+			string[] val = RNA_Model.data[key];
+			string sequence = val[1];
 
 			var texture = new Texture2D(textureX, textureY, TextureFormat.BGRA32, true);
  			GetComponent<Renderer>().material.mainTexture = texture;    		

@@ -85,6 +85,8 @@ using Config;
 using Molecule.Model;
 using System.IO;
 
+using Hover.Core.Items.Types;
+
 public class Molecule3D:MonoBehaviour {
 
 	private GameObject molecule;
@@ -121,6 +123,13 @@ public class Molecule3D:MonoBehaviour {
 	private GameObject DNA_Panel;
 	private GameObject DNA_Canvas;
 	private GameObject DNA_Slider;
+	private GameObject DNA_Show;
+	private HoverItemDataCheckbox DNA_Check;
+
+	private RNAPanelController rnaPanelController;
+	private GameObject RNA_Panel;
+	private GameObject RNA_Canvas;
+	private GameObject RNA_Slider;
 
 //	private Boolean flag=false;
 	private Boolean isControl=false;
@@ -217,24 +226,21 @@ public class Molecule3D:MonoBehaviour {
 		DNA_Panel = GameObject.Find("DNA_Plane");
 		DNA_Slider = GameObject.Find("DNA_SliderItem");
 
+		// Debug.Log("got DNA_Check.");
+		// Debug.Log("DNA_Check: " + DNA_Check);
+
+		RNA_Canvas = GameObject.Find("RNA_Canvas");
+		RNA_Panel = GameObject.Find("RNA_Plane");
+		RNA_Slider = GameObject.Find("RNA_SliderItem");
+
 		// dnaPanelController = (DNAPanelController) DNA_Panel.GetComponent(typeof(DNAPanelController));
 		dnaPanelController = DNAPanelController.Instance;
 		DNA_Panel.GetComponent<Renderer>().enabled = false;
 		DNA_Slider.SetActive(false);
-		// DNA_Canvas.SetActive(false);
-		// foreach (Transform child in DNA_Canvas.transform) {
-		// 	Debug.Log("child: " + child + " isActive: " + child.gameObject.activeInHierarchy);
-		// }
 
-		// Debug.Log(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
-		// parseDNA.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
-		// parseDNA.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/1L2Y_nuc.fasta");
-
-		// Debug.Log("parseDNA.data.Count: " + parseDNA.data.Count);
-		// foreach (DictionaryEntry de in parseDNA.data) {
-		// 	string[] val = (string[]) de.Value;
-		// 	Debug.Log("Key = " + de.Key + ", Descr = " + val[0] + ", Value = " + val[1]);
-		// }
+		rnaPanelController = RNAPanelController.Instance;
+		RNA_Panel.GetComponent<Renderer>().enabled = false;
+		RNA_Slider.SetActive(false);
 
 		//dnaPanelController.DNA_Model = parseDNA;
 	}
@@ -275,198 +281,36 @@ public class Molecule3D:MonoBehaviour {
 		Debug.Log("dnaPanelController: " + dnaPanelController);
 		
 		if (DNA_Panel.GetComponent<Renderer>().enabled && !dnaPanelController.viewGenerated) {
+			DNA_Show = GameObject.Find("Hovercast/TransformAdjuster/Rows/DNA_row/Show DNA");
+			DNA_Check = (HoverItemDataCheckbox) DNA_Show.GetComponent(typeof(HoverItemDataCheckbox));
+			Debug.Log("got DNA_Check.");
+			Debug.Log("DNA_Check: " + DNA_Check);
 			dnaPanelController.BuildMeshUVs();
 			dnaPanelController.BuildTexture();
 			dnaPanelController.viewGenerated = !dnaPanelController.viewGenerated;
 		}
-		// if (DNA_Panel.activeInHierarchy) {
-		// 	Debug.Log("hide DNA.");
-		// 	DNA_Canvas.SetActive(false);
-		// 	DNA_Panel.SetActive(false);
-
-		// } else {
-		// 	Debug.Log("show DNA");
-		// 	DNA_Canvas.SetActive(true);
-		// 	foreach (Transform child in DNA_Canvas.transform) {
-		// 		Debug.Log("child: " + child);
-		// 		child.gameObject.SetActive(true);
-		// 		MonoBehaviour[] scripts = child.gameObject.GetComponents<MonoBehaviour>();
-		// 		foreach (MonoBehaviour m in scripts) {
-		// 			m.enabled = true;
-		// 		}
-		// 	}
-
-		// 	if (!dnaPanelController.viewGenerated) {
-		// 		Debug.Log("generating the mesh for the first time.");
-		// 		dnaPanelController.BuildMesh(DNA_Panel);
-		// 		dnaPanelController.BuildTexture(DNA_Panel, parseDNA);
-		// 		dnaPanelController.viewGenerated = true;
-		// 	}
-		// }
 	}
 
-		// CanvasGroup c;
+	public void ToggleRNA() {
+		Debug.Log("clicked that RNA button. RNA_Panel: " + RNA_Panel);
 
-		// GameObject tempObject = GameObject.Find("MinimalPanel_1");
-  //   	if(tempObject != null){
-  //       	//If we found the object , get the Canvas component from it.
-  //       	c = tempObject.GetComponent<CanvasGroup>();
-  //       	if(c == null){
-  //           	Debug.Log("Could not locate Canvas component on " + tempObject.name);
-  //       	} else {
-  //       		Debug.Log("CanvasGroup: " + c);
-  //       	}
+		if (DNA_Panel.GetComponent<Renderer>().enabled && DNA_Check != null) {
+			// DNA_Panel.GetComponent<Renderer>().enabled = !DNA_Panel.GetComponent<Renderer>().enabled;
+			// DNA_Slider.SetActive(!DNA_Slider.activeInHierarchy);
+			DNA_Check.Select();
+		}
+		
+		RNA_Panel.GetComponent<Renderer>().enabled = !RNA_Panel.GetComponent<Renderer>().enabled;
+		RNA_Slider.SetActive(RNA_Slider.activeInHierarchy);
 
-  //       	c.alpha = 0.0f;
-  //       	c.interactable = false;
-  //       	c.blocksRaycasts = false; //does not allow collision.
-  //   	}
-
-// 	void OnGUI() {	
-// 		GUI.skin = mySkin;
+		Debug.Log("rnaPanelController: " + rnaPanelController);
 		
-// 		if(!fontInitialized) {
-// 			Rectangles.SetFontSize();
-// 			fontInitialized = true;
-// 		}
-	
-// 		if(GUIMoleculeController.m_fileBrowser != null)
-// 			GUIMoleculeController.m_fileBrowser.OnGUI();
-
-
-
-// 		if(gUIDisplay.m_fileBrowser != null) {
-// 			GUIMoleculeController.FileBrowser_show=true;
-// 			gUIDisplay.m_fileBrowser.OnGUI();
-// 		} else
-// 			GUIMoleculeController.FileBrowser_show=false;
-		
-// 		UIData.EnableUpdate=false;
-// 		if((!UIData.hiddenUI)&&(!UIData.hiddenUIbutFPS))
-// 			gUIDisplay.Display();
-		
-// 		if((!UIData.hiddenUI)&&(UIData.hiddenUIbutFPS)){
-// 			GUIMoleculeController.toggle_INFOS = true;
-// 		}
-		
-// 		if(!UIData.hiddenUI)
-// 			if(GUIMoleculeController.showPanelsMenu)
-// 				GUIMoleculeController.SetPanels();
-		
-// 		if(!UIData.hiddenUI)
-// 			if (GUIMoleculeController.showResiduesMenu)
-// 				GUIMoleculeController.SetResidues();
-		
-// 		if(!UIData.hiddenUI)
-// 			if (GUIMoleculeController.showAtomsExtendedMenu)
-// 				GUIMoleculeController.SetAtomsExtended();
-		
-// 		if(!UIData.hiddenUI)
-// 			if (GUIMoleculeController.showChainsMenu)
-// 				GUIMoleculeController.SetChains();
-
-// 		if(UIData.changeStructure) {
-// 			DisplayMolecule.ResetDisplay();
-// 			UIData.changeStructure = false;
-// 			UIData.isParticlesInitialized = false;
-// 		}
-		
-// 		if(UIData.isclear) {
-// 			DisplayMolecule.DestroyFieldLine();
-// 			DisplayMolecule.DestroyObject();
-// 			DisplayMolecule.DestroyRingBlending();
-// 			DisplayMolecule.DestroySugarRibbons();
-// 			DisplayMolecule.DestroyOxySpheres();
-// 			DisplayMolecule.DestroyBondObject();
-// 			DisplayMolecule.DestroySurfaces();
-// 			DisplayMolecule.DestroyElectIso();
-// 			DisplayMolecule.ClearMemory();
-			
-// 			// ----- Clearing all variables -----
-// 			UIData.isCubeLoaded = false;
-// 			UIData.isSphereLoaded = false;
-// 			UIData.isHBallLoaded = false;
-// 			LoadTypeGUI.buildSurfaceDone = false;
-// 			LoadTypeGUI.surfaceTextureDone = false;
-// 			LoadTypeGUI.toggle_RING_BLENDING = false;
-// 			LoadTypeGUI.toggle_NA_HIDE = false;
-// 			LoadTypeGUI.toggle_TWISTER= false;
-// 			LoadTypeGUI.toggle_HIDE_HYDROGEN = false;
-// 			LoadTypeGUI.toggle_OXYGEN = false;
-// 			LoadTypeGUI.ColorationModeBond=0;
-// 			LoadTypeGUI.ColorationModeRing=0;
-// 			UIData.isParticlesInitialized=false;
-// 			GUIMoleculeController.globalRadius = 1.0f;
-// 			UIData.secondarystruct = false;
-// 			UIData.atomtype = UIData.AtomType.noatom;
-// 			UIData.bondtype = UIData.BondType.nobond;
-// 			MoleculeModel.existingName.Clear();
-// 			MoleculeModel.existingRes.Clear();
-// 			MoleculeModel.existingChain.Clear();
-// //			id="";
-// 			//T.T test debug
-// 			Molecule.Model.MoleculeModel.atomsLocalScaleList.Clear();
-// 			RequestPDB.isDone=false;
-			
-// 			UIData.isclear=false;
-// 			Debug.Log("UIData.isclear");
-// 		}
-		
-// 		if(UIData.resetDisplay&&UIData.isCubeToSphere) {
-// 			DisplayMolecule.CubeToSphere();
-// 			Debug.Log ("UIData :: resetDisplay && iscubetoSphere");
-// 		}
-		
-// 		if(UIData.resetDisplay&&UIData.isSphereToCube) {
-// 			DisplayMolecule.SphereToCube();
-// 			Debug.Log ("UIData :: reset display && is spheretocube");
-// 		}
-		
-// 		if(UIData.resetBondDisplay) {
-// 			DisplayMolecule.ResetBondDisplay();
-// 			Debug.Log ("UIData :: reset bonddisplay ");
-// 		}
-		
-// 		if(UIData.isOpenFile) {	
-// 			StartCoroutine(loadLoadFile());
-// 		}
-		
-// 			LocCamera.GetComponent<Skybox>().enabled=true;
-// 		else
-// 			LocCamera.GetComponent<Skybox>().enabled=false;
-
-// 		UIData.EnableUpdate=true;
-		
-// 		if(UIData.interactive&&UIData.resetInteractive)	{
-// 			DisplayMolecule.AddAllPhysics();
-// 			UIData.resetInteractive=false;			
-// 		}
-// 		else if(!UIData.interactive && UIData.resetInteractive) {
-// 			DisplayMolecule.DeleteAllPhysics();
-// 			UIData.resetInteractive = false;
-// 		}
-		
-// 		if(UIData.meshcombine) {
-// 			DisplayMolecule.AddCombineMesh();
-// 			UIData.resetMeshcombine=false;			
-// 		}
-// 		else if(!UIData.meshcombine) {
-// 			DisplayMolecule.DeleteCombineMesh();
-// 			UIData.resetMeshcombine=false;			
-// 		}
-		
-// 		/*if (requestPDB.Loading) {
-//             	GUI.Label(new Rect(100, 15, 200, 30), "", "bj");
-//             	GUI.Label(new Rect(100,15, requestPDB.progress * 200, 30), "", "qj");
-//         }*/
-
-// //		if(GUI.tooltip != "")GUI.Label ( new Rect(180,Screen.height-35,Screen.width-360,20), GUI.tooltip);
-// //		if(MoleculeModel.newtooltip != "")GUI.Label ( new Rect(180,Screen.height-35,Screen.width-360,20), MoleculeModel.newtooltip);
-// 		if(GUI.tooltip != "")GUI.Box ( new Rect(180,Screen.height-55,450,25), GUI.tooltip);
-// 		if(MoleculeModel.newtooltip != "")GUI.Box ( new Rect(180,Screen.height-55,450,25), MoleculeModel.newtooltip);
-
-
-// 	}
+		if (RNA_Panel.GetComponent<Renderer>().enabled && !rnaPanelController.viewGenerated) {
+			rnaPanelController.BuildMeshUVs();
+			rnaPanelController.BuildTexture();
+			rnaPanelController.viewGenerated = !rnaPanelController.viewGenerated;
+		}
+	}
 	
 	//this fonction is used to synchronise the file loading and the Display
 	//Otherwise Display is execute before the end of the loading.
