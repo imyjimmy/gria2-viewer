@@ -42,8 +42,8 @@ namespace Controller {
 		private int seqLength;
 
 		//textures...
-		private int textureX = 64;
-		private int textureY; // must be sequence length / 128.
+		private int textureX = 32;
+		private int textureY; // must be sequence length / 64.
 		private int numRows; // 18
 		public float tileSize = 1.0f;
 		public bool viewGenerated = false;
@@ -76,7 +76,7 @@ namespace Controller {
 			key = RNA_Model.niceName["Rattus norvegicus"]; //load the default key on start.
 			seqLength = RNA_Model.data[key][1].Length;
 			textureY = seqLength / textureX;
-			numRows = 18;
+			numRows = 12;
 
 			//Load UIs
 			RNAUI = GameObject.Find("CursorRenderers/Look/DNA_Letter_UI");
@@ -128,7 +128,8 @@ namespace Controller {
 				if (raycastHit == null) {
 	            	return null;
 				}
-
+				
+				
 				RaycastHit hit = raycastHit.Value;
 				Renderer renderer = hit.transform.GetComponent<Renderer>();
 				MeshCollider meshCollider = hit.transform.GetComponent<MeshCollider>();
@@ -140,8 +141,8 @@ namespace Controller {
 	        	uv.x = texture.width - uv.x*texture.width;
 	        	uv.y = uv.y * texture.height; //* 0.0255f 
 
-	        	// Debug.Log("textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
-	        	// Debug.Log("int coords: " + (int) uv.x + ", " + (int) uv.y);
+	        	Debug.Log("RNA. textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
+	        	Debug.Log("RNA.  int coords: " + (int) uv.x + ", " + (int) uv.y);
 
 	        	return uv;
 	        } else {
@@ -154,9 +155,10 @@ namespace Controller {
 			Vector3 result = rcWorldPos - offset;
 			Debug.DrawLine(rcWorldPos, result ,Color.cyan);
 			// Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
-
+			int mask = 1 << 14;
+			mask = ~mask;
 			RaycastHit raycastHit;
-			if (!Physics.Linecast(rcWorldPos, result, out raycastHit)) {
+			if (!Physics.Linecast(rcWorldPos, result, out raycastHit, mask)) {
 				return null;
 			}
 			return raycastHit;
@@ -267,6 +269,7 @@ namespace Controller {
 
      		texture.filterMode = FilterMode.Point;
     	 	texture.Apply();
+    	 	Debug.Log("built texture!");
 		}
 
 		public void updatePosition(HoverItemDataSlider slider) {

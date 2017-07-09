@@ -16,10 +16,11 @@ namespace VRModel.Algorithms {
 		public int gapExtPenalty { get; set; }
 		public int matchScore { get; set; }
 		public int mismatchPenalty { get; set; }
+		public bool consideringTies { get; set; }
 
 		public Seq seqType { get; set; }
 		//public Nuc nucType { get; set; }
-		public enum Direction : byte {START, L, T, R, D, LD, LT, LTD };
+		public enum Direction : byte {START, L, T, D, LD, LT, TD, LTD };
 		
 		// private Dictionary<string, Nuc> nSeqs; //nuc seq comparisons
 		// private Dictionary<string, string> pSeqs; //protein seq comparisons.
@@ -48,6 +49,7 @@ namespace VRModel.Algorithms {
 			gapExtPenalty = -1;
 			matchScore = 1;
 			mismatchPenalty = -1;
+			consideringTies = false;
 			pam100 = new Dictionary<string, int>();
 		}
 
@@ -60,6 +62,7 @@ namespace VRModel.Algorithms {
 				case Seq.AA:
 				return registerProteinSeqModel();
 			}
+			return null;
 		}
 
 		public void populatePAM() {
@@ -99,18 +102,18 @@ namespace VRModel.Algorithms {
 			}
 
 		//1. create matrices.
-		private void createMatrices(string seq1, string seq2) {
-			matrix = new int[seq1.Length+1, seq2.Length+1];
-			cell_origin = new Direction[seq1.Length+1, seq2.Length+1];
-		}
+			private void createMatrices(string seq1, string seq2) {
+				matrix = new int[seq1.Length+1, seq2.Length+1];
+				cell_origin = new Direction[seq1.Length+1, seq2.Length+1];
+			}
 
 		//2. initialize matrices with default values.
-		private void initializeMatrices() {
-			for (int i = 0; i < this.matrix.GetLength(0); i++) {
-				if (i == 0) {
-					for (int j = 0; j < this.matrix.GetLength(1); j++) {
-						this.matrix[i, j] = 0;
-					} 
+			private void initializeMatrices() {
+				for (int i = 0; i < this.matrix.GetLength(0); i++) {
+					if (i == 0) {
+						for (int j = 0; j < this.matrix.GetLength(1); j++) {
+							this.matrix[i, j] = 0;
+						} 
 				} else { //i = 1, 2, etc.
 					this.matrix[i, 0] = 0;
 				}
@@ -177,15 +180,15 @@ namespace VRModel.Algorithms {
 		}
 
 		//3.2
-		private int decideGapPenalty() {
+		private int decideGapPenalty(int i, int j, int prev_i, int prev_j) {
 			if (prev_i < i) { //from top
 				if (prev_i != 0 && ( 
-					this.matrix[prev_i, prev_j] - this.matrix[prev_i-1, prev_j] == gapExtensionPenalty ||
+					this.matrix[prev_i, prev_j] - this.matrix[prev_i-1, prev_j] == gapExtPenalty ||
 					this.matrix[prev_i, prev_j] - this.matrix[prev_i-1, prev_j] == openGapPenalty))
 					{ //this.cellOrigin(matrix, prev_i, prev_j, seq1, seq2).equals("TOP")
 							//the previous cell either started the gap from the same direction or it extended it.
 							//prev_i can't be 0, if it were we can't extend the gap from top.
-					return gapExtensionPenalty;
+					return gapExtPenalty;
 				} else { 
 					return openGapPenalty;
 				}
@@ -193,10 +196,10 @@ namespace VRModel.Algorithms {
 					//from left
 					//analogous logic
 				if (prev_j != 0 && (
-					this.matrix[prev_i, prev_j] - this.matrix[prev_i, prev_j-1] == gapExtensionPenalty ||
+					this.matrix[prev_i, prev_j] - this.matrix[prev_i, prev_j-1] == gapExtPenalty ||
 					this.matrix[prev_i, prev_j] - this.matrix[prev_i, prev_j-1] == openGapPenalty)) { 
 					//this.cellOrigin(matrix, prev_i, prev_j, seq1, seq2).equals("LEFT")
-					return gapExtensionPenalty;
+					return gapExtPenalty;
 				} else {
 					return openGapPenalty;
 				}
@@ -204,9 +207,9 @@ namespace VRModel.Algorithms {
 		}
 
 		//3.3
-		private int matchOrMismatch() {
+		private int matchOrMismatch(int i, int j, string seq1, string seq2) {
 		// // System.out.println("sequence type: " + seq_type);
-			if (seqType != seq.AA) { //nucleotide comparison.
+			if (seqType != Seq.AA) { //nucleotide comparison.
 				if (seq1[i] == seq2[j]) {
 					return matchScore;
 				} else {
@@ -217,142 +220,235 @@ namespace VRModel.Algorithms {
 				char x = seq1[i];
 				char y = seq2[j];
 					// System.out.println("Comparing: " + x + " and " + y + "...");
-				if (pam100.TryGetValue("" + x + y, out score) {
+				if (pam100.TryGetValue("" + x + y, out score)) {
 					return score;
 				}
 				else {
-					return pam100.TryGetValue("" + y + x, out score);
+					pam100.TryGetValue("" + y + x, out score);
+					return score;
 				}
 					// System.out.println("protein score: " + score);
 				return score;
 			}
 		}
 
-    /* 4. getAlignment
-    *  next major step.
-    *  j is the column, i is the row.
-    */
-    public void getAlignment(String key1, String key2, String seq1, String seq2) {
-        //first, get the max value of the bottom row of 'matrix'
-        int max = 0;
-        int max_j_index = 0;
-        int max_i_index = 0;
-        int i = this.matrix.length-1;
+		/* 4. getAlignment
+		*  next major step.
+		*  j is the column, i is the row.
+		*/
+		public void getAlignment(string key1, string key2, string seq1, string seq2) {
+				//first, get the max value of the bottom row of 'matrix'
+			int max = 0;
+			int max_j_index = 0;
+			int max_i_index = 0;
+			int i = this.matrix.GetLength(0)-1;
 
-        List<Integer>max_i_indices = new ArrayList<Integer>();
-        List<Integer>max_j_indices = new ArrayList<Integer>();
+			List<int>max_i_indices = new List<int>();
+			List<int>max_j_indices = new List<int>();
 
-        for (int j = 0; j < this.matrix[i].length; j++) {
-            if (j == 0) {
-                max = this.matrix[i][j];
-                max_j_index = 0;
+			int j = 0;
+			for (j = 0; j < this.matrix.GetLength(1); j++) {
+				if (j == 0) {
+					max = this.matrix[i, j];
+					max_j_index = 0;
 
-                max_j_indices.add(new Integer(max_j_index));
-                max_i_indices.add(new Integer(max_i_index));
-            } else {
-                if (this.matrix[i][j] > max) {
-                    max = this.matrix[i][j];
-                    // max_j_index = j;
-                    // max_i_index = i;
-                    max_j_indices.clear();
-                    max_i_indices.clear();
+					max_j_indices.Add(max_j_index);
+					max_i_indices.Add(max_i_index);
+				} else {
+					if (this.matrix[i, j] > max) {
+						max = this.matrix[i, j];
+										// max_j_index = j;
+										// max_i_index = i;
+						max_j_indices.Clear();
+						max_i_indices.Clear();
 
-                    // System.out.println("max_j_indices.size(); " + max_j_indices.size());
-                    // System.out.println("clearing prev, then adding: " + i + " , " + j);
+										// System.out.println("max_j_indices.size(); " + max_j_indices.size());
+										// System.out.println("clearing prev, then adding: " + i + " , " + j);
 
-                    max_j_indices.add(new Integer(j));
-                    max_i_indices.add(new Integer(i));
-                } else if (matrix[i][j] == max) {
-                    //tie. add without clearing.
-                    // System.out.println("max_j_indices.size(); " + max_j_indices.size());
-                    // System.out.println("adding without clearing: " + i + " , " + j);
-                    
+						max_j_indices.Add(j);
+						max_i_indices.Add(i);
+					} else if (matrix[i, j] == max) {
+										//tie. add without clearing.
+										// System.out.println("max_j_indices.size(); " + max_j_indices.size());
+										// System.out.println("adding without clearing: " + i + " , " + j);
 
-                    max_j_indices.add(new Integer(j));
-                    max_i_indices.add(new Integer(i));
-                }
-            }
+						max_j_indices.Add(j);
+						max_i_indices.Add(i);
+					}
+				}
+			}
+				//now we have the max along the bottom row.
+				//now going along the rightmost column.
+			j = this.matrix.GetLength(1)-1;
+			for (int k = 0; k < this.matrix.GetLength(0)-1; k++) {
+				if (this.matrix[k, j] > max) {
+								// System.out.println("along the rightmost column, coordinates of max score: " + k + " , " + j);
+					max_j_indices.Clear();
+					max_i_indices.Clear();
+
+					max_j_indices.Add(j);
+					max_i_indices.Add(k);
+					max = matrix[k, j];
+				} else if (this.matrix[k, j] == max) {
+								// System.out.println("max_j_indices.size(); " + max_j_indices.size());
+								// System.out.println("adding without clearing: " + k + " , " + j);
+
+					max_j_indices.Add(j);
+					max_i_indices.Add(k);
+				}
+			}
+
+				//assuming one max value for now...
+				// System.out.println("Max: " + max + " at j: " + max_j_index + " at i: " + max_i_index);
+
+				//@todo: before traverse, pretty print terminal gap
+			List<string> terminalGaps = new List<string>();
+
+				// System.out.println("max_j_indices.size(); " + max_j_indices.size());
+			for (int k = 0; k < max_j_indices.Count; k++) {
+				string terminalGap = "";
+				i = max_i_indices[k];
+				j = max_j_indices[k];
+
+						// System.out.println("coordinates of max score: " + i + " , " + j);
+				int m = this.matrix.GetLength(0) - 1;
+				int n = this.matrix.GetLength(1) - 1;
+						// System.out.println("matrix.length-1: " +  m + " , maxtrix.GetLength(1) -1: " + n);
+				if (i != matrix.GetLength(0)-1 || j != matrix.GetLength(1) -1 ) {
+								// System.out.println("adding a terminal gap");
+					terminalGaps.Insert(k, terminalGapstring(i, j, seq1, seq2));
+				} else {
+					terminalGaps.Insert(k, "");
+				}
+
+						// System.out.println("doing a traverse...");
+						//old variables from Osier's algorithms class, may not need.
+						// this.numSolutions = 4;
+						// this.numTies = 5;
+						// System.out.println("numSolutions: " + this.numSolutions);
+						// System.out.println("numTies: " + this.numTies);
+				this.traverse(i, j, max, key1, key2, seq1, seq2, terminalGaps[k]);
+						// this.numSolutions = 0;
+
+				if ( !consideringTies ) {
+					break;
+				}
+			}
+		}
+
+		//returns a string which represents terminal gaps.
+		public string terminalGapstring(int i, int j, string seq1, string seq2) {
+			string terminal = "";
+				if (i < this.matrix.GetLength(0)-1) { //not the bottom row
+						// System.out.println("not the bottom row");
+					for (int k = i; k < this.matrix.GetLength(0)-1; k++) {
+						terminal += "" + "-" + seq1[k];
+								// System.out.println("terminal: " + terminal);
+					}
+						//example: "-A-A-A"
+				} else { //not the rightmost column
+						// System.out.println("not the rightmost column");
+					for (int l = j; l < this.matrix.GetLength(1)-1; l++) {
+						terminal += seq2[l] + "-";
+					}
+				}
+
+				string reverse = "";
+				for (int k = terminal.Length-1; k>=0; k--) {
+					reverse += Char.ToString(terminal[k]);
+				}
+				
+				return reverse;
+			}
+
+		//traverses the alignment.
+		//START, L, T, D, LD, LT, TD, LTD
+		//j is the column, i is the row.
+		private void traverse(int i, int j, int max, string key1, string key2, string seq1, string seq2, string output) {
+
+			if (cell_origin[i, j] == Direction.START) {
+					prettyPrintAlignment(key1, key2, max, output);
+			} else if (cell_origin[i, j] == Direction.D) {
+        output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
+        // System.out.println("diag case reached: " + i + "," + j);
+        this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);
+			} else if (cell_origin[i, j] == Direction.L) {
+				output += "-" + Char.ToString(seq2[j-1]);
+				this.traverse(i, j-1, max, key1, key2, seq1, seq2, output);
+			} else if (cell_origin[i, j] == Direction.T) {
+        output += Char.ToString(seq1[i-1]) + "-";
+        this.traverse(i-1, j, max, key1, key2, seq1, seq2, output);
+			} else if (cell_origin[i, j] == Direction.LD) { //left diag
+				//traversing diag
+        String temp = output;
+        output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
+        this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);  
+
+        // System.out.println("tie, and there's less than 2 1k strings...");
+        if ( consideringTies ) { //traversing left
+        	temp += Char.ToString(seq1[i-1]) + "-";
+        	this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp);
         }
-        //now we have the max along the bottom row.
-        //now going along the rightmost column.
-        int j = this.matrix[0].length-1;
-        for (int k = 0; k < this.matrix.length-1; k++) {
-            if (this.matrix[k][j] > max) {
-                // System.out.println("along the rightmost column, coordinates of max score: " + k + " , " + j);
-                max_j_indices.clear();
-                max_i_indices.clear();
 
-                max_j_indices.add(new Integer(j));
-                max_i_indices.add(new Integer(k));
-                max = matrix[k][j];
-            } else if (this.matrix[k][j] == max) {
-                // System.out.println("max_j_indices.size(); " + max_j_indices.size());
-                // System.out.println("adding without clearing: " + k + " , " + j);
-                
-                max_j_indices.add(new Integer(j));
-                max_i_indices.add(new Integer(k));
-            }
-        }
-
-        //assuming one max value for now...
-        // System.out.println("Max: " + max + " at j: " + max_j_index + " at i: " + max_i_index);
-
-        //@todo: before traverse, pretty print terminal gap
-        List<String> terminalGaps = new ArrayList<String>();
-
-        // System.out.println("max_j_indices.size(); " + max_j_indices.size());
-        for (int k = 0; k < max_j_indices.size(); k++) {
-            String terminalGap = "";
-            i = max_i_indices.get(k).intValue();
-            j = max_j_indices.get(k).intValue();
-            
-            // System.out.println("coordinates of max score: " + i + " , " + j);
-            int m = this.matrix.length - 1;
-            int n = this.matrix[0].length - 1;
-            // System.out.println("matrix.length-1: " +  m + " , maxtrix[0].length -1: " + n);
-            if (i != matrix.length-1 || j != matrix[0].length -1 ) {
-                // System.out.println("adding a terminal gap");
-                terminalGaps.add(k, prettyPrintTerminal(i, j, seq1, seq2));
-            } else {
-                terminalGaps.add(k, "");
-            }
-
-            // System.out.println("doing a traverse...");
-            // this.numSolutions = 4;
-            this.numTies = 5;
-            // System.out.println("numSolutions: " + this.numSolutions);
-            // System.out.println("numTies: " + this.numTies);
-            this.traverse(i, j, max, key1, key2, seq1, seq2, terminalGaps.get(k));
-            this.numSolutions = 0;
-
-            if (this.num2kStrings > 1) {
-                break;
-            }
-        }
-    }
-
-    public string terminalGap(int i, int j, string seq1, string seq2) {
-        string terminal = "";
-        if (i < this.matrix.length-1) { //not the bottom row
-            // System.out.println("not the bottom row");
-            for (int k = i; k < this.matrix.length-1; k++) {
-                terminal += "" + "-" + seq1.charAt(k);
-                // System.out.println("terminal: " + terminal);
-            }
-            //example: "-A-A-A"
-        } else { //not the rightmost column
-            // System.out.println("not the rightmost column");
-            for (int l = j; l < this.matrix[0].length-1; l++) {
-                terminal += seq2.charAt(l) + "-";
-            }
-        }
-
-        String reverse = "";
-        for (int k = terminal.length()-1; k>=0; k--) {
-            reverse += String.valueOf(terminal.charAt(k));
-        }
+			} else if (cell_origin[i, j] == Direction.LT) {
+				//left top.
+        // System.out.println("tie between top, left. go left first. i, j: " + i + "," + j);
+        // System.out.println("tie, and there's less than 2 1k strings...");
+        String temp = output;
         
-        return reverse;
+        output += "-" + Char.ToString(seq2[j-1]);
+        this.traverse(i, j-1, max, key1, key2, seq1, seq2, output); // go left
+        // System.out.println("done going left, now going top");
+        
+        if ( consideringTies ) { //top
+        	temp += Char.ToString(seq1[i-1]) + "-";
+        	this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp);
+      	}  
+
+			} else if (cell_origin[i, j] == Direction.TD) {
+        String temp = output;
+        output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
+        this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);  //traversing diag
+        // System.out.println("tie, and there's less than 2 1k strings...");
+        
+        if ( consideringTies ) {
+	        temp += Char.ToString(seq1[i-1]) + "-";
+	        this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp);
+	      }
+
+			} else if (cell_origin[i, j] == Direction.LTD) {
+				string temp = output;
+				string temp2 = output;
+
+        output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
+        this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);                 
+        
+        if ( consideringTies ) {
+	        //left 
+	        temp += "-" + Char.ToString(seq2[j-1]);
+	        this.traverse(i, j-1, max, key1, key2, seq1, seq2, temp);
+
+	        //top
+	        temp2 += Char.ToString(seq1[i-1]) + "-";
+	        this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp2);
+	      }
+			}
+		}
+
+    private void prettyPrintAlignment(string key1, string key2, int max, string alignment) {
+      string reverse = "";
+      for (int i = alignment.Length-1; i>=0; i--) {
+          reverse += Char.ToString(alignment[i]);
+      }
+      string top = "";
+      string bottom = "";
+      for (int i = 0; i < alignment.Length; i++) {
+          if (i % 2 == 0) {
+              bottom += Char.ToString(reverse[i]);
+          } else {
+              top += Char.ToString(reverse[i]);
+          }
+      }
     }
 
 		/* ==========================
@@ -367,8 +463,8 @@ namespace VRModel.Algorithms {
 			string key1 = seqModel1.niceName[name1];
 			string key2 = seqModel2.niceName[name2];
 			
-			string seq1 = seqModel1.data[key1,1];
-			string seq2 = seqModel2.data[key2,1];
+			string seq1 = seqModel1.data[key1][1];
+			string seq2 = seqModel2.data[key2][1];
 
 			createMatrices(seq1, seq2);
 			initializeMatrices();
@@ -422,7 +518,7 @@ namespace VRModel.Algorithms {
 			return rna;
 		}
 
-		public ProteinSeqModel registerProteinModel() {
+		public ProteinSeqModel registerProteinSeqModel() {
 			if (proteinSeq == null) {
 				proteinSeq = ProteinSeqModel.Instance;
 			}

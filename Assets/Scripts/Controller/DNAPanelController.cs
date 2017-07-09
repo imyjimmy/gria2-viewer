@@ -174,7 +174,7 @@ namespace Controller {
 			Vector3 result = rcWorldPos - offset;
 			Debug.DrawLine(rcWorldPos, result ,Color.cyan);
 			// Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
-
+			LayerMask mask = 14;
 			RaycastHit raycastHit;
 			if (!Physics.Linecast(rcWorldPos, result, out raycastHit)) {
 				return null;

@@ -184,10 +184,10 @@ public class Splitting {
 			Debug.Log("triangles[" + i + "]: " + triangles[i]);
 		}
 
-		Debug.Log("MeshData colors:");
-		for (int i=0; i < colors.Length; i++) {
-			Debug.Log("colors[" + i + "]: " + colors[i]);
-		}
+		// Debug.Log("MeshData colors:");
+		// for (int i=0; i < colors.Length; i++) {
+		// 	Debug.Log("colors[" + i + "]: " + colors[i]);
+		// }
 
 		Debug.Log("residue info make it to Splitting.cs");
 		// foreach (Residue r in residueSeq) {
