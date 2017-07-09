@@ -9,6 +9,8 @@ public class PostProcessing {
 	
 	public Splitting split;
 
+	public List<GameObject> gameObjects = new List<GameObject>();
+
 	public PostProcessing() {
 		Debug.Log("PostProcessing constructor.");
 		split = new Splitting();
@@ -158,6 +160,7 @@ public class PostProcessing {
 	}
 	
 	//@imyjimmy this is here!!!
+	//this is where the mesh gets put into the geometry.
 	private void SubGenerateMeshes(List<Mesh> meshes, string tag, string gameobj) {
 		Debug.Log("inside SubGenerateMeshes. meshes.length: " + meshes.Count);
 		foreach(Mesh mesh in meshes) {
@@ -181,9 +184,10 @@ public class PostProcessing {
 			ribbObj.AddComponent<MeshRenderer>();
 			ribbObj.GetComponent<MeshFilter>().mesh = mesh;
 			ribbObj.GetComponent<Renderer>().material = new Material(Shader.Find("Custom/Ribbons"));
-			// ribbObj.GetComponent<Renderer>().material = new Material(Shader.Find("VacuumShaders/The Amazing Wireframe/Standard"));
+			// ribbObj.GetComponent<Renderer>().material = new Material(Shader.Find("Transparent/Diffuse"));
 			ribbObj.transform.position = CENTER;
 			ribbObj.transform.localPosition = CENTER;
+			gameObjects.Add(ribbObj);
 		}
 	}
 	
@@ -338,7 +342,7 @@ public class PostProcessing {
 		}
 		*/
 		
-		List<Mesh> meshes = split.Split(mData);
+		List<Mesh> meshes = split.Split(mData, this);
 		Debug.Log("PostProcessing, number of meshes: " + meshes.Count);
 
 		this.SubGenerateMeshes(meshes, tag, gameobj);		

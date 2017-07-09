@@ -31,7 +31,7 @@ namespace Controller {
 		//updates the protein. @todo: make this an event called via delegate.
 		public void showOnModel() {
 			Debug.Log("inside Protein3DViewController. Clicked Button.");
-			split.updateSplit();
+			split.updateSplit(10);
 		}
 	}
 }

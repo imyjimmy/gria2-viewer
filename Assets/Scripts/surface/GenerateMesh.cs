@@ -408,7 +408,7 @@ public class GenerateMesh {
 			FlipTriangles(mData);
 		
 		Splitting splitting = new Splitting();
-		List<Mesh> meshes = splitting.Split(mData);
+		List<Mesh> meshes = splitting.Split(mData, null);
 		CreateSurfaceObjects(meshes);
 	}
 	

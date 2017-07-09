@@ -7,7 +7,7 @@ using VRModel;
 using VRModel.Monomer;
 //using Hover.InputModules.Follow;
 
-public class Splitting {
+public class Splitting  {
 	private static int vertexLimit = 65000;
 	private int[] triangles;
 	private Vector3[] vertices;
@@ -24,14 +24,19 @@ public class Splitting {
 
 	//imyjimmy
 	private List<Residue> residueSeq;
-
 	private Vector3 CENTER = new Vector3(0f,0f,0f);
+	private PostProcessing pp;
+	private GameObject LoadBox;
 
 	//@imyjimmy called by PostProcessing.GenerateMeshes(List<Vector3> vertices, List<Vector3> normals, 
 		//List<int> triangles, List<Color32> colors, int[] ss,
 	    //string tag="RibbonObj", string gameobj="Ribbons")
-	public List<Mesh> Split(MeshData mData) {
+	public List<Mesh> Split(MeshData mData, PostProcessing postprocessing) {
 		Debug.Log("inside Split(mData);");
+		if (pp == null) {
+			pp = postprocessing;
+		}
+		LoadBox = GameObject.Find("LoadBox");
 
 		triangles = mData.triangles;
 		vertices = mData.vertices;
@@ -133,38 +138,161 @@ public class Splitting {
 		fixResidueEntry(currentIndex, verts.Count, norms.Count);
 	}
 
-	//@imyjimmy proof of concept of adding/ changing the mesh.
-		// Debug.Log("inside Splitting. Proof of concept.");
-		// List<int> vertices = residueSeq[0].vertices;
-		// List<Color32> colors = residueSeq[0].colors;
-		// List<int> mi = residueSeq[0].meshIndices;
+	public void oldUpdateSplit(int resNum) {	
+		int beginV;
+		int endV;
+		Residue r;
+		Mesh m;
+		for (int i = 0; i < residueSeq.Count; i++) {
+			r = residueSeq[resNum];
+			beginV = r.vertices[0];
+			endV = r.vertices[1];
+			m = meshes[0];
 
-		// foreach (int i in mi) {
-		// 	foreach (int vIndex in vertices) {
-		// 		meshes[i].colors[vIndex] = new Color32(255,255,0,255);
-		// 	}
-		// }
-	public void updateSplit() {
-		Mesh m = meshes[0];
-		Color32[] colors = new Color32[m.colors32.Length];
-		Debug.Log("inside Splitting. Proof of concept. colors length: " + colors.Length + "\n m.colors32.Length: " + m.colors32.Length);
-
-		for (int i = 0; i < m.colors32.Length; i++) {
-			colors[i] = new Color32(255,255,0,255);
+			Debug.Log("beginV: " + beginV + " endV: " + endV);
+			Debug.Log(" colors length: " + m.colors32.Length + " vert length: " + m.vertices.Length);
 		}
 
-		m.colors32 = colors;
+		r = residueSeq[resNum];
+		beginV = r.vertices[0];
+		endV = r.vertices[1];
+		m = meshes[0];
 
-		// Mesh m = this.makeMesh();
-		// meshes.Add(m);
-		// GameObject ribbObj = new GameObject("Ribbons");
-		// ribbObj.tag = "RibbonObj";
-		// ribbObj.AddComponent<MeshFilter>();
-		// ribbObj.AddComponent<MeshRenderer>();
-		// ribbObj.GetComponent<MeshFilter>().mesh = m;
-		// ribbObj.GetComponent<Renderer>().material = new Material(Shader.Find("Custom/Ribbons"));
-		// ribbObj.transform.position = CENTER;
-		// ribbObj.transform.localPosition = CENTER;
+		Color32[] highlightColors = new Color32[m.colors32.Length];
+		
+		Debug.Log("out of the for loop. beginV: " + beginV + " endV: " + endV);
+		Debug.Log("colors length: " + m.colors32.Length + " vert length: " + m.vertices.Length);
+
+		for ( int vInt = 0; vInt < m.colors32.Length; vInt++) {
+			if (vInt >= beginV && vInt <= endV) {
+				highlightColors[vInt] = new Color32(255,231,99,128);
+			} else {
+				highlightColors[vInt] = m.colors32[vInt];
+			}
+		}
+
+		m.colors32 = highlightColors;
+	}
+
+	//@imyjimmy proof of concept of adding/ changing the mesh.
+	public void updateSplit(int resNum) {
+		float x, y, z = 0.0f;
+
+		// oldUpdateSplit(resNum);
+
+		Residue r = residueSeq[resNum];
+		Debug.Log("updatesplit: r.vertices.Length: " + r.vertices.Count);
+		foreach (int s in r.vertices) {
+			Debug.Log("s: " + meshes[0].vertices[s]);
+		}
+		int beginV = r.vertices[0];
+		int endV = r.vertices[1];
+
+		if (r.vertices.Count > 2) {
+			//hold that thought for now
+		}
+
+		float maxX = float.MinValue, maxY = float.MinValue, maxZ = float.MinValue;
+		float y_MaxX = 0.0f, z_MaxX = 0.0f, x_MaxY = 0.0f, z_MaxY = 0.0f, x_MaxZ = 0.0f, y_MaxZ = 0.0f;
+
+		float minX = float.MaxValue, minY = float.MaxValue, minZ = float.MaxValue;
+		float y_MinX = 0.0f, z_MinX = 0.0f, x_MinY = 0.0f, z_MinY = 0.0f, x_MinZ = 0.0f, y_MinZ = 0.0f;
+
+		// foreach (int mIndex in r.meshIndices) { //consodering meshindices of length 1 for now.
+			int mIndex = 0;
+			Mesh m = meshes[mIndex];
+			for (int vInt = beginV; vInt <= endV; vInt++) {
+				Vector3 v = pp.gameObjects[mIndex].transform.TransformPoint(m.vertices[vInt]);
+				// x += v.x;
+				if (v.x > maxX) {
+					maxX = v.x;
+					y_MaxX = v.y;
+					z_MaxX = v.z;
+				}
+
+				if (v.x < minX) {
+					minX = v.x;
+					y_MinX = v.y;
+					z_MinX = v.z;
+				}
+
+				// y += v.y;
+				if (v.y > maxY) {
+					maxY = v.y;
+					x_MaxY = v.x;
+					z_MaxY = v.z;
+				}
+
+				if (v.y < minY) {
+					minY = v.y;
+					x_MinY = v.x;
+					z_MinY = v.z;
+				}
+				
+				// z += v.z;
+				if (v.z > maxZ) {
+					maxZ = v.z;
+					x_MaxZ = v.x;
+					y_MaxZ = v.y;
+				}
+				if (v.z < minZ) {
+					minZ = v.z;
+					x_MinZ = v.x;
+					y_MinZ = v.y;
+				}
+			}
+		// }
+
+		Debug.Log("x: " + maxX + "," + minX + " y: " + maxY + "," + minY + " z: " + maxZ + "," + minZ);
+		Vector3 avgCoord = new Vector3( (maxX + minX) / 2.0f, (maxY + minY) / 2.0f, (maxZ + minZ) / 2.0f );
+		Debug.Log("updating split, avgCoord: " + avgCoord);
+
+		Mesh focusMesh = diamond(new Vector3(maxX, y_MaxX, z_MaxX), new Vector3(x_MaxY, maxY, z_MaxY), new Vector3(x_MaxZ, y_MaxZ, maxZ),
+			new Vector3(minX, y_MinX, z_MinX), new Vector3(x_MinY, minY, z_MinY), new Vector3(x_MinZ, y_MinZ, minZ), avgCoord);
+		
+		GameObject ProteinFocus = new GameObject("ProteinFocus");
+		ProteinFocus.AddComponent<MeshFilter>();
+		ProteinFocus.AddComponent<MeshRenderer>();
+		
+		Material material = ProteinFocus.GetComponent<Renderer>().material;
+		material = new Material(Shader.Find("Standard"));
+		material.SetColor("_Color", new Color32(255,231,99,128));
+		// ProteinFocus.GetComponent<Renderer>().material = new Material(Shader.Find("Custom/Ribbons"));
+
+		ProteinFocus.GetComponent<MeshFilter>().mesh = focusMesh;
+
+		// Vector3 worldAvgCoord = transform.TransformPoint(avgCoord);
+		ProteinFocus.transform.position = avgCoord;
+		// ProteinFocus.transform.localScale *= 1.2f;
+		ProteinFocus.tag = "RibbonObj";
+		ProteinFocus.transform.parent = LoadBox.transform;
+
+  		ProteinFocus.transform.localPosition = LoadBox.transform.localPosition;
+	}
+
+	private Mesh diamond(Vector3 maxX, Vector3 maxY, Vector3 maxZ, Vector3 minX, Vector3 minY, Vector3 minZ, Vector3 avg) {
+		Vector3[] vertices = new Vector3[] {maxX, maxY, maxZ, minX, minY, minZ};
+		//									[0,   1,    2,    3,    4,    5]
+		int[] triangles = new int[] {1,2,0, 
+									1,0,5,
+									1,5,3,
+									1,3,2,
+									4,0,2,
+									4,5,0,
+									4,3,5,
+									4,2,3};
+		Vector3[] normals = new Vector3[] {maxX - avg, maxY - avg, maxZ - avg, avg - minX, avg - minY, avg - minZ};
+		Color32[] colors = new Color32[] {new Color32(255,231,99,128), new Color32(255,231,99,128), new Color32(255,231,99,128), 
+			new Color32(255,231,99,128), new Color32(255,231,99,128), new Color32(255,231,99,128)};
+
+		Mesh diamond = new Mesh();
+		diamond.vertices = vertices;
+		diamond.triangles = triangles;
+		diamond.normals = normals;
+		diamond.colors32 = colors;
+
+		// Debug.Log("diamond. normals length: " + normals.Length);
+		return diamond;
 	}
 
 	public void getResidueForUV(Vector2 uv) {
@@ -172,10 +300,6 @@ public class Splitting {
 		int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
 	 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);
 		Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc);
-	}
-
-	public void generateSubMeshes() {
-
 	}
 
 	public void debug() {
@@ -190,17 +314,7 @@ public class Splitting {
 		// }
 
 		Debug.Log("residue info make it to Splitting.cs");
-		// foreach (Residue r in residueSeq) {
-		// 	Debug.Log("r: " + r.name
-		// 	+ "," + AminoAcid.OneLetterCode[r.name]
-		// 	+ ", triangles: " + r.triangles[0] + "," + r.triangles[1]
-		// 	+ ", vertices: " + r.vertices[0] + "," + r.vertices[1]
-		// 	+ ", normals: " + r.normals[0] + "," + r.normals[1]
-		// 	+ " triangle value at r.triangles[0]: " + triangles[r.triangles[0]]
-		// 	+ " triangle value at r.triangles[1]: " + triangles[r.triangles[1]]
-		// 	+ " also vertices: " + vertices[r.vertices[0]] + "," + vertices[r.vertices[1]] 
-		// 	+ " normals: " + normals[r.normals[0]] + "," + normals[r.normals[1]]);
-		// }
+
 	}
 
 	//
@@ -315,3 +429,15 @@ public class Splitting {
 	// 	Debug.Log ("Done Mesh!");
 	// 	return mesh;
 	// }
+
+		// foreach (Residue r in residueSeq) {
+		// 	Debug.Log("r: " + r.name
+		// 	+ "," + AminoAcid.OneLetterCode[r.name]
+		// 	+ ", triangles: " + r.triangles[0] + "," + r.triangles[1]
+		// 	+ ", vertices: " + r.vertices[0] + "," + r.vertices[1]
+		// 	+ ", normals: " + r.normals[0] + "," + r.normals[1]
+		// 	+ " triangle value at r.triangles[0]: " + triangles[r.triangles[0]]
+		// 	+ " triangle value at r.triangles[1]: " + triangles[r.triangles[1]]
+		// 	+ " also vertices: " + vertices[r.vertices[0]] + "," + vertices[r.vertices[1]] 
+		// 	+ " normals: " + normals[r.normals[0]] + "," + normals[r.normals[1]]);
+		// }
