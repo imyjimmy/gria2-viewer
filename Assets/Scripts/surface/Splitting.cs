@@ -18,17 +18,14 @@ public class Splitting  {
 	private List<Mesh> meshes;
 	private int lastIndex;
 
+	//imyjimmy
 	private Material hlResMat;
 	private GameObject DNA_Panel;
 	private ScenePreload_5L1B scenePreload;
-
-	//imyjimmy
 	private List<Residue> residueSeq;
 	private Vector3 CENTER = new Vector3(0f,0f,0f);
 	private PostProcessing pp;
 	private GameObject LoadBox;
-	private GameObject DNA_Panel;
-
 	//@imyjimmy called by PostProcessing.GenerateMeshes(List<Vector3> vertices, List<Vector3> normals, 
 		//List<int> triangles, List<Color32> colors, int[] ss,
 	    //string tag="RibbonObj", string gameobj="Ribbons")
@@ -181,9 +178,7 @@ public class Splitting  {
 		if (scenePreload == null) {
 			scenePreload = (ScenePreload_5L1B) LoadBox.GetComponent(typeof(ScenePreload_5L1B));
 		}
-
-		DNA_Panel = scenePreload.DNA_Panel;
-
+		
 		hlResMat = scenePreload.hlResMat;
 
 		float x = 0.0f; float y = 0.0f; float z = 0.0f;
@@ -316,6 +311,9 @@ public class Splitting  {
 
 	public void getResidueForUV(Vector2 uv) {
 		Debug.Log("Splitting.cs: getResidueForUV(uv): " + uv);
+		if (DNA_Panel == null) {
+			DNA_Panel = DNAPanelController.Instance.DNA_Panel;
+		}
 		if (DNA_Panel.GetComponent<Renderer>().enabled) {
 			int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
 		 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);

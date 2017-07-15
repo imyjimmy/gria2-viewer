@@ -297,6 +297,7 @@ public class Molecule3D:MonoBehaviour {
 			Debug.Log("got DNA_Check.");
 			Debug.Log("DNA_Check: " + DNA_Check);
 			if (!dnaPanelController.viewGenerated) {
+				dnaPanelController.DNA_Panel = DNA_Panel;
 				dnaPanelController.BuildMeshUVs();
 				dnaPanelController.BuildTexture();
 				dnaPanelController.viewGenerated = !dnaPanelController.viewGenerated;

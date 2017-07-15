@@ -26,7 +26,8 @@ namespace Controller {
 
 		//GRIA2 DNA: 179704629-179584302
 
-		/* UI elements */		
+		/* UI elements */
+		public GameObject DNA_Panel;
 		private GameObject Center;
 
 		private GameObject Look;
@@ -111,6 +112,7 @@ namespace Controller {
 			UVCoordChangedEvent += updateRightIndexUV; 
 			// UVCoordChangedEvent += updateLookUV;
 		    NiceNameChangedEvent += updateNiceNameKey;
+		    Debug.Log("added UVCoordChangedEvent events");
 		}
 
 		public void Update() {
@@ -119,11 +121,12 @@ namespace Controller {
 			Vector2? _uvRightIndex = getUVFromCursor(HoverRightIndexTransform);
 			if (_uvRightIndex != null && gameObject.GetComponent<Renderer>().enabled && isPanelSelected()) {
 				Vector2 uvRightIndex = _uvRightIndex.Value;
-
+				Debug.Log("uvRightIndex: " + uvRightIndex + " oldUVRightIndex: " + oldUVRightIndex);
 				if (uvRightIndex != oldUVRightIndex && UVCoordChangedEvent != null) {
 					UVCoordChangedEvent(uvRightIndex);
 				}
 			} else {
+				Debug.Log("getUVFromCursor was called but the right conditions were not met\nto consider UVCoordChangedEvents");
 				Invoke("turnOffUI",2);
 			}
 		}
@@ -226,7 +229,8 @@ namespace Controller {
 		}
 
 		public void updateRightIndexUV(Vector2 uv) {
-			Debug.Log("inside update UV. oldUV: " + oldLookUV + " new uv: " + uv);
+			Debug.Log("inside update UV. oldUV: " + oldUVRightIndex + " new uv: " + uv);
+			bool updateLabelCond = !oldUVRightIndex.Equals(new Vector2(0.0f, 0.0f));
 
 			oldUVRightIndex = uv;
 			
@@ -244,7 +248,9 @@ namespace Controller {
 			GameObject label = (GameObject) c.transform.FindChild("Label").gameObject;
 			label.SetActive(true);
 
-			updateLabel(label, uv);
+			if (updateLabelCond) {
+				updateLabel(label, uv);
+			}
 		}
 
 		public void updateNiceNameKey(string name) {

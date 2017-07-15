@@ -74,8 +74,6 @@ public class ScenePreload_5L1B : MonoBehaviour {
 	private string progresses;
 	
 	private GameObject LoadBox;	//@imyjimmy
-	public GameObject DNA_Panel;
-
 	public Ribbons ribbons;
 	public Material hlResMat;
 
@@ -128,8 +126,6 @@ public class ScenePreload_5L1B : MonoBehaviour {
 
 		LoadBox = GameObject.Find("LoadBox");
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("RibbonObj");
-
-		DNA_Panel = GameObject.Find("DNA_Plane");
 
 		GUIMoleculeController.showOpenMenu = false;
 		GUIMoleculeController.showAtomMenu = false;
