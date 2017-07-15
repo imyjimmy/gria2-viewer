@@ -109,6 +109,7 @@ namespace Controller {
 
 			//subscribe updateUV method to UVCoordChangedEvent.
 			UVCoordChangedEvent += updateRightIndexUV; 
+			// UVCoordChangedEvent += updateLookUV;
 		    NiceNameChangedEvent += updateNiceNameKey;
 		}
 
@@ -161,7 +162,7 @@ namespace Controller {
 	        	uv.y = uv.y * texture.height; //* 0.0255f 
 
 	        	Debug.Log("textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
-	        	Debug.Log("int coords: " + (int) uv.x + ", " + (int) uv.y);
+	        	// Debug.Log("int coords: " + (int) uv.x + ", " + (int) uv.y);
 
 	        	return uv;
         	} else {
@@ -174,16 +175,17 @@ namespace Controller {
 			Vector3 result = rcWorldPos - offset;
 			Debug.DrawLine(rcWorldPos, result ,Color.cyan);
 			// Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
-			LayerMask mask = 14;
+			int mask = 1 << 14;
+			mask = ~mask;
 			RaycastHit raycastHit;
-			if (!Physics.Linecast(rcWorldPos, result, out raycastHit)) {
+			if (!Physics.Linecast(rcWorldPos, result, out raycastHit, mask)) {
 				return null;
 			}
 			return raycastHit;
 		}
 
 		public void updateLabel(GameObject label, Vector2 uv) {
-			Debug.Log("updating label.");
+			// Debug.Log("updating label.");
 			Text t = label.GetComponent<Text>();
 			t.text = getNucAcidForUV(uv);
 		}
@@ -224,6 +226,8 @@ namespace Controller {
 		}
 
 		public void updateRightIndexUV(Vector2 uv) {
+			Debug.Log("inside update UV. oldUV: " + oldLookUV + " new uv: " + uv);
+
 			oldUVRightIndex = uv;
 			
 			RightIndexUI.SetActive(true);

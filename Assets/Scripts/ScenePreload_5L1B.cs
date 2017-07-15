@@ -74,8 +74,10 @@ public class ScenePreload_5L1B : MonoBehaviour {
 	private string progresses;
 	
 	private GameObject LoadBox;	//@imyjimmy
+	public GameObject DNA_Panel;
 
 	public Ribbons ribbons;
+	public Material hlResMat;
 
 	// Use this for initialization
 	void Start () 
@@ -88,7 +90,7 @@ public class ScenePreload_5L1B : MonoBehaviour {
 	
 	}
 
-	IEnumerator InitScene(RequestPDB requestPDB)
+	IEnumerator InitScene(object[] stuff)
 	{
 		//http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb
 		// StartCoroutine(requestPDB.LoadPDBWWW("http://www.shaman.ibpc.fr/umolweb/Scenes/1KX2/1KX2.pdb"));
@@ -97,6 +99,9 @@ public class ScenePreload_5L1B : MonoBehaviour {
 		//5l1b_short
 		// StartCoroutine(requestPDB.LoadPDBWWW("file:///C://Users/imyjimmy-vr/Documents/vr-projects/gria2-viewer/Assets/StreamingAssets/Gria2Data/5l1b_short.pdb"));  //5l1b //1l2y
 		//1l2y
+		Material mat = (Material) stuff[0];
+		RequestPDB requestPDB = (RequestPDB) stuff[1];
+
 		StartCoroutine(requestPDB.LoadPDBWWW("file:///C://Users/imyjimmy-vr/Documents/vr-projects/gria2-viewer/Assets/StreamingAssets/Gria2Data/1l2y.pdb"));  //5l1b //1l2y
 
 		while(!RequestPDB.isDone) {
@@ -114,6 +119,7 @@ public class ScenePreload_5L1B : MonoBehaviour {
 		UIData.secondarystruct = true;
 
 		//trying it out
+		hlResMat = mat;
 		ribbons = new Ribbons();
 		List<string> residueNames = Molecule.Model.MoleculeModel.atomsResnamelist;
 
@@ -122,6 +128,8 @@ public class ScenePreload_5L1B : MonoBehaviour {
 
 		LoadBox = GameObject.Find("LoadBox");
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("RibbonObj");
+
+		DNA_Panel = GameObject.Find("DNA_Plane");
 
 		GUIMoleculeController.showOpenMenu = false;
 		GUIMoleculeController.showAtomMenu = false;

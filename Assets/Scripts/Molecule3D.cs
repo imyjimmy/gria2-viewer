@@ -119,6 +119,7 @@ public class Molecule3D:MonoBehaviour {
 	
 	//@imyjimmy added
 	// private TileDNA tileDNA = new TileDNA();
+	public Material hlResMat;
 	private DNAPanelController dnaPanelController;
 	private GameObject DNA_Panel;
 	private GameObject DNA_Canvas;
@@ -199,7 +200,7 @@ public class Molecule3D:MonoBehaviour {
 		timeleft = updateInterval;	
 //		AtomModel.InitHiRERNA();
 		AtomModel.InitAtomic();
-		SendMessage("InitScene",requestPDB,SendMessageOptions.DontRequireReceiver);
+		SendMessage("InitScene", new object[] {hlResMat, requestPDB}, SendMessageOptions.DontRequireReceiver);
 		// ScenePreload_5L1B scene = new ScenePreload_5L1B();
 		// scene.InitScene(requestPDB);
 	}
@@ -225,7 +226,6 @@ public class Molecule3D:MonoBehaviour {
 		DNA_Canvas = GameObject.Find("DNA_Canvas");
 		DNA_Panel = GameObject.Find("DNA_Plane");
 		DNA_Slider = GameObject.Find("DNA_SliderItem");
-
 		// Debug.Log("got DNA_Check.");
 		// Debug.Log("DNA_Check: " + DNA_Check);
 

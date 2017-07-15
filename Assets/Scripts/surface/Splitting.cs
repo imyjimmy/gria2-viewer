@@ -5,6 +5,7 @@ using Molecule.Model;
 using Controller;
 using VRModel;
 using VRModel.Monomer;
+using View;
 //using Hover.InputModules.Follow;
 
 public class Splitting  {
@@ -17,16 +18,16 @@ public class Splitting  {
 	private List<Mesh> meshes;
 	private int lastIndex;
 
-	//proof of concept, from catlike coding.
-	public int size_x = 100;
-	public int size_z = 50;
-	public float tileSize = 1.0f;
+	private Material hlResMat;
+	private GameObject DNA_Panel;
+	private ScenePreload_5L1B scenePreload;
 
 	//imyjimmy
 	private List<Residue> residueSeq;
 	private Vector3 CENTER = new Vector3(0f,0f,0f);
 	private PostProcessing pp;
 	private GameObject LoadBox;
+	private GameObject DNA_Panel;
 
 	//@imyjimmy called by PostProcessing.GenerateMeshes(List<Vector3> vertices, List<Vector3> normals, 
 		//List<int> triangles, List<Color32> colors, int[] ss,
@@ -49,6 +50,7 @@ public class Splitting  {
 
 		//register a method to DNAPanel's UVChanged event.
 		DNAPanelController.UVCoordChangedEvent += getResidueForUV;
+		RNAPanelController.UVCoordChangedEvent += getResidueForUV;
 
 		if(UI.UIData.isGLIC)
 			vertexLimit = 59520;
@@ -176,7 +178,15 @@ public class Splitting  {
 
 	//@imyjimmy proof of concept of adding/ changing the mesh.
 	public void updateSplit(int resNum) {
-		float x, y, z = 0.0f;
+		if (scenePreload == null) {
+			scenePreload = (ScenePreload_5L1B) LoadBox.GetComponent(typeof(ScenePreload_5L1B));
+		}
+
+		DNA_Panel = scenePreload.DNA_Panel;
+
+		hlResMat = scenePreload.hlResMat;
+
+		float x = 0.0f; float y = 0.0f; float z = 0.0f;
 
 		// oldUpdateSplit(resNum);
 
@@ -201,9 +211,10 @@ public class Splitting  {
 		// foreach (int mIndex in r.meshIndices) { //consodering meshindices of length 1 for now.
 			int mIndex = 0;
 			Mesh m = meshes[mIndex];
+			int count = endV - beginV + 1;
 			for (int vInt = beginV; vInt <= endV; vInt++) {
 				Vector3 v = pp.gameObjects[mIndex].transform.TransformPoint(m.vertices[vInt]);
-				// x += v.x;
+				x += v.x;
 				if (v.x > maxX) {
 					maxX = v.x;
 					y_MaxX = v.y;
@@ -216,7 +227,7 @@ public class Splitting  {
 					z_MinX = v.z;
 				}
 
-				// y += v.y;
+				y += v.y;
 				if (v.y > maxY) {
 					maxY = v.y;
 					x_MaxY = v.x;
@@ -229,7 +240,7 @@ public class Splitting  {
 					z_MinY = v.z;
 				}
 				
-				// z += v.z;
+				z += v.z;
 				if (v.z > maxZ) {
 					maxZ = v.z;
 					x_MaxZ = v.x;
@@ -243,29 +254,36 @@ public class Splitting  {
 			}
 		// }
 
-		Debug.Log("x: " + maxX + "," + minX + " y: " + maxY + "," + minY + " z: " + maxZ + "," + minZ);
-		Vector3 avgCoord = new Vector3( (maxX + minX) / 2.0f, (maxY + minY) / 2.0f, (maxZ + minZ) / 2.0f );
-		Debug.Log("updating split, avgCoord: " + avgCoord);
+		// Debug.Log("x: " + maxX + "," + minX + " y: " + maxY + "," + minY + " z: " + maxZ + "," + minZ + 
+		// 	"\nx: " + x + " y: " + y + " z: " + z + " count: " + count);
+		Vector3 avgCoord = new Vector3( x / (float) count , y / (float) count, z / (float) count );
+		// Debug.Log("updating split, avgCoord: " + avgCoord);
+		avgCoord = LoadBox.transform.TransformPoint(avgCoord);
+		// Debug.Log("after transform.TransformPoint, avgCoord: " + avgCoord);
 
 		Mesh focusMesh = diamond(new Vector3(maxX, y_MaxX, z_MaxX), new Vector3(x_MaxY, maxY, z_MaxY), new Vector3(x_MaxZ, y_MaxZ, maxZ),
 			new Vector3(minX, y_MinX, z_MinX), new Vector3(x_MinY, minY, z_MinY), new Vector3(x_MinZ, y_MinZ, minZ), avgCoord);
-		
+
 		GameObject ProteinFocus = new GameObject("ProteinFocus");
+		ProteinFocus.transform.parent = LoadBox.transform;
+		ProteinFocus.transform.localPosition = avgCoord;
 		ProteinFocus.AddComponent<MeshFilter>();
 		ProteinFocus.AddComponent<MeshRenderer>();
 		
-		Material material = ProteinFocus.GetComponent<Renderer>().material;
-		material = new Material(Shader.Find("Standard"));
-		material.SetColor("_Color", new Color32(255,231,99,128));
-		// ProteinFocus.GetComponent<Renderer>().material = new Material(Shader.Find("Custom/Ribbons"));
+		// Material material = ProteinFocus.GetComponent<Renderer>().material;
+		ProteinFocus.GetComponent<Renderer>().material = hlResMat;
+		var texture = new Texture2D(100, 100, TextureFormat.BGRA32, true);
+ 		ProteinFocus.GetComponent<Renderer>().material.mainTexture = texture;    		    		
+		
+		texture.filterMode = FilterMode.Point;
+		texture.Apply();
 
 		ProteinFocus.GetComponent<MeshFilter>().mesh = focusMesh;
 
 		// Vector3 worldAvgCoord = transform.TransformPoint(avgCoord);
-		ProteinFocus.transform.position = avgCoord;
+		// ProteinFocus.transform.position = avgCoord;
 		// ProteinFocus.transform.localScale *= 1.2f;
 		ProteinFocus.tag = "RibbonObj";
-		ProteinFocus.transform.parent = LoadBox.transform;
 
   		ProteinFocus.transform.localPosition = LoadBox.transform.localPosition;
 	}
@@ -292,14 +310,20 @@ public class Splitting  {
 		diamond.colors32 = colors;
 
 		// Debug.Log("diamond. normals length: " + normals.Length);
+		diamond.RecalculateNormals(0);
 		return diamond;
 	}
 
 	public void getResidueForUV(Vector2 uv) {
 		Debug.Log("Splitting.cs: getResidueForUV(uv): " + uv);
-		int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
-	 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);
-		Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc);
+		if (DNA_Panel.GetComponent<Renderer>().enabled) {
+			int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
+		 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);
+			Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc);
+		} else {
+			//do it
+			Debug.Log("RNA panel");
+		}
 	}
 
 	public void debug() {

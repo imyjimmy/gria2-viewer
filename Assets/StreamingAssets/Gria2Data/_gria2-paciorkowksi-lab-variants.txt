@@ -1,0 +1,6 @@
+Gria2 Mutations from Paciorkowski Lab:
+IS13-014	TES	GRIA2	g.chr4:158257578A>T	c.A1523T p.E508V	DN	0.05 / 0.947	5.46	Absent / Absent
+DB13-035	WES	GRIA2	g.chr4:158262487C>T	c.1916C>Tp.A639V	DN	0 / 1			5.53	Absent / Absent
+
+TES
+GRIA2	chr4:158141736-158287226

@@ -6,6 +6,8 @@ namespace VRModel {
 	using System.Collections.Generic;
 
 	public class GeneticCode {
+		//@todo: add hashtable representing degeneracy
+		
 		public static readonly Dictionary<string, string> DNAToAA = new Dictionary<string, string> {
 			{"ATG", "MET"},
 			{"ATA", "ILE"},
