@@ -60,6 +60,7 @@ namespace Controller {
 
 		public void Update3DModelFocus(Vector2 uv) {
 			Debug.Log("Update3DModelFocus, uv: " + uv.x + "," + uv.y);
+			//split.updateSplit
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace Controller {
 		private int seqLength;
 
 		//textures...
-		private int textureX = 128;
+		private int textureX = 64;
 		private int textureY; 
 		private int numRows;
 		public float tileSize = 1.0f;
@@ -222,6 +222,13 @@ namespace Controller {
 			}
 			return result;
 		}
+
+		// should I even?!
+		// public int getPosForUV(Vector2 uv) {
+		// 	if (key != null) {
+		// 		int pos = ((int) uv.y) * textureX + (int) uv.x;
+		// 	}
+		// }
 
 		public void updateLookUV(Vector2 uv) {
 			Debug.Log("inside update UV. oldUV: " + oldLookUV + " new uv: " + uv);

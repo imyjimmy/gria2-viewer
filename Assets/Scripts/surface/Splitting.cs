@@ -5,6 +5,7 @@ using Molecule.Model;
 using Controller;
 using VRModel;
 using VRModel.Monomer;
+using VRModel.Algorithms; //might or might not need
 using View;
 //using Hover.InputModules.Follow;
 
@@ -26,6 +27,8 @@ public class Splitting  {
 	private Vector3 CENTER = new Vector3(0f,0f,0f);
 	private PostProcessing pp;
 	private GameObject LoadBox;
+
+	private SequenceModel seqModel;
 	//@imyjimmy called by PostProcessing.GenerateMeshes(List<Vector3> vertices, List<Vector3> normals, 
 		//List<int> triangles, List<Color32> colors, int[] ss,
 	    //string tag="RibbonObj", string gameobj="Ribbons")
@@ -73,6 +76,8 @@ public class Splitting  {
 		while(currentIndex < lastIndex) {
 			FillMesh(resNum);
 		}
+
+		ProteinSeqModel.Instance.protein3Dseq = residueSeq;
 
 		return meshes;
 	}
@@ -137,48 +142,12 @@ public class Splitting  {
 		fixResidueEntry(currentIndex, verts.Count, norms.Count);
 	}
 
-	public void oldUpdateSplit(int resNum) {	
-		int beginV;
-		int endV;
-		Residue r;
-		Mesh m;
-		for (int i = 0; i < residueSeq.Count; i++) {
-			r = residueSeq[resNum];
-			beginV = r.vertices[0];
-			endV = r.vertices[1];
-			m = meshes[0];
-
-			Debug.Log("beginV: " + beginV + " endV: " + endV);
-			Debug.Log(" colors length: " + m.colors32.Length + " vert length: " + m.vertices.Length);
-		}
-
-		r = residueSeq[resNum];
-		beginV = r.vertices[0];
-		endV = r.vertices[1];
-		m = meshes[0];
-
-		Color32[] highlightColors = new Color32[m.colors32.Length];
-		
-		Debug.Log("out of the for loop. beginV: " + beginV + " endV: " + endV);
-		Debug.Log("colors length: " + m.colors32.Length + " vert length: " + m.vertices.Length);
-
-		for ( int vInt = 0; vInt < m.colors32.Length; vInt++) {
-			if (vInt >= beginV && vInt <= endV) {
-				highlightColors[vInt] = new Color32(255,231,99,128);
-			} else {
-				highlightColors[vInt] = m.colors32[vInt];
-			}
-		}
-
-		m.colors32 = highlightColors;
-	}
-
 	//@imyjimmy proof of concept of adding/ changing the mesh.
 	public void updateSplit(int resNum) {
 		if (scenePreload == null) {
 			scenePreload = (ScenePreload_5L1B) LoadBox.GetComponent(typeof(ScenePreload_5L1B));
 		}
-		
+
 		hlResMat = scenePreload.hlResMat;
 
 		float x = 0.0f; float y = 0.0f; float z = 0.0f;
@@ -309,15 +278,53 @@ public class Splitting  {
 		return diamond;
 	}
 
+	//getResNum for the UV.
+	public int getResidueNum(Vector2 uv) {
+		Debug.Log("Splitting.cs: getResidueForUV(uv): " + uv);
+		if (DNA_Panel == null) {
+			DNA_Panel = DNAPanelController.Instance.DNA_Panel;
+		}
+		if (DNA_Panel.GetComponent<Renderer>().enabled) {
+			if (seqModel == null) {
+				seqModel = new SequenceModel();
+
+			}
+			int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
+		 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);
+			Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc + ", seqModel: " + seqModel);
+			string nucStr = nuc.Split(':')[0];
+
+			//string niceName, int pos, Nuc n, Seq type
+			// seqModel.getPeptide("Rattus norvegicus", DNASeqNum, Nucleotide.strNuc[nucStr], Seq.DNA);
+			
+
+		} else {
+			//do it
+			Debug.Log("RNA panel");
+		}
+
+		return 0;
+	}
+
 	public void getResidueForUV(Vector2 uv) {
 		Debug.Log("Splitting.cs: getResidueForUV(uv): " + uv);
 		if (DNA_Panel == null) {
 			DNA_Panel = DNAPanelController.Instance.DNA_Panel;
 		}
 		if (DNA_Panel.GetComponent<Renderer>().enabled) {
+			if (seqModel == null) {
+				seqModel = new SequenceModel();
+
+			}
 			int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
 		 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);
-			Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc);
+			Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc + ", seqModel: " + seqModel);
+			string nucStr = nuc.Split(':')[0];
+
+			//string niceName, int pos, Nuc n, Seq type
+			seqModel.getPeptide("Rattus norvegicus", DNASeqNum, Nucleotide.strNuc[nucStr], Seq.DNA);
+			
+
 		} else {
 			//do it
 			Debug.Log("RNA panel");
@@ -393,73 +400,39 @@ public class Splitting  {
 		}
 	}
 }
-	// public Mesh makeMesh() {
-	// 	int numTiles = size_x * size_z;
-	// 	int numTris = numTiles * 2;
-		
-	// 	int vsize_x = size_x + 1;
-	// 	int vsize_z = size_z + 1;
-	// 	int numVerts = vsize_x * vsize_z;
-		
-	// 	// Generate the mesh data
-	// 	Vector3[] vertices = new Vector3[ numVerts ];
-	// 	Vector3[] normals = new Vector3[numVerts];
-	// 	Vector2[] uv = new Vector2[numVerts];
-		
-	// 	int[] triangles = new int[ numTris * 3 ];
 
-	// 	int x, z;
-	// 	for(z=0; z < vsize_z; z++) {
-	// 		for(x=0; x < vsize_x; x++) {
-	// 			vertices[ z * vsize_x + x ] = new Vector3( x*tileSize, 0, z*tileSize );
-	// 			normals[ z * vsize_x + x ] = Vector3.up;
-	// 			uv[ z * vsize_x + x ] = new Vector2( (float)x / vsize_x, (float)z / vsize_z );
+	// public void oldUpdateSplit(int resNum) {	
+	// 	int beginV;
+	// 	int endV;
+	// 	Residue r;
+	// 	Mesh m;
+	// 	for (int i = 0; i < residueSeq.Count; i++) {
+	// 		r = residueSeq[resNum];
+	// 		beginV = r.vertices[0];
+	// 		endV = r.vertices[1];
+	// 		m = meshes[0];
+
+	// 		Debug.Log("beginV: " + beginV + " endV: " + endV);
+	// 		Debug.Log(" colors length: " + m.colors32.Length + " vert length: " + m.vertices.Length);
+	// 	}
+
+	// 	r = residueSeq[resNum];
+	// 	beginV = r.vertices[0];
+	// 	endV = r.vertices[1];
+	// 	m = meshes[0];
+
+	// 	Color32[] highlightColors = new Color32[m.colors32.Length];
+		
+	// 	Debug.Log("out of the for loop. beginV: " + beginV + " endV: " + endV);
+	// 	Debug.Log("colors length: " + m.colors32.Length + " vert length: " + m.vertices.Length);
+
+	// 	for ( int vInt = 0; vInt < m.colors32.Length; vInt++) {
+	// 		if (vInt >= beginV && vInt <= endV) {
+	// 			highlightColors[vInt] = new Color32(255,231,99,128);
+	// 		} else {
+	// 			highlightColors[vInt] = m.colors32[vInt];
 	// 		}
 	// 	}
-	// 	Debug.Log ("Done Verts!");
-		
-	// 	for(z=0; z < size_z; z++) {
-	// 		for(x=0; x < size_x; x++) {
-	// 			int squareIndex = z * size_x + x;
-	// 			int triOffset = squareIndex * 6;
-	// 			triangles[triOffset + 0] = z * vsize_x + x + 		   0;
-	// 			triangles[triOffset + 1] = z * vsize_x + x + vsize_x + 0;
-	// 			triangles[triOffset + 2] = z * vsize_x + x + vsize_x + 1;
-				
-	// 			triangles[triOffset + 3] = z * vsize_x + x + 		   0;
-	// 			triangles[triOffset + 4] = z * vsize_x + x + vsize_x + 1;
-	// 			triangles[triOffset + 5] = z * vsize_x + x + 		   1;
-	// 		}
-	// 	}
-		
-	// 	Debug.Log ("Done Triangles!");
-		
-	// 	// Create a new Mesh and populate with the data
-	// 	Mesh mesh = new Mesh();
-	// 	mesh.vertices = vertices;
-	// 	mesh.triangles = triangles;
-	// 	mesh.normals = normals;
-	// 	mesh.uv = uv;
-		
-	// 	// Assign our mesh to our filter/renderer/collider
-	// 	// MeshFilter mesh_filter = GetComponent<MeshFilter>();
-	// 	// MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
-	// 	// MeshCollider mesh_collider = GetComponent<MeshCollider>();
-		
-	// 	// mesh_filter.mesh = mesh;
-	// 	// mesh_collider.sharedMesh = mesh;
-	// 	Debug.Log ("Done Mesh!");
-	// 	return mesh;
+
+	// 	m.colors32 = highlightColors;
 	// }
-
-		// foreach (Residue r in residueSeq) {
-		// 	Debug.Log("r: " + r.name
-		// 	+ "," + AminoAcid.OneLetterCode[r.name]
-		// 	+ ", triangles: " + r.triangles[0] + "," + r.triangles[1]
-		// 	+ ", vertices: " + r.vertices[0] + "," + r.vertices[1]
-		// 	+ ", normals: " + r.normals[0] + "," + r.normals[1]
-		// 	+ " triangle value at r.triangles[0]: " + triangles[r.triangles[0]]
-		// 	+ " triangle value at r.triangles[1]: " + triangles[r.triangles[1]]
-		// 	+ " also vertices: " + vertices[r.vertices[0]] + "," + vertices[r.vertices[1]] 
-		// 	+ " normals: " + normals[r.normals[0]] + "," + normals[r.normals[1]]);
-		// }

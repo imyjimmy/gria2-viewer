@@ -26,10 +26,6 @@ namespace VRModel.Algorithms {
 		// private Dictionary<string, string> pSeqs; //protein seq comparisons.
 		private Dictionary<string, int> pam100;
 
-		private DNAModel dna;
-		private RNAModel rna;
-		private ProteinSeqModel proteinSeq;
-
 		//also a Nuc -> string 
 
 		//pairwise
@@ -51,18 +47,6 @@ namespace VRModel.Algorithms {
 			mismatchPenalty = -1;
 			consideringTies = false;
 			pam100 = new Dictionary<string, int>();
-		}
-
-		public FASTAModel registerSequences(Seq type) {
-			switch (type) {
-				case Seq.DNA:
-				return registerDNAModel();
-				case Seq.RNA:
-				return registerRNAModel();
-				case Seq.AA:
-				return registerProteinSeqModel();
-			}
-			return null;
 		}
 
 		public void populatePAM() {
@@ -457,8 +441,8 @@ namespace VRModel.Algorithms {
 		*/
 
 		public void startPairwise(string name1, Seq type1, string name2, Seq type2) {
-			FASTAModel seqModel1 = registerSequences(type1);
-			FASTAModel seqModel2 = registerSequences(type2);
+			FASTAModel seqModel1 = SequenceModel.Instance.registerSeqType(type1);
+			FASTAModel seqModel2 = SequenceModel.Instance.registerSeqType(type2);
 
 			string key1 = seqModel1.niceName[name1];
 			string key2 = seqModel2.niceName[name2];
@@ -499,34 +483,6 @@ namespace VRModel.Algorithms {
 
 			//MSA Pileup. Access the Alignment object.
 		}
-
-
-
-		public DNAModel registerDNAModel() {
-			if (dna == null) {
-				dna = DNAModel.Instance;
-			}
-			// niceNameDNA = dna.niceName;
-			return dna;
-		}
-
-		public RNAModel registerRNAModel() {
-			if (rna == null) {
-				rna = RNAModel.Instance;
-			}
-			// niceNameRNA = rna.niceName;
-			return rna;
-		}
-
-		public ProteinSeqModel registerProteinSeqModel() {
-			if (proteinSeq == null) {
-				proteinSeq = ProteinSeqModel.Instance;
-			}
-			// niceNameProtein = ProteinSeqModel.niceName;
-			return proteinSeq;
-		}
-
-
 
 	}
 }

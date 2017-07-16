@@ -3,12 +3,14 @@ namespace VRModel.Monomer {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
+	using VRModel; //do I need to specify this?
 	
 	using System.Text.RegularExpressions;
 	// using UI;
 
 	public class ProteinSeqModel : FASTAModel {
 		// key contains: complement, indexStart, indexEnd, etc.
+		public List<Residue> protein3Dseq;
 
 		private static ProteinSeqModel _instance;
 		public static ProteinSeqModel Instance {

@@ -308,7 +308,7 @@ public class PostProcessing {
 
 	}
 	
-
+	//imyjimmy
 	public void GenerateMeshes(List<Vector3> vertices, List<Vector3> normals,
 										List<int> triangles, List<Color32> colors, int[] ss, List<Residue> residueSeq,
 	                                  string tag="RibbonObj", string gameobj="Ribbons") {

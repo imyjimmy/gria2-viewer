@@ -1073,7 +1073,7 @@ public class Ribbons {
 
 				ssglic.Add(ss[i]);
 			}
-			MoleculeModel.residueSeq[i] = r;
+			MoleculeModel.residueSeq[i] = r; //@imyjimmy
 		} //end for loop
 
 		if(RENDER_MODE == 0) {
