@@ -26,7 +26,7 @@ namespace VRModel.Monomer {
 		}
 
 		//Note: nice name mapping is seperate from reading the file, which just populates the data hashtable.
-		public void readFile(string path) {
+		public virtual void readFile(string path) {
 			Debug.Log("inside readFile for fasta data. path: " + path);
 			// string newPath = Application.dataPath + "/StreamingAssets";
 			StreamReader reader = new StreamReader(path);
@@ -61,7 +61,7 @@ namespace VRModel.Monomer {
 			reader.Close();
 		}
 
-		public void addData(ref string key, ref string descr, ref string val) {
+		public virtual void addData(ref string key, ref string descr, ref string val) {
 			string[] values = new string[2] {descr, val};
 			this.data.Add(key, values);
 			

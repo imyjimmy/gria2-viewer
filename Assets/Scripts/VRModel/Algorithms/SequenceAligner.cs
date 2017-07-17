@@ -458,11 +458,19 @@ namespace VRModel.Algorithms {
 		* Public Methods for interaction with other modules (particularly SequenceModel) below
 		*  ==========================
 		*/
-		public Consensus alignTo3D(string name, Seq type, List<Residue> protein3DSeq) {
+		public Consensus alignTo3DProtein(string name, Seq type, List<Residue> _3DSeq) {
 			FASTAModel model = getFASTAModel(type);
 			string key = model.niceName[name];
 
-			return new Consensus(); //lol
+			string seq = model.data[key][1];
+
+			Consensus c = new Consensus();
+			string id = name + "," + name + ":" + type.ToString + "," + Seq.AA.ToString();
+			c.id = id;
+
+			
+			//return new Consensus(); //lol
+
 		}
 
 		public void startPairwise(string name1, Seq type1, string name2, Seq type2) {

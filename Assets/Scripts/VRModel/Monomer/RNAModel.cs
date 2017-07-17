@@ -17,6 +17,8 @@ namespace VRModel.Monomer {
 	public class RNAModel : FASTAModel {
 		public List<int> exonStartIndices;
 
+		public List<List<string>> readingFrameSeq;
+
 		private static RNAModel _instance;
 		public static RNAModel Instance {
 			get {
@@ -41,5 +43,10 @@ namespace VRModel.Monomer {
 		// public void readFile(string path) : base readFile(string path) {
 			
 		// }
+
+		public void addData(ref string key, ref string descr, ref string val) : base addData(ref string key, ref string descr, ref string val){
+
+		}
+
 	}
 }
