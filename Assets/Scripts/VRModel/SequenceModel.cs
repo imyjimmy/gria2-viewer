@@ -15,7 +15,7 @@ namespace VRModel {
 	public class SequenceModel {
 		public DNAModel dna; //@todo: protected?
 		public RNAModel rna;
-		public ProteinSeqModel proteinSeq;
+		public ProteinModel proteinSeq;
 
 		public SequenceAligner seqAligner;
 		public Dictionary<string, Consensus> alignments;
@@ -45,7 +45,7 @@ namespace VRModel {
 				case Seq.RNA:
 				return registerRNAModel();
 				case Seq.AA:
-				return registerProteinSeqModel();
+				return registerProteinModel();
 			}
 			return null;
 		}
@@ -75,7 +75,7 @@ namespace VRModel {
 			Consensus alignment;
 			if (!alignments.TryGetValue(key, alignment)) { //alignment is null, create one.
 				if (proteinSeq == null) {
-					registerProteinSeqModel();
+					registerProteinModel();
 				}
 				Debug.Log("inside getPeptide");
 				alignment = seqAligner.alignTo3D(name, type, proteinSeq._3DSeq);
@@ -117,7 +117,7 @@ namespace VRModel {
 				}
 			} else { //make the alignment object.
 				if (proteinSeq == null) {
-					registerProteinSeqModel();
+					registerProteinModel();
 				}
 
 				alignment = seqAligner.alignTo3DProtein(name, type, proteinSeq._3DSeq);
@@ -170,11 +170,11 @@ namespace VRModel {
 			return rna;
 		}
 
-		private ProteinSeqModel registerProteinSeqModel() {
+		private ProteinModel registerProteinModel() {
 			if (proteinSeq == null) {
-				proteinSeq = ProteinSeqModel.Instance;
+				proteinSeq = ProteinModel.Instance;
 			}
-			// niceNameProtein = ProteinSeqModel.niceName;
+			// niceNameProtein = ProteinModel.niceName;
 			return proteinSeq;
 		}
 

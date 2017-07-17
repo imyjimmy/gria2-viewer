@@ -8,7 +8,7 @@ namespace VRModel.Monomer {
 	using System.Text.RegularExpressions;
 	// using UI;
 
-	public class ProteinSeqModel : FASTAModel {
+	public class ProteinModel : FASTAModel {
 		// key contains: complement, indexStart, indexEnd, etc.
 		public List<Residue> _3DSeq;
 
@@ -26,7 +26,7 @@ namespace VRModel.Monomer {
 			}
 		}
 
-		public ProteinSeqModel() : base() {
+		public ProteinModel() : base() {
 
 		}
 

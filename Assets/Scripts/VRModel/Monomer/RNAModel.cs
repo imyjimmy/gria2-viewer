@@ -3,21 +3,15 @@ namespace VRModel.Monomer {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
-	// using ParseData.IParsePDB;
-	// using System.Net;
-	// using System.Linq;
-	// using System;
-	// using Molecule.Model;
-	// using Molecule.Control;
-	// using System.Xml;
-	// using System.Text;	
 	using System.Text.RegularExpressions;
-	// using UI;
+	using VRModel;
+	using VRModel.Monomer;
 
 	public class RNAModel : FASTAModel {
 		public List<int> exonStartIndices;
 
-		public List<List<string>> readingFrameSeq;
+		// public List<List<string>> orfSeq;
+		public List<string> translatedSeq;
 
 		private static RNAModel _instance;
 		public static RNAModel Instance {
@@ -44,9 +38,38 @@ namespace VRModel.Monomer {
 			
 		// }
 
-		public void addData(ref string key, ref string descr, ref string val) : base addData(ref string key, ref string descr, ref string val){
-
+		public override void addData(ref string key, ref string descr, ref string val) {
+			// string v = string.Copy(val);
+			inferTranslation(val);
+			base.addData(key, descr, val);
 		}
 
+		public void inferTranslation(ref string val) {
+			translatedSeq = new List<string>();
+			for (int i=0; i< val.Length - 2 - offset; i++) {
+				string triplet = val[i+offset] + val[i+1+offset] + val[i+2+offset];
+				Debug.Log("RNAModel.inferTranslation: triplet: " + triplet);
+				string aa = GeneticCode.DNAtoAA[triplet];
+				translatedSeq.Add(aa);
+			}			
+		}
 	}
 }
+
+			// if (orfSeq == null) {
+			// 	for (int offset = 0; offset < 3; offset++) {
+			// 		List<string> currList = new List<string>();
+			// 		if (offset > 0) {
+			// 			Debug.Log("orfSeq[0]: " + orfSeq[0] + " currList: " + currList);
+			// 		}
+			// 		for (int i=0; i< val.Length - 2 - offset; i++) {
+			// 			string triplet = val[i+offset] + val[i+1+offset] + val[i+2+offset];
+			// 			Debug.Log("RNAModel.inferORFS: triplet: " + triplet);
+			// 			string aa = GeneticCode.DNAtoAA[triplet];
+			// 			currList.Add(aa);
+			// 		}
+			// 		orfSeq.Add(currList);
+			// 	}
+			// }
+
+			//return orfSeq;

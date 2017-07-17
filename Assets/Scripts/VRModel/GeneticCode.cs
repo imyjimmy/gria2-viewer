@@ -8,7 +8,7 @@ namespace VRModel {
 	public class GeneticCode {
 		//@todo: add hashtable representing degeneracy
 		
-		public static readonly Dictionary<string, string> DNAToAA = new Dictionary<string, string> {
+		public static readonly Dictionary<string, string> DNAtoAA = new Dictionary<string, string> {
 			{"ATG", "MET"},
 			{"ATA", "ILE"},
 			{"ATC", "ILE"},
@@ -90,7 +90,7 @@ namespace VRModel {
 			{"GGG", "GLY"}
 		};
 		
-		public static readonly Dictionary<string, string> RNAToAA = new Dictionary<string, string> {
+		public static readonly Dictionary<string, string> RNAtoAA = new Dictionary<string, string> {
 			{"AUG", "MET"},
 			{"AUA", "ILE"},
 			{"AUC", "ILE"},
@@ -172,7 +172,7 @@ namespace VRModel {
 			{"GGG", "GLY"}
 		};
 
-		public static readonly Dictionary<string, List<string>> AAToDNA = new Dictionary<string, List<string>>{
+		public static readonly Dictionary<string, List<string>> AAtoDNA = new Dictionary<string, List<string>>{
 			{"MET", new List<string>{"ATG"}},
 			{"ILE", new List<string>{"ATA", "ATC", "ATT"}},
 			{"LEU", new List<string>{"CTT", "CTC", "CTA", "CTG", "TTA", "TTG"}},

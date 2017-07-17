@@ -468,7 +468,7 @@ namespace VRModel.Algorithms {
 			string id = name + "," + name + ":" + type.ToString + "," + Seq.AA.ToString();
 			c.id = id;
 
-			
+			// startPairwise(name, type, name, Seq.AA);
 			//return new Consensus(); //lol
 
 		}
@@ -485,6 +485,17 @@ namespace VRModel.Algorithms {
 			
 			string seq1 = model1.data[key1][1];
 			string seq2 = model2.data[key2][1];
+
+			if (type1.Seq == Seq.RNA && type2.seq == Seq.AA) {
+				seq1 = "";
+				foreach( string s in (model1 as RNAModel).translatedSeq) {
+					string oneLetter = AminoAcid.OneLetterCode[s];
+					seq1 += oneLetter;
+				}
+				foreach ( Residue r in (model2 as ProteinSeqModel)._3DSeq) {
+					
+				}
+			}
 
 			createMatrices(seq1, seq2);
 			initializeMatrices();

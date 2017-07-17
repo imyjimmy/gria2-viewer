@@ -13,7 +13,8 @@ namespace VRModel.Algorithms {
 
 		public List<string> nucs { get; set; }
 		public List<int[]> cds { get; set; }
-		public List<List<string>> nucXaa; 
+		public List<List<string>> nucXaa;
+		public List<string> aas { get; set; }
 		
 		public Consensus() {
 			nucXaa = new List<List<string>>{ new List<string>(), new List<string>()};
