@@ -72,7 +72,7 @@ using ParseData.ParsePDB;
 using ParseData.IParsePDB;
 using ParseData.ParseFASTA; //@imyjimmy
 // using View.NucleicAcids;
-using Controller;
+using VRController;
 using UI;
 using Molecule.View;
 //using System.Net.Sockets;

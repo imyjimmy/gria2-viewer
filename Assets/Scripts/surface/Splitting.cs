@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Molecule.Model;
-using Controller;
+using VRController;
 using VRModel;
 using VRModel.Monomer;
 using VRModel.Algorithms; //might or might not need
