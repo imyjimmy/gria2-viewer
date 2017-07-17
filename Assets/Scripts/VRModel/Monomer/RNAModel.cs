@@ -15,6 +15,7 @@ namespace VRModel.Monomer {
 	// using UI;
 
 	public class RNAModel : FASTAModel {
+		public List<int> exonStartIndices;
 
 		private static RNAModel _instance;
 		public static RNAModel Instance {

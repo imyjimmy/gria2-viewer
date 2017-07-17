@@ -10,16 +10,17 @@ namespace VRModel.Monomer {
 
 	public class ProteinSeqModel : FASTAModel {
 		// key contains: complement, indexStart, indexEnd, etc.
-		public List<Residue> protein3Dseq;
+		public List<Residue> _3DSeq;
 
 		private static ProteinSeqModel _instance;
 		public static ProteinSeqModel Instance {
 			get {
 				if (_instance == null) {
-					ProteinSeqModel ProteinSeqModel = new ProteinSeqModel();
+					ProteinSeqModel p = new ProteinSeqModel();
 					//load the default file for this ProteinSeqModel.
-					ProteinSeqModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_protein_sequence_rattus_nrovegicus.fasta");
-					_instance = ProteinSeqModel;
+					p.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_protein_sequence_rattus_nrovegicus.fasta");
+					// 3DSeq = new List<Residue>();
+					_instance = p;
 				}
 				return _instance;
 			}

@@ -58,7 +58,7 @@ public class Splitting  {
 		// Small meshes don't need to be split
 		if(mData.vertices.Length < vertexLimit) {
 			Debug.Log("Within vertex limit.\nVertices size : "+vertices.Length);
-			Debug.Log("   triangle size : "+ triangles.Length);
+			Debug.Log("triangle size : "+ triangles.Length);
 			debug();
 			Mesh mesh = new Mesh();
 			mesh.vertices = vertices;
@@ -77,7 +77,7 @@ public class Splitting  {
 			FillMesh(resNum);
 		}
 
-		ProteinSeqModel.Instance.protein3Dseq = residueSeq;
+		ProteinSeqModel.Instance._3DSeq = residueSeq;
 
 		return meshes;
 	}
@@ -280,6 +280,7 @@ public class Splitting  {
 
 	//getResNum for the UV.
 	public int getResidueNum(Vector2 uv) {
+		int result;
 		Debug.Log("Splitting.cs: getResidueForUV(uv): " + uv);
 		if (DNA_Panel == null) {
 			DNA_Panel = DNAPanelController.Instance.DNA_Panel;
@@ -287,17 +288,17 @@ public class Splitting  {
 		if (DNA_Panel.GetComponent<Renderer>().enabled) {
 			if (seqModel == null) {
 				seqModel = new SequenceModel();
-
 			}
+
 			int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
 		 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);
 			Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc + ", seqModel: " + seqModel);
 			string nucStr = nuc.Split(':')[0];
 
 			//string niceName, int pos, Nuc n, Seq type
-			// seqModel.getPeptide("Rattus norvegicus", DNASeqNum, Nucleotide.strNuc[nucStr], Seq.DNA);
-			
-
+			int pos = seqModel.getPeptidePos("Rattus norvegicus", DNASeqNum, Nucleotide.StrToNuc(nucStr), Seq.DNA);
+			// residueSeq[x].name;
+			return pos;
 		} else {
 			//do it
 			Debug.Log("RNA panel");
@@ -322,7 +323,7 @@ public class Splitting  {
 			string nucStr = nuc.Split(':')[0];
 
 			//string niceName, int pos, Nuc n, Seq type
-			seqModel.getPeptide("Rattus norvegicus", DNASeqNum, Nucleotide.strNuc[nucStr], Seq.DNA);
+			int num = seqModel.getPeptide("Rattus norvegicus", DNASeqNum, Nucleotide.StrToNuc(nucStr), Seq.DNA);
 			
 
 		} else {

@@ -17,6 +17,8 @@ namespace VRModel.Monomer {
 
 	public class DNAModel : FASTAModel {
 		// key contains: complement, indexStart, indexEnd, etc.
+		public int indexStart;
+		public int indexEnd;
 
 		private static DNAModel _instance;
 		public static DNAModel Instance {

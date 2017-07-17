@@ -90,8 +90,8 @@ namespace Controller {
 			DNA_Model = DNAModel.Instance;	//get the DNA Model.
 			key = DNA_Model.niceName["Rattus norvegicus"];
 			seqLength = DNA_Model.data[key][1].Length;
-			textureY = seqLength / 128;
-			numRows = 24;
+			textureY = seqLength / textureX;
+			numRows = 18;
 
 			Debug.Log("numRows: " + numRows + " seqLength: " + seqLength + " textureX: " + textureX);
 			//Load UIs
@@ -147,7 +147,7 @@ namespace Controller {
 
 		public Vector2? getUVFromCursor(Transform t) {
 			if (t != null) {
-				RaycastHit? raycastHit = raycastHitCursor(t.position);
+				RaycastHit? raycastHit = raycastHitCursor(t);
 
 				if (raycastHit == null) {
 	            	return null;
@@ -173,8 +173,10 @@ namespace Controller {
         	}	
 		}	
 
-		public RaycastHit? raycastHitCursor(Vector3 rcWorldPos) {
-			Vector3 offset = new Vector3(0.0f, 1.0f, -1.5f); //new Vector3(0.0f,-.25f,-1.2f), 
+		public RaycastHit? raycastHitCursor(Transform t) {
+			Vector3 rcWorldPos = t.position;
+			Vector3 localPos = t.InverseTransformPoint(t.position);
+			Vector3 offset = new Vector3(0.0f, 1.0f, -0.35f); //new Vector3(0.0f,-.25f,-1.2f), 
 			Vector3 result = rcWorldPos - offset;
 			Debug.DrawLine(rcWorldPos, result ,Color.cyan);
 			// Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
@@ -262,7 +264,7 @@ namespace Controller {
 
 		public void updateNiceNameKey(string name) {
 			key = DNA_Model.niceName[name];
-			textureY = DNA_Model.data[key][1].Length / 128;
+			textureY = DNA_Model.data[key][1].Length / textureX;
 		}
 
 		//called by Molecule3D.ToggleDNA
@@ -308,7 +310,7 @@ namespace Controller {
 			Debug.Log("sequence: " + sequence);
 
 			for (int i=0; i< sequence.Length; i++) {
-				Nuc n = Nucleotide.charToNuc(sequence[i]);
+				Nuc n = Nucleotide.CharToNuc(sequence[i]);
 				texture.SetPixel(i % textureX, i / textureX, Nucleotide.defaultColor[n]);
 			}
 

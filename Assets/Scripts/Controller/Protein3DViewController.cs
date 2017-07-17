@@ -58,9 +58,15 @@ namespace Controller {
 			Debug.Log("added Update3DModelFocus to DNA and RNAPanelController");
 		}
 
+		public void deregister() {
+			DNAPanelController.UVCoordChangedEvent -= Update3DModelFocus;
+			RNAPanelController.UVCoordChangedEvent -= Update3DModelFocus;
+		}
+
 		public void Update3DModelFocus(Vector2 uv) {
 			Debug.Log("Update3DModelFocus, uv: " + uv.x + "," + uv.y);
-			//split.updateSplit
+			int pos = split.getResidueNum(uv);
+			split.updateSplit(pos);
 		}
 	}
 }

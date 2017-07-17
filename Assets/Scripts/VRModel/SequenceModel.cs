@@ -13,41 +13,42 @@ namespace VRModel {
 	//maps DNA, RNA, Peptide sequences.
 	//interacts with DNAModel, etc.
 	public class SequenceModel {
-		private DNAModel dna;
-		private RNAModel rna;
-		private ProteinSeqModel proteinSeq;
+		public DNAModel dna; //@todo: protected?
+		public RNAModel rna;
+		public ProteinSeqModel proteinSeq;
 
-		public List<string> alignment;
+		public SequenceAligner seqAligner;
+		public Consensus alignment { get; set; }
 
-		private static SequenceModel _instance;
-		public static SequenceModel Instance {
-			get {
-				if(_instance == null) {
-					SequenceModel t = new SequenceModel();
-					_instance = t;
-				}
-				return _instance;
-			}
-		}
+		// private static SequenceModel _instance;
+		// public static SequenceModel Instance {
+		// 	get {
+		// 		if(_instance == null) {
+		// 			SequenceModel t = new SequenceModel();
+		// 			_instance = t;
+		// 		}
+		// 		return _instance;
+		// 	}
+		// }
 
 		public SequenceModel() {
 			//blah blah...
-			SequenceAligner seqAligner = new SequenceAligner();
-			SequenceModel.Instance.registerSeqType(Seq.DNA);
-			SequenceModel.Instance.registerSeqType(Seq.RNA);
+			seqAligner = new SequenceAligner(this);
+			registerModel(Seq.DNA);
+			registerModel(Seq.RNA);
 		}
 
-		// public FASTAModel registerSeqType(Seq type) {
-		// 	switch (type) {
-		// 		case Seq.DNA:
-		// 		return registerDNAModel();
-		// 		case Seq.RNA:
-		// 		return registerRNAModel();
-		// 		case Seq.AA:
-		// 		return registerProteinSeqModel();
-		// 	}
-		// 	return null;
-		// }
+		private FASTAModel registerModel(Seq type) {
+			switch (type) {
+				case Seq.DNA:
+				return registerDNAModel();
+				case Seq.RNA:
+				return registerRNAModel();
+				case Seq.AA:
+				return registerProteinSeqModel();
+			}
+			return null;
+		}
 
 		public Nuc getDNA() {
 			//
@@ -58,30 +59,73 @@ namespace VRModel {
 		//int pos: the position we are interested in
 		//Nuc n : whether it's A|T|C|G
 		//Seq type: DNA or RNA. shouldn't be AA.
-		public string getPeptide(string name, int pos, Nuc n, Seq type) {
-			Debug.Log("inside getPeptide");
-			if (alignment == null) {
-				alignment = new List<string>();
+		public int getPeptide(string name, int pos, Nuc n, Seq type) {
+			string result;
+			int offset = 0;
+			if (alignment == null) { //make the alignment object.
+				if (proteinSeq == null) {
+					registerProteinSeqModel();
+				}
+
+				Debug.Log("inside getPeptide");
+				alignment = seqAligner.alignTo3D(name, type, proteinSeq._3DSeq);
+
+				
+				FASTAModel m = registerModel(type); //lol
+				if (m.GetType() == typeof(RNAModel)) {
+					offset = (m as RNAModel).exonStartIndices[0];
+				} else { //dna model, uses start index.
+					offset = (m as DNAModel).indexStart;
+				}
 			}
-			
-			ProteinSeqModel p = ProteinSeqModel.Instance;
 
-			seqAligner.align(name, type, p.protein3DSeq);
+			int index = alignment.getResNum(pos - offset , n);
+			if ( index == -1 ) {
+				return -1; //"-"
+			}
+			//result = proteinSeq._3DSeq[index].name;
 
-			// string key; 
-			// if (p.niceName.TryGetValue(name, out key)) {
-			// 	string[] vals = p.data[key];
-			// 	string seq = vals[1];
-			// } else {
-			// 	//lol
-			// }
-
-			return "haha";
+			// return result;
+			return index;
 		}
 
-		public int getResNum(string niceName, int pos, Nuc n, Seq type) {
-			return 0;
+		public int getPeptidePos(string name, int pos, Nuc n, Seq type) {
+			int offset = 0;
+			if (alignment == null) { //make the alignment object.
+				if (proteinSeq == null) {
+					registerProteinSeqModel();
+				}
+
+				Debug.Log("inside getPeptide");
+				alignment = seqAligner.alignTo3D(name, type, proteinSeq._3DSeq);
+
+				
+				FASTAModel m = registerModel(type); //lol
+				if (m.GetType() == typeof(RNAModel)) {
+					offset = (m as RNAModel).exonStartIndices[0];
+				} else { //dna model, uses start index.
+					offset = (m as DNAModel).indexStart;
+				}
+			}
+
+			int index = alignment.getResNum(pos - offset , n);
+			if ( index == -1 ) {
+				return -1; //"-"
+			}
+			//result = proteinSeq._3DSeq[index].name;
+
+			// return result;
+			return index;
+
 		}
+		//public getXPeptide() { ...@todo }
+
+		//niceName: rattus, mus musculus, etc.
+		//int pos: the position we are interested in
+		//Nuc n : whether it's A|T|C|G
+		//Seq type: DNA or RNA. shouldn't be AA.
+		//returns the residue number of the 3d protein to which the Nuc n int pos refers.
+
 		//everything is aligned with respect to Rattus nrovegicus
 		//what kind of output are we trying to get?
 		// position => % consensus as float, List<string> agree, List<string> disagree
@@ -96,29 +140,29 @@ namespace VRModel {
 		// }
 
 
-		// public DNAModel registerDNAModel() {
-		// 	if (dna == null) {
-		// 		dna = DNAModel.Instance;
-		// 	}
-		// 	// niceNameDNA = dna.niceName;
-		// 	return dna;
-		// }
+		private DNAModel registerDNAModel() {
+			if (dna == null) { //guarantees instance is only set once.
+				dna = DNAModel.Instance;
+			}
+			// niceNameDNA = dna.niceName;
+			return dna;
+		}
 
-		// public RNAModel registerRNAModel() {
-		// 	if (rna == null) {
-		// 		rna = RNAModel.Instance;
-		// 	}
-		// 	// niceNameRNA = rna.niceName;
-		// 	return rna;
-		// }
+		private RNAModel registerRNAModel() {
+			if (rna == null) {
+				rna = RNAModel.Instance;
+			}
+			// niceNameRNA = rna.niceName;
+			return rna;
+		}
 
-		// public ProteinSeqModel registerProteinSeqModel() {
-		// 	if (proteinSeq == null) {
-		// 		proteinSeq = ProteinSeqModel.Instance;
-		// 	}
-		// 	// niceNameProtein = ProteinSeqModel.niceName;
-		// 	return proteinSeq;
-		// }
+		private ProteinSeqModel registerProteinSeqModel() {
+			if (proteinSeq == null) {
+				proteinSeq = ProteinSeqModel.Instance;
+			}
+			// niceNameProtein = ProteinSeqModel.niceName;
+			return proteinSeq;
+		}
 
 	}
 }

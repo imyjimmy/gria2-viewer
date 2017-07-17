@@ -11,7 +11,7 @@ namespace VRModel.Monomer {
 
 	public class Nucleotide {
 
-		public static readonly Dictionary<Nuc, string> nucStr = new Dictionary<Nuc, string> {
+		private static readonly Dictionary<Nuc, string> nucStr = new Dictionary<Nuc, string> {
 			{Nuc.A, "A"},
 			{Nuc.T, "T"},
 			{Nuc.C, "C"},
@@ -19,7 +19,7 @@ namespace VRModel.Monomer {
 			{Nuc.X, "-"}
 		};
 
-		public static readonly Dictionary<string, Nuc> strNuc = new Dictionary<string, Nuc> {
+		private static readonly Dictionary<string, Nuc> strNuc = new Dictionary<string, Nuc> {
 			{"A", Nuc.A},
 			{"T", Nuc.T},
 			{"C", Nuc.C},
@@ -39,11 +39,11 @@ namespace VRModel.Monomer {
 
 		// };
 
-		public static Nuc charToNuc(char c) {
-			return strToNuc(Char.ToString(c));
+		public static Nuc CharToNuc(char c) {
+			return strNuc[Char.ToString(c)];
 		}
 
-		public static Nuc strToNuc(string x) {
+		public static Nuc StrToNuc(string x) {
 			try {
 				return (Nuc) Enum.Parse(typeof(Nuc), x);
 			}

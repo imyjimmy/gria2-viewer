@@ -151,7 +151,7 @@ namespace Controller {
 		}	
 
 		public RaycastHit? raycastHitCursor(Vector3 rcWorldPos) {
-			Vector3 offset = new Vector3(0.0f, 1.0f, -1.5f); //new Vector3(0.0f,-.25f,-1.2f), 
+			Vector3 offset = new Vector3(0.0f, 1.0f, -0.35f); //new Vector3(0.0f,-.25f,-1.2f), 
 			Vector3 result = rcWorldPos - offset;
 			Debug.DrawLine(rcWorldPos, result ,Color.cyan);
 			// Debug.DrawRay(new Vector3(0.0f,-.25f,-1.2f), rcWorldPos, Color.yellow);
@@ -263,7 +263,7 @@ namespace Controller {
 			Debug.Log("sequence: " + sequence);
 
 			for (int i=0; i< sequence.Length; i++) {
-				Nuc n = Nucleotide.charToNuc(sequence[i]);
+				Nuc n = Nucleotide.CharToNuc(sequence[i]);
 				texture.SetPixel(i % textureX, i / textureX, Nucleotide.defaultColor[n]);
 			}
 

@@ -11,6 +11,7 @@ namespace VRModel.Algorithms {
 	using VRModel.Monomer;
 
 	public class SequenceAligner {
+		public SequenceModel seqModel;
 
 		public int openGapPenalty { get; set; }
 		public int gapExtPenalty { get; set; }
@@ -39,7 +40,9 @@ namespace VRModel.Algorithms {
 		private Dictionary<string, float> msaDistances;
 		private Dictionary<string, float> msaTransformDistances;
 
-		public SequenceAligner() {
+		public SequenceAligner(SequenceModel _seqModel) {
+			seqModel = _seqModel;
+			Debug.Log("SequenceAligner(): seqModel: " + seqModel);
 			//set auto properties
 			openGapPenalty = -3;
 			gapExtPenalty = -1;
@@ -220,8 +223,7 @@ namespace VRModel.Algorithms {
 		*  next major step.
 		*  j is the column, i is the row.
 		*/
-		public void getAlignment(string key1, string key2, string seq1, string seq2) {
-				//first, get the max value of the bottom row of 'matrix'
+		public void getAlignment(string key1, string key2, string seq1, string seq2) { //first, get the max value of the bottom row of 'matrix'		
 			int max = 0;
 			int max_j_index = 0;
 			int max_i_index = 0;
@@ -349,24 +351,23 @@ namespace VRModel.Algorithms {
 		//START, L, T, D, LD, LT, TD, LTD
 		//j is the column, i is the row.
 		private void traverse(int i, int j, int max, string key1, string key2, string seq1, string seq2, string output) {
-
 			if (cell_origin[i, j] == Direction.START) {
 					prettyPrintAlignment(key1, key2, max, output);
 			} else if (cell_origin[i, j] == Direction.D) {
-        output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
-        // System.out.println("diag case reached: " + i + "," + j);
-        this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);
+        	output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
+        	// System.out.println("diag case reached: " + i + "," + j);
+        	this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);
 			} else if (cell_origin[i, j] == Direction.L) {
 				output += "-" + Char.ToString(seq2[j-1]);
 				this.traverse(i, j-1, max, key1, key2, seq1, seq2, output);
 			} else if (cell_origin[i, j] == Direction.T) {
-        output += Char.ToString(seq1[i-1]) + "-";
-        this.traverse(i-1, j, max, key1, key2, seq1, seq2, output);
+        		output += Char.ToString(seq1[i-1]) + "-";
+        		this.traverse(i-1, j, max, key1, key2, seq1, seq2, output);
 			} else if (cell_origin[i, j] == Direction.LD) { //left diag
 				//traversing diag
-        String temp = output;
-        output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
-        this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);  
+        		String temp = output;
+        		output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
+        		this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);  
 
         // System.out.println("tie, and there's less than 2 1k strings...");
         if ( consideringTies ) { //traversing left
@@ -419,36 +420,63 @@ namespace VRModel.Algorithms {
 			}
 		}
 
-    private void prettyPrintAlignment(string key1, string key2, int max, string alignment) {
-      string reverse = "";
-      for (int i = alignment.Length-1; i>=0; i--) {
-          reverse += Char.ToString(alignment[i]);
-      }
-      string top = "";
-      string bottom = "";
-      for (int i = 0; i < alignment.Length; i++) {
-          if (i % 2 == 0) {
-              bottom += Char.ToString(reverse[i]);
-          } else {
-              top += Char.ToString(reverse[i]);
-          }
-      }
-    }
+	    private void prettyPrintAlignment(string key1, string key2, int max, string alignment) {
+			string reverse = "";
+			for (int i = alignment.Length-1; i>=0; i--) {
+			  reverse += Char.ToString(alignment[i]);
+			}
+			string top = "";
+			string bottom = "";
+			for (int i = 0; i < alignment.Length; i++) {
+			  if (i % 2 == 0) {
+			      bottom += Char.ToString(reverse[i]);
+			  } else {
+			      top += Char.ToString(reverse[i]);
+			  }
+			}
+	    }
 
+	    private FASTAModel getFASTAModel(Seq type) {
+	    	FASTAModel seq;
+	    	switch (type) {
+				case Seq.DNA:
+				seq = seqModel.dna; //assumes that these have already been registered. 
+									//see private registermodel function in SequenceModel.
+				break;
+				case Seq.RNA:
+				seq = seqModel.rna; 
+				break;
+				case Seq.AA:
+				seq = seqModel.proteinSeq;
+				break;
+				default:
+				throw new ArgumentOutOfRangeException();
+			}
+			return seq;
+	    }
 		/* ==========================
-		* Public Methods for interaction with other modules below
+		* Public Methods for interaction with other modules (particularly SequenceModel) below
 		*  ==========================
 		*/
+		public Consensus alignTo3D(string name, Seq type, List<Residue> protein3DSeq) {
+			FASTAModel model = getFASTAModel(type);
+			string key = model.niceName[name];
+
+			return new Consensus(); //lol
+		}
 
 		public void startPairwise(string name1, Seq type1, string name2, Seq type2) {
-			FASTAModel seqModel1 = SequenceModel.Instance.registerSeqType(type1);
-			FASTAModel seqModel2 = SequenceModel.Instance.registerSeqType(type2);
+			FASTAModel model1;
+			FASTAModel model2;
 
-			string key1 = seqModel1.niceName[name1];
-			string key2 = seqModel2.niceName[name2];
+			model1 = getFASTAModel(type1);
+			model2 = getFASTAModel(type2);
+
+			string key1 = model1.niceName[name1];
+			string key2 = model2.niceName[name2];
 			
-			string seq1 = seqModel1.data[key1][1];
-			string seq2 = seqModel2.data[key2][1];
+			string seq1 = model1.data[key1][1];
+			string seq2 = model2.data[key2][1];
 
 			createMatrices(seq1, seq2);
 			initializeMatrices();

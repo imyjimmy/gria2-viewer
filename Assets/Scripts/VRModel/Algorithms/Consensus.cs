@@ -1,6 +1,7 @@
 /*
 */
 namespace VRModel.Algorithms {
+	using UnityEngine;
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -8,13 +9,34 @@ namespace VRModel.Algorithms {
 
 	public class Consensus { //consensus generator?
 
-		public List<string> comparisons { get; private set; }
-		public Seq type { get; private set; }
+		public string id { get; set; } //format: "niceName1, niceName2, ... : Seq.Type1, Seq.Type2, ... etc"
+
+		public List<string> nucs { get; set; }
+		public List<int[]> cds { get; set; }
+		public List<List<string>> nucXaa; 
 		
 		public Consensus() {
-
+			nucXaa = new List<List<string>>{ new List<string>(), new List<string>()};
 		}
 
-		
+		public int getResNum(int pos, Nuc n) {
+			string nuc = nucXaa[0][pos];
+			if (Nucleotide.NucToStr(n).Equals(nuc)) { //matches our data struct, implying 
+
+				return pos/3;
+			} else {
+				//something wrong
+				Debug.Log("something went wrong in Consensus.getResNum. res numbers and Nuc n do not match.");
+				//NOTE: it could be the case that the alignment went like so:
+				// ATG | GAG        | --- | GTA       | GGT |
+				// M   |  somehting | L   | something | something
+				//                    ^ 
+				// therefore getResNum(6, G) now refers to ---, L. instead of G of the original pos 6.
+				// such cases all fall into this branch.
+				return -1; 
+			}
+		}
+
+		//@todo: public int getNucPos(int pos, string residue) {}
 	}
 }
