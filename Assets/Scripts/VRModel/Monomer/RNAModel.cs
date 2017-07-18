@@ -19,6 +19,8 @@ namespace VRModel.Monomer {
 				if (_instance == null) {
 					RNAModel rnaModel = new RNAModel();
 					//load the default file for this RNAModel.
+					rnaModel.exonStartIndices = new List<int>();
+					rnaModel.exonStartIndices.Add(0); //default to this for now.
 					rnaModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_mRNA_rattus_nrovegicus.fasta");
 					_instance = rnaModel;
 				}

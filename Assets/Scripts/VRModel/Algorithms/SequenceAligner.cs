@@ -475,11 +475,30 @@ namespace VRModel.Algorithms {
 
 			Consensus c;
 			if (!seqModel.alignments.TryGetValue(id, out c)) { 
+				//map DNA, AA. onto nucXaa.
+				List<List<string>> mapping = new List<List<string>>();
+				List<string> nuc = new List<string>();
+				List<string> aa = new List<string>();
+
+				for (int i=0; i < seq.Length / 3; i++) {
+					string codon = "" + seq[i*3] + seq[i*3 + 1] + seq[i*3 + 2];
+					string AA3 = GeneticCode.DNAtoAA[codon];
+					string oneLetter = AminoAcid.OneLetterCode[AA3];
+					nuc.Add(codon);
+					aa.Add(oneLetter);
+				}
+
+				mapping.Add(nuc);
+				mapping.Add(aa);
+				c.nucMapAA = mapping;
+
 				startPairwise(name, type, name, Seq.AA);
-				c = seqModel.alignments[id];
+				
 				if (c == null) {
 					Debug.Log("pairwise algorithm did not work!!!");
 				}
+				
+				seqModel.alignments[id] = c;
 			}
 
 			return c;
