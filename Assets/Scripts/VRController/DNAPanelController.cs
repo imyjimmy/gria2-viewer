@@ -91,7 +91,7 @@ namespace VRController {
 			key = DNA_Model.niceName["Rattus norvegicus"];
 			seqLength = DNA_Model.data[key][1].Length;
 			textureY = seqLength / textureX;
-			numRows = 18;
+			numRows = 24;
 
 			Debug.Log("numRows: " + numRows + " seqLength: " + seqLength + " textureX: " + textureX);
 			//Load UIs
@@ -295,6 +295,11 @@ namespace VRController {
 			Debug.Log ("Done Mesh!");
 		}
 
+		public void UpdateMeshTexture(float v) {
+			MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
+			mesh_renderer.material.SetTextureOffset("_MainTex", new Vector2(0.0f, -1.0f * v));
+		}
+
 		public void BuildTexture() { //, ParseDNA parseDNA) {
 			//this.DNA_Model = parseDNA;
 
@@ -320,7 +325,8 @@ namespace VRController {
 
 		public void updatePosition(HoverItemDataSlider slider) {
 			float v = slider.Value;
-			Debug.Log("value: " + v);
+			Debug.Log("updating slider, value: " + v);
+			UpdateMeshTexture(v);
 			//1.0 = 0.0%, 0.0 = 100.0%;
 		}
 	}

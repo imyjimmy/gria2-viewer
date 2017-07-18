@@ -52,7 +52,9 @@ namespace VRModel {
 			{"ASP", "D"},
 			{"Aspartic Acid", "D"},
 			{"THR", "T"},
-			{"Threonine", "T"}
+			{"Threonine", "T"},
+			{"---", "-"},
+			{"STOP", "X"}
 		};
 
 		public static readonly Dictionary<string, string> FullName = new Dictionary<string, string> {
@@ -95,7 +97,8 @@ namespace VRModel {
 			{"ASP", "Aspartic Acid"},
 			{"D", "Aspartic Acid"}, 
 			{"THR", "Threonine"},
-			{"T", "Threonine"}
+			{"T", "Threonine"},
+			{"X", "STOP"}
 		};
 
 		public static readonly Dictionary<string, string> ThreeLetterCode = new Dictionary<string, string> {
@@ -139,7 +142,8 @@ namespace VRModel {
 			{"D", "ASP"},
 			{"Threonine", "THR"},
 			{"T", "THR"},
-			{"-", "---"}
+			{"-", "---"},
+			{"X", "STOP"}
 		};
 	}
 }

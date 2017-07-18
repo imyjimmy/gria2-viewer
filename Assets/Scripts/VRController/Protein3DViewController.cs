@@ -13,12 +13,13 @@ namespace VRController {
 		public Ribbons ribbons;
 		public PostProcessing postprocessing;
 		public Splitting split;
+		private bool SplitRegisteredEvents;
 
 		public delegate void ShowOnModelSelect();
 		public static event ShowOnModelSelect SelectedEvent;
 
 		public void Awake() {
-
+			SplitRegisteredEvents = false;
 		}
 
 		public void Start() {
@@ -44,6 +45,10 @@ namespace VRController {
 			}
 			if (split == null) {	
 				split = postprocessing.split;
+			}
+
+			if (!SplitRegisteredEvents) {
+				SplitRegisteredEvents = split.RegisterEvents();
 			}
 			// Debug.Log("splitting script: " + split); 
 		}

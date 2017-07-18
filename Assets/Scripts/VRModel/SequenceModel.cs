@@ -34,6 +34,7 @@ namespace VRModel {
 		public SequenceModel() {
 			//blah blah...
 			seqAligner = new SequenceAligner(this);
+			alignments = new Dictionary<string, Consensus>();
 			registerModel(Seq.DNA);
 			registerModel(Seq.RNA);
 		}

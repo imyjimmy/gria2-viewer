@@ -30,6 +30,17 @@ namespace VRModel.Monomer {
 
 		}
 
+		public override void addData(string key, string descr, string val) {
+			string[] values = new string[2] {descr, val};
+			this.data.Add(key, values);
+
+			string[] temp = values[0].Split('[');
+			string name = temp[1].Split(']')[0];
+			
+			this.niceName.Add(name, key);
+			this.niceName.Add(key, name);
+		}
+		
 		// public void readFile(string path) : base readFile(string path) {
 			
 		// }

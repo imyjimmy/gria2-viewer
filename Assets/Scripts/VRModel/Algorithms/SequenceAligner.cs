@@ -329,6 +329,7 @@ namespace VRModel.Algorithms {
 				if (i < this.matrix.GetLength(0)-1) { //not the bottom row
 						// System.out.println("not the bottom row");
 					for (int k = i; k < this.matrix.GetLength(0)-1; k++) {
+						
 						terminal += "" + "-" + seq1[k];
 								// System.out.println("terminal: " + terminal);
 					}
@@ -475,6 +476,7 @@ namespace VRModel.Algorithms {
 
 			Consensus c;
 			if (!seqModel.alignments.TryGetValue(id, out c)) { 
+				c = new Consensus();
 				//map DNA, AA. onto nucXaa.
 				List<List<string>> mapping = new List<List<string>>();
 				List<string> nuc = new List<string>();
@@ -483,6 +485,7 @@ namespace VRModel.Algorithms {
 				for (int i=0; i < seq.Length / 3; i++) {
 					string codon = "" + seq[i*3] + seq[i*3 + 1] + seq[i*3 + 2];
 					string AA3 = GeneticCode.DNAtoAA[codon];
+					// Debug.Log("AA3: " + AA3);
 					string oneLetter = AminoAcid.OneLetterCode[AA3];
 					nuc.Add(codon);
 					aa.Add(oneLetter);
@@ -526,6 +529,9 @@ namespace VRModel.Algorithms {
 				}
 				type1 = Seq.AA; //rna model seq goes undercover as the theoretical AA translation.
 
+				if (model2 == null) {
+					Debug.Log("model2 is null!!!!");
+				}
 				foreach ( Residue r in (model2 as ProteinModel)._3DSeq) {
 					string oneLetter = AminoAcid.OneLetterCode[r.name];
 					seq2 += oneLetter;

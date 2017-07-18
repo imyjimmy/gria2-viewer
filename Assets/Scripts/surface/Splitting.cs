@@ -48,10 +48,6 @@ public class Splitting  {
 		//get the mapping of each individual residue to its associated normals, triangles, vertices, colors.
 		residueSeq = mData.residueSeq;
 
-		//register a method to DNAPanel's UVChanged event.
-		DNAPanelController.UVCoordChangedEvent += getResidueForUV;
-		RNAPanelController.UVCoordChangedEvent += getResidueForUV;
-
 		if(UI.UIData.isGLIC)
 			vertexLimit = 59520;
 		
@@ -77,9 +73,17 @@ public class Splitting  {
 			FillMesh(resNum);
 		}
 
-		ProteinModel.Instance._3DSeq = residueSeq;
 
 		return meshes;
+	}
+
+	public bool RegisterEvents() { //i guess its more than just events lol
+		//register a method to DNAPanel's UVChanged event.
+		Debug.Log("Splitting.cs: events are registered!");
+		DNAPanelController.UVCoordChangedEvent += getResidueForUV;
+		RNAPanelController.UVCoordChangedEvent += getResidueForUV;
+		ProteinModel.Instance._3DSeq = residueSeq;
+		return true;
 	}
 	
 	private void FillMesh(int resNum) {
@@ -309,27 +313,40 @@ public class Splitting  {
 
 	public void getResidueForUV(Vector2 uv) {
 		Debug.Log("Splitting.cs: getResidueForUV(uv): " + uv);
-		if (DNA_Panel == null) {
-			DNA_Panel = DNAPanelController.Instance.DNA_Panel;
-		}
-		if (DNA_Panel.GetComponent<Renderer>().enabled) {
+
+		if (DNAPanelController.Instance.DNA_Panel == null) {
+			//do it
+			Debug.Log("RNA panel");
 			if (seqModel == null) {
 				seqModel = new SequenceModel();
-
 			}
-			int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
-		 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);
-			Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc + ", seqModel: " + seqModel);
+
+			int RNASeqNum = RNAPanelController.Instance.getSeqPos(uv);
+		 	string nuc = RNAPanelController.Instance.getNucAcidForUV(uv);
+			Debug.Log("Pos: " + RNASeqNum + ", RNA: " + nuc + ", seqModel: " + seqModel);
 			string nucStr = nuc.Split(':')[0];
 
 			//string niceName, int pos, Nuc n, Seq type
-			int num = seqModel.getPeptidePos("Rattus norvegicus", DNASeqNum, Nucleotide.StrToNuc(nucStr), Seq.DNA);
-			
-
+			int num = seqModel.getPeptidePos("Rattus norvegicus", RNASeqNum, Nucleotide.StrToNuc(nucStr), Seq.RNA);
+			Debug.Log("peptidePos: " + num);
 		} else {
-			//do it
-			Debug.Log("RNA panel");
+			if (DNAPanelController.Instance.DNA_Panel.GetComponent<Renderer>().enabled) {
+				if (seqModel == null) {
+					seqModel = new SequenceModel();
+				}
+
+				int DNASeqNum = DNAPanelController.Instance.getSeqPos(uv);
+			 	string nuc = DNAPanelController.Instance.getNucAcidForUV(uv);
+				Debug.Log("Pos: " + DNASeqNum + ", DNA: " + nuc + ", seqModel: " + seqModel);
+				string nucStr = nuc.Split(':')[0];
+
+				//string niceName, int pos, Nuc n, Seq type
+				int num = seqModel.getPeptidePos("Rattus norvegicus", DNASeqNum, Nucleotide.StrToNuc(nucStr), Seq.DNA);
+				
+				Debug.Log("peptidePos: " + num);
+			}
 		}
+
 	}
 
 	public void debug() {

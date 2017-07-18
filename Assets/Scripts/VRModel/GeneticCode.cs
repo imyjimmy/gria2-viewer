@@ -87,7 +87,8 @@ namespace VRModel {
 			{"GGT", "GLY"}, 
 			{"GGC", "GLY"},
 			{"GGA", "GLY"},
-			{"GGG", "GLY"}
+			{"GGG", "GLY"},
+			{"---", "---"}
 		};
 		
 		public static readonly Dictionary<string, string> RNAtoAA = new Dictionary<string, string> {

@@ -25,7 +25,7 @@ namespace VRController {
 		}
 
 		/* UI elements */
-		// public GameObject RNAPanel;		
+		public GameObject RNA_Panel;		
 		private GameObject Center;
 
 		private GameObject Look;
@@ -44,13 +44,13 @@ namespace VRController {
 
 		//textures...
 		private int textureX = 32;
-		private int textureY; // must be sequence length / 64.
+		private int textureY; // must be sequence length / textureX.
 		private int numRows; // 18
 		public float tileSize = 1.0f;
 		public bool viewGenerated = false;
-		public float uvPos = 0.0f;
+		private float textureOffset;
 
-		public Vector2 oldLookUV = new Vector2(-100.0f, -100.0f);
+		public Vector2 oldLookUV = new Vector2(0.0f, 0.0f);
 		public Vector2 oldUVRightIndex = new Vector2(-100.0f, -100.0f);
 
 		//event handing via delegates
@@ -110,7 +110,7 @@ namespace VRController {
 
 		public bool isPanelSelected() {
 			HoverIndicator hi = RightIndexSelection.GetComponent<HoverIndicator>();
-			return (hi.SelectionProgress >= 0.8f);
+			return (hi.SelectionProgress >= 0.5f);
 		}
 
 		public void turnOffUI() {
@@ -140,7 +140,7 @@ namespace VRController {
 	        	Vector2 uv = hit.textureCoord;
 	        	
 	        	uv.x = texture.width - uv.x*texture.width;
-	        	uv.y = uv.y * texture.height; //* 0.0255f 
+	        	uv.y = (uv.y + textureOffset) * texture.height; //* 0.0255f 
 
 	        	Debug.Log("RNA. textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
 	        	Debug.Log("RNA.  int coords: " + (int) uv.x + ", " + (int) uv.y);
@@ -168,7 +168,7 @@ namespace VRController {
 		public void updateLabel(GameObject label, Vector2 uv) {
 			Debug.Log("updating label.");
 			Text t = label.GetComponent<Text>();
-			t.text = getNucForUV(uv);
+			t.text = getNucAcidForUV(uv);
 		}
 
 		public int getSeqPos(Vector2 uv) {
@@ -177,7 +177,7 @@ namespace VRController {
 			return toReturn;
 		}
 
-		public string getNucForUV(Vector2 uv) {
+		public string getNucAcidForUV(Vector2 uv) {
 			string result = "";
 			if (key != null) {
 				int pos = ((int) uv.y) * textureX + (int) uv.x;
@@ -200,7 +200,8 @@ namespace VRController {
 		}
 
 		public void updateRightIndexUV(Vector2 uv) {
-			bool updateLabelCond = !oldUVRightIndex.Equals(new Vector2(0.0f, 0.0f));
+			Debug.Log("inside update UV. oldUV: " + oldUVRightIndex + " new uv: " + uv);
+			bool updateLabelCond = !oldUVRightIndex.Equals(new Vector2(-100.0f, -100.0f));
 			oldUVRightIndex = uv;
 			
 			RightIndexUI.SetActive(true);
@@ -224,7 +225,7 @@ namespace VRController {
 
 		public void updateNiceNameKey(string name) {
 			key = RNA_Model.niceName[name];
-			textureY = RNA_Model.data[key][1].Length / 128;
+			textureY = RNA_Model.data[key][1].Length / textureX;
 		}
 
 		//called by Molecule3D.ToggleRNA
@@ -255,6 +256,12 @@ namespace VRController {
 			// Debug.Log ("Done Mesh!");
 		}
 
+		public void UpdateMeshTexture(float v) {
+			MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
+			mesh_renderer.material.SetTextureOffset("_MainTex", new Vector2(0.0f, -1.0f * v));
+			textureOffset = -1.0f * v;
+		}
+
 		public void BuildTexture() {
 			string[] val = RNA_Model.data[key];
 			string sequence = val[1];
@@ -278,7 +285,8 @@ namespace VRController {
 
 		public void updatePosition(HoverItemDataSlider slider) {
 			float v = slider.Value;
-			Debug.Log("value: " + v);
+			Debug.Log("updating slider, value: " + v);
+			UpdateMeshTexture(v);
 			//1.0 = 0.0%, 0.0 = 100.0%;
 		}
 	}
