@@ -27,6 +27,8 @@ namespace VRModel.Monomer {
 					DNAModel dnaModel = new DNAModel();
 					//load the default file for this DNAModel.
 					dnaModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
+					dnaModel.indexStart = 179704629;
+					dnaModel.indexEnd = 179584302;
 					_instance = dnaModel;
 				}
 				return _instance;

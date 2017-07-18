@@ -131,6 +131,8 @@ public class Molecule3D:MonoBehaviour {
 	private GameObject RNA_Panel;
 	private GameObject RNA_Canvas;
 	private GameObject RNA_Slider;
+	private GameObject RNA_Show;
+	private HoverItemDataCheckbox RNA_Check;
 
 //	private Boolean flag=false;
 	private Boolean isControl=false;
@@ -280,6 +282,12 @@ public class Molecule3D:MonoBehaviour {
 		if (!DNA_Panel.active) {//turning on.
 			DNA_Panel.active = true;
 		}
+		
+		if (RNA_Panel.GetComponent<Renderer>().enabled && RNA_Check != null) {
+			// DNA_Panel.GetComponent<Renderer>().enabled = !DNA_Panel.GetComponent<Renderer>().enabled;
+			// DNA_Slider.SetActive(!DNA_Slider.activeInHierarchy);
+			RNA_Check.Select();
+		}
 
 		DNA_Panel.GetComponent<Renderer>().enabled = !DNA_Panel.GetComponent<Renderer>().enabled;
 
@@ -328,13 +336,16 @@ public class Molecule3D:MonoBehaviour {
 		Debug.Log("rnaPanelController: " + rnaPanelController);
 		
 		if (RNA_Panel.GetComponent<Renderer>().enabled && !rnaPanelController.viewGenerated) {
-			// DNA_Show = GameObject.Find("Hovercast/TransformAdjuster/Rows/DNA_row/Show DNA");
-			// DNA_Check = (HoverItemDataCheckbox) DNA_Show.GetComponent(typeof(HoverItemDataCheckbox));
+			RNA_Show = GameObject.Find("Hovercast/TransformAdjuster/Rows/RNA_row/Show RNA");
+			RNA_Check = (HoverItemDataCheckbox) RNA_Show.GetComponent(typeof(HoverItemDataCheckbox));
 			// Debug.Log("got DNA_Check.");
 			// Debug.Log("DNA_Check: " + DNA_Check);
-			rnaPanelController.BuildMeshUVs();
-			rnaPanelController.BuildTexture();
-			rnaPanelController.viewGenerated = !rnaPanelController.viewGenerated;
+			if (!rnaPanelController.viewGenerated) {
+				rnaPanelController.RNA_Panel = RNA_Panel;
+				rnaPanelController.BuildMeshUVs();
+				rnaPanelController.BuildTexture();
+				rnaPanelController.viewGenerated = !rnaPanelController.viewGenerated;
+			}
 		}
 	}
 	

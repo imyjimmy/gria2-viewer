@@ -24,7 +24,8 @@ namespace VRController {
 			}
 		}
 
-		/* UI elements */		
+		/* UI elements */
+		// public GameObject RNAPanel;		
 		private GameObject Center;
 
 		private GameObject Look;
@@ -199,6 +200,7 @@ namespace VRController {
 		}
 
 		public void updateRightIndexUV(Vector2 uv) {
+			bool updateLabelCond = !oldUVRightIndex.Equals(new Vector2(0.0f, 0.0f));
 			oldUVRightIndex = uv;
 			
 			RightIndexUI.SetActive(true);
@@ -215,7 +217,9 @@ namespace VRController {
 			GameObject label = (GameObject) c.transform.FindChild("Label").gameObject;
 			label.SetActive(true);
 
-			updateLabel(label, uv);
+			if (updateLabelCond) {
+				updateLabel(label, uv);
+			}
 		}
 
 		public void updateNiceNameKey(string name) {
