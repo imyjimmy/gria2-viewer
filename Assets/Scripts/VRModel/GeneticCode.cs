@@ -193,7 +193,8 @@ namespace VRModel {
 			{"CYS", new List<string>{"TGT", "TGC"}},
 			{"TRP", new List<string>{"TGG"}},
 			{"ARG", new List<string>{"CGT", "CGC", "CGA", "CGG", "AGA", "AGG"}},
-			{"GLY", new List<string>{"GGT", "GGC", "GGA", "GGG"}}
+			{"GLY", new List<string>{"GGT", "GGC", "GGA", "GGG"}},
+			{"---", new List<string>{"---"}}
 		};
 		//public static readonly Dictionary<string, List<string>> AAToRNA = new Dictionary<string, List<string>>();
 	}

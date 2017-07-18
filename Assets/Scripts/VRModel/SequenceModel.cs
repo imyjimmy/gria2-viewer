@@ -8,7 +8,6 @@ namespace VRModel {
 	using VRModel.Monomer;
 
 	public enum Seq {DNA, RNA, AA};
-
 	// public DNA
 	//maps DNA, RNA, Peptide sequences.
 	//interacts with DNAModel, etc.
@@ -19,6 +18,7 @@ namespace VRModel {
 
 		public SequenceAligner seqAligner;
 		public Dictionary<string, Consensus> alignments;
+
 
 		// private static SequenceModel _instance;
 		// public static SequenceModel Instance {
@@ -73,13 +73,13 @@ namespace VRModel {
 			}
 			
 			Consensus alignment;
-			if (!alignments.TryGetValue(key, alignment)) { //alignment is null, create one.
+			if (!alignments.TryGetValue(key, out alignment)) { //alignment is null, create one.
 				if (proteinSeq == null) {
 					registerProteinModel();
 				}
 				Debug.Log("inside getPeptide");
-				alignment = seqAligner.alignTo3D(name, type, proteinSeq._3DSeq);
-				alignment.key = key;
+				alignment = seqAligner.alignTo3DProtein(name, type, proteinSeq._3DSeq);
+				alignment.id = key;
 				alignments[key] = alignment;
 			} else { 
 				// (alignment != null)
@@ -110,7 +110,7 @@ namespace VRModel {
 			string key = name + "," + name + ":" + type.ToString() + "," + Seq.AA.ToString();
 			Debug.Log("getPeptidePos, key: " + key);
 			
-			if (alignments.TryGetValue(key, alignment)) {
+			if (alignments.TryGetValue(key, out alignment)) {
 				index = alignment.getResNum(pos - offset , n);
 				if ( index == -1 ) {
 					return -1; //"-"
@@ -125,7 +125,7 @@ namespace VRModel {
 				alignments[key] = alignment; //warning, overwrite the old val at the given key!
 			}
 
-			int index = alignment.getResNum(pos - offset , n);
+			index = alignment.getResNum(pos - offset , n);
 			if ( index == -1 ) {
 				return -1; //"-"
 			}

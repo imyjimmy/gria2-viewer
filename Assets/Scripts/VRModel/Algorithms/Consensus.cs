@@ -17,12 +17,16 @@ namespace VRModel.Algorithms {
 		public List<string> aas { get; set; }
 		
 		public Consensus() {
-			nucXaa = new List<List<string>>{ new List<string>(), new List<string>()};
+			// nucXaa = new List<List<string>>{ new List<string>(), new List<string>()};
 		}
 
 		public int getResNum(int pos, Nuc n) {
+			if (nucXaa == null) {
+				AAListToNuc();
+			}
+
 			string nuc = nucXaa[0][pos];
-			if (Nucleotide.NucToStr(n).Equals(nuc)) { //matches our data struct, implying 
+			if (Nucleotide.NucToStr(n).Equals(nuc)) { //matches our data struct, implying correct alignment
 
 				return pos/3;
 			} else {
@@ -36,6 +40,10 @@ namespace VRModel.Algorithms {
 				// such cases all fall into this branch.
 				return -1; 
 			}
+		}
+
+		public void AAListToNuc() { //populates nucXaa list. assumes first string is going back to RNA.
+
 		}
 
 		//@todo: public int getNucPos(int pos, string residue) {}

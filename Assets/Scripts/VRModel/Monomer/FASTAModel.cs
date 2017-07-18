@@ -41,7 +41,7 @@ namespace VRModel.Monomer {
 				if (m.Success) { // starts with >alpha-numeric_stuff , that's the key...
 					if (key != string.Empty && val != string.Empty) {	//add the prev key value pair, if available.
 						Debug.Log("key: " + key + " value: " + val + " descr: " + descr);
-						this.addData(ref key, ref descr, ref val);
+						this.addData(key, descr, val);
 						Debug.Log("key: " + key + " value: " + val + " descr: " + descr);
 					}
 
@@ -55,13 +55,14 @@ namespace VRModel.Monomer {
 			}
 
 			Debug.Log("key: " + key + " descr: " + descr + " value: " + val);
-			this.addData(ref key, ref descr, ref val);
+			this.addData(key, descr, val);
+			key = descr = val = string.Empty;
 			Debug.Log("key: " + key + " descr: " + descr + " value: " + val);
 
 			reader.Close();
 		}
 
-		public virtual void addData(ref string key, ref string descr, ref string val) {
+		public virtual void addData(string key, string descr, string val) {
 			string[] values = new string[2] {descr, val};
 			this.data.Add(key, values);
 			
@@ -74,7 +75,7 @@ namespace VRModel.Monomer {
 			this.niceName.Add(name, key);
 			this.niceName.Add(key, name);
 			
-			key = descr = val = string.Empty;
+			// key = descr = val = string.Empty;
 		}
 	}
 }

@@ -138,7 +138,8 @@ namespace VRModel {
 			{"Aspartic Acid", "ASP"},
 			{"D", "ASP"},
 			{"Threonine", "THR"},
-			{"T", "THR"}
+			{"T", "THR"},
+			{"-", "---"}
 		};
 	}
 }

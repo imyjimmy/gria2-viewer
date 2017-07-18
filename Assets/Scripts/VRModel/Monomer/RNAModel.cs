@@ -38,16 +38,16 @@ namespace VRModel.Monomer {
 			
 		// }
 
-		public override void addData(ref string key, ref string descr, ref string val) {
-			// string v = string.Copy(val);
-			inferTranslation(val);
+		public override void addData(string key, string descr, string val) {
+			string v = string.Copy(val);
+			inferTranslation(v);
 			base.addData(key, descr, val);
 		}
 
-		public void inferTranslation(ref string val) {
+		public void inferTranslation(string val) {
 			translatedSeq = new List<string>();
-			for (int i=0; i< val.Length - 2 - offset; i++) {
-				string triplet = val[i+offset] + val[i+1+offset] + val[i+2+offset];
+			for (int i=0; i< val.Length - 2; i++) {
+				string triplet = "" + val[i] + val[i+1] + val[i+2];
 				Debug.Log("RNAModel.inferTranslation: triplet: " + triplet);
 				string aa = GeneticCode.DNAtoAA[triplet];
 				translatedSeq.Add(aa);

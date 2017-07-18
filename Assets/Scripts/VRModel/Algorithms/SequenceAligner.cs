@@ -8,10 +8,12 @@ namespace VRModel.Algorithms {
 	using System.Text.RegularExpressions;
 
 	using VRModel;
+
 	using VRModel.Monomer;
 
 	public class SequenceAligner {
 		public SequenceModel seqModel;
+		public string id; // Consensus id in case of doing multiple comparisons in the seqModel.
 
 		public int openGapPenalty { get; set; }
 		public int gapExtPenalty { get; set; }
@@ -19,7 +21,6 @@ namespace VRModel.Algorithms {
 		public int mismatchPenalty { get; set; }
 		public bool consideringTies { get; set; }
 
-		public Seq seqType { get; set; }
 		//public Nuc nucType { get; set; }
 		public enum Direction : byte {START, L, T, D, LD, LT, TD, LTD };
 		
@@ -48,7 +49,7 @@ namespace VRModel.Algorithms {
 			gapExtPenalty = -1;
 			matchScore = 1;
 			mismatchPenalty = -1;
-			consideringTies = false;
+			consideringTies = false; //can set to true sometime later
 			pam100 = new Dictionary<string, int>();
 		}
 
@@ -71,36 +72,36 @@ namespace VRModel.Algorithms {
 					line = line.Replace(" ", "");
 					line = rgx.Replace(line, replacement);
 					column = line;
-					} else { //not the first line.
-						char aa = line[0];
-						for (int i = row-1; i < column.Length; i++) {
-							string number = line.Substring(3*i+2, 3*i+4);
-							number = rgx.Replace(number, replacement);
+				} else { //not the first line.
+					char aa = line[0];
+					for (int i = row-1; i < column.Length; i++) {
+						string number = line.Substring(3*i+2, 3*i+4);
+						number = rgx.Replace(number, replacement);
 
-							int val = int.Parse(number);
-							string key = "" + aa + column[i];
+						int val = int.Parse(number);
+						string key = "" + aa + column[i];
 
-							pam100.Add(key, val);
-						}
+						pam100.Add(key, val);
 					}
-					row++;
-				} while (!reader.EndOfStream);
+				}
+				row++;
+			} while (!reader.EndOfStream);
 
-			}
+		}
 
 		//1. create matrices.
-			private void createMatrices(string seq1, string seq2) {
-				matrix = new int[seq1.Length+1, seq2.Length+1];
-				cell_origin = new Direction[seq1.Length+1, seq2.Length+1];
-			}
+		private void createMatrices(string seq1, string seq2) {
+			matrix = new int[seq1.Length+1, seq2.Length+1];
+			cell_origin = new Direction[seq1.Length+1, seq2.Length+1];
+		}
 
 		//2. initialize matrices with default values.
-			private void initializeMatrices() {
-				for (int i = 0; i < this.matrix.GetLength(0); i++) {
-					if (i == 0) {
-						for (int j = 0; j < this.matrix.GetLength(1); j++) {
-							this.matrix[i, j] = 0;
-						} 
+		private void initializeMatrices() {
+			for (int i = 0; i < this.matrix.GetLength(0); i++) {
+				if (i == 0) {
+					for (int j = 0; j < this.matrix.GetLength(1); j++) {
+						this.matrix[i, j] = 0;
+					} 
 				} else { //i = 1, 2, etc.
 					this.matrix[i, 0] = 0;
 				}
@@ -123,16 +124,16 @@ namespace VRModel.Algorithms {
 
 		//3. needlemanWunsch
 		//global gap alignment begins...//
-		private void needlemanWunsch(string seq1, string seq2) {
+		private void needlemanWunsch(string seq1, string seq2, Seq type1, Seq type2) {
 			for (int i = 1; i < this.matrix.GetLength(0); i++) {
 				for (int j = 1; j < this.matrix.GetLength(1); j++) {
-					this.matrix[i, j] = this.scoreEntry(i, j, seq1, seq2);
+					this.matrix[i, j] = this.scoreEntry(i, j, seq1, seq2, type1, type2);
 				}
 			}
 		}
 
 		//3.1 part of needlemanWunsh
-		private int scoreEntry(int i, int j, string seq1, string seq2) {
+		private int scoreEntry(int i, int j, string seq1, string seq2, Seq type1, Seq type2) {
 			//from the left
 			int left = this.matrix[i, j-1] + this.decideGapPenalty(i, j, i, j-1);
 			int max = left; //max score so far. 
@@ -150,7 +151,7 @@ namespace VRModel.Algorithms {
 			}
 
 			//DG, LD, TD, ALL;
-			int diag = this.matrix[i-1, j-1] + this.matchOrMismatch(i-1, j-1, seq1, seq2);
+			int diag = this.matrix[i-1, j-1] + this.matchOrMismatch(i-1, j-1, seq1, seq2, type1, type2);
 			if (diag > max) {
 				max = diag;
 				this.cell_origin[i, j] = Direction.D;
@@ -194,9 +195,9 @@ namespace VRModel.Algorithms {
 		}
 
 		//3.3
-		private int matchOrMismatch(int i, int j, string seq1, string seq2) {
+		private int matchOrMismatch(int i, int j, string seq1, string seq2, Seq type1, Seq type2) {
 		// // System.out.println("sequence type: " + seq_type);
-			if (seqType != Seq.AA) { //nucleotide comparison.
+			if (type1 != Seq.AA && type2 != Seq.AA) { //nucleotide comparison.
 				if (seq1[i] == seq2[j]) {
 					return matchScore;
 				} else {
@@ -352,7 +353,7 @@ namespace VRModel.Algorithms {
 		//j is the column, i is the row.
 		private void traverse(int i, int j, int max, string key1, string key2, string seq1, string seq2, string output) {
 			if (cell_origin[i, j] == Direction.START) {
-					prettyPrintAlignment(key1, key2, max, output);
+				seqModel.alignments[id] = prettyPrintAlignment(key1, key2, max, output);
 			} else if (cell_origin[i, j] == Direction.D) {
         	output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
         	// System.out.println("diag case reached: " + i + "," + j);
@@ -369,71 +370,78 @@ namespace VRModel.Algorithms {
         		output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
         		this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);  
 
-        // System.out.println("tie, and there's less than 2 1k strings...");
-        if ( consideringTies ) { //traversing left
-        	temp += Char.ToString(seq1[i-1]) + "-";
-        	this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp);
-        }
+		        // System.out.println("tie, and there's less than 2 1k strings...");
+		        if ( consideringTies ) { //traversing left
+		        	temp += Char.ToString(seq1[i-1]) + "-";
+		        	this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp);
+		        }
 
 			} else if (cell_origin[i, j] == Direction.LT) {
 				//left top.
-        // System.out.println("tie between top, left. go left first. i, j: " + i + "," + j);
-        // System.out.println("tie, and there's less than 2 1k strings...");
-        String temp = output;
+        		// System.out.println("tie between top, left. go left first. i, j: " + i + "," + j);
+        		// System.out.println("tie, and there's less than 2 1k strings...");
+        		String temp = output;
         
-        output += "-" + Char.ToString(seq2[j-1]);
-        this.traverse(i, j-1, max, key1, key2, seq1, seq2, output); // go left
-        // System.out.println("done going left, now going top");
+        		output += "-" + Char.ToString(seq2[j-1]);
+        		this.traverse(i, j-1, max, key1, key2, seq1, seq2, output); // go left
+        		// System.out.println("done going left, now going top");
         
-        if ( consideringTies ) { //top
-        	temp += Char.ToString(seq1[i-1]) + "-";
-        	this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp);
-      	}  
-
+	        	if ( consideringTies ) { //top
+	        		temp += Char.ToString(seq1[i-1]) + "-";
+	        		this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp);
+	      		}  
 			} else if (cell_origin[i, j] == Direction.TD) {
-        String temp = output;
-        output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
-        this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);  //traversing diag
-        // System.out.println("tie, and there's less than 2 1k strings...");
-        
-        if ( consideringTies ) {
-	        temp += Char.ToString(seq1[i-1]) + "-";
-	        this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp);
-	      }
+	        String temp = output;
+	        output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
+	        this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);  //traversing diag
+	        // System.out.println("tie, and there's less than 2 1k strings...");
+	        
+		        if ( consideringTies ) {
+			    	temp += Char.ToString(seq1[i-1]) + "-";
+			    	this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp);
+			    }
 
 			} else if (cell_origin[i, j] == Direction.LTD) {
 				string temp = output;
 				string temp2 = output;
 
-        output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
-        this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);                 
-        
-        if ( consideringTies ) {
-	        //left 
-	        temp += "-" + Char.ToString(seq2[j-1]);
-	        this.traverse(i, j-1, max, key1, key2, seq1, seq2, temp);
+	        	output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
+	        	this.traverse(i-1, j-1, max, key1, key2, seq1, seq2, output);                 
+	        
+	        	if ( consideringTies ) {
+		        	//left 
+		        	temp += "-" + Char.ToString(seq2[j-1]);
+		        	this.traverse(i, j-1, max, key1, key2, seq1, seq2, temp);
 
-	        //top
-	        temp2 += Char.ToString(seq1[i-1]) + "-";
-	        this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp2);
-	      }
+		        	//top
+		        	temp2 += Char.ToString(seq1[i-1]) + "-";
+		        	this.traverse(i-1, j, max, key1, key2, seq1, seq2, temp2);
+		      	}
 			}
 		}
 
-	    private void prettyPrintAlignment(string key1, string key2, int max, string alignment) {
+	    private Consensus prettyPrintAlignment(string key1, string key2, int max, string alignStr) {
+			Consensus c;
 			string reverse = "";
-			for (int i = alignment.Length-1; i>=0; i--) {
-			  reverse += Char.ToString(alignment[i]);
+			for (int i = alignStr.Length-1; i>=0; i--) {
+			  reverse += Char.ToString(alignStr[i]);
 			}
 			string top = "";
 			string bottom = "";
-			for (int i = 0; i < alignment.Length; i++) {
+			for (int i = 0; i < alignStr.Length; i++) {
 			  if (i % 2 == 0) {
-			      bottom += Char.ToString(reverse[i]);
+			    bottom += Char.ToString(reverse[i]);
 			  } else {
-			      top += Char.ToString(reverse[i]);
+			    top += Char.ToString(reverse[i]);
 			  }
 			}
+			
+			c = new Consensus();
+			c.id = id;
+			c.aas = new List<string>();
+			c.aas.Add(top);
+			c.aas.Add(bottom);
+			return c;
 	    }
 
 	    private FASTAModel getFASTAModel(Seq type) {
@@ -461,19 +469,23 @@ namespace VRModel.Algorithms {
 		public Consensus alignTo3DProtein(string name, Seq type, List<Residue> _3DSeq) {
 			FASTAModel model = getFASTAModel(type);
 			string key = model.niceName[name];
-
 			string seq = model.data[key][1];
 
-			Consensus c = new Consensus();
-			string id = name + "," + name + ":" + type.ToString + "," + Seq.AA.ToString();
-			c.id = id;
+			id = name + "," + name + ":" + type.ToString() + "," + Seq.AA.ToString();
 
-			// startPairwise(name, type, name, Seq.AA);
-			//return new Consensus(); //lol
+			Consensus c;
+			if (!seqModel.alignments.TryGetValue(id, out c)) { 
+				startPairwise(name, type, name, Seq.AA);
+				c = seqModel.alignments[id];
+				if (c == null) {
+					Debug.Log("pairwise algorithm did not work!!!");
+				}
+			}
 
+			return c;
 		}
 
-		public void startPairwise(string name1, Seq type1, string name2, Seq type2) {
+		public void startPairwise(string name1, Seq type1, string name2, Seq type2) {	
 			FASTAModel model1;
 			FASTAModel model2;
 
@@ -486,21 +498,25 @@ namespace VRModel.Algorithms {
 			string seq1 = model1.data[key1][1];
 			string seq2 = model2.data[key2][1];
 
-			if (type1.Seq == Seq.RNA && type2.seq == Seq.AA) {
+			if (type1 == Seq.RNA && type2 == Seq.AA) {
 				seq1 = "";
+				seq2 = "";
 				foreach( string s in (model1 as RNAModel).translatedSeq) {
 					string oneLetter = AminoAcid.OneLetterCode[s];
 					seq1 += oneLetter;
 				}
-				foreach ( Residue r in (model2 as ProteinSeqModel)._3DSeq) {
-					
+				type1 = Seq.AA; //rna model seq goes undercover as the theoretical AA translation.
+
+				foreach ( Residue r in (model2 as ProteinModel)._3DSeq) {
+					string oneLetter = AminoAcid.OneLetterCode[r.name];
+					seq2 += oneLetter;
 				}
 			}
 
 			createMatrices(seq1, seq2);
 			initializeMatrices();
-			needlemanWunsch(seq1, seq2);
-			//getAlignment
+			needlemanWunsch(seq1, seq2, type1, type2);
+			getAlignment(name1, seq1, name2, seq2);
 		}
 
 		public void startMSA() {

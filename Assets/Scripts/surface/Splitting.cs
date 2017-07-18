@@ -77,7 +77,7 @@ public class Splitting  {
 			FillMesh(resNum);
 		}
 
-		ProteinSeqModel.Instance._3DSeq = residueSeq;
+		ProteinModel.Instance._3DSeq = residueSeq;
 
 		return meshes;
 	}
@@ -323,7 +323,7 @@ public class Splitting  {
 			string nucStr = nuc.Split(':')[0];
 
 			//string niceName, int pos, Nuc n, Seq type
-			int num = seqModel.getPeptide("Rattus norvegicus", DNASeqNum, Nucleotide.StrToNuc(nucStr), Seq.DNA);
+			int num = seqModel.getPeptidePos("Rattus norvegicus", DNASeqNum, Nucleotide.StrToNuc(nucStr), Seq.DNA);
 			
 
 		} else {

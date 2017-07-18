@@ -12,11 +12,11 @@ namespace VRModel.Monomer {
 		// key contains: complement, indexStart, indexEnd, etc.
 		public List<Residue> _3DSeq;
 
-		private static ProteinSeqModel _instance;
-		public static ProteinSeqModel Instance {
+		private static ProteinModel _instance;
+		public static ProteinModel Instance {
 			get {
 				if (_instance == null) {
-					ProteinSeqModel p = new ProteinSeqModel();
+					ProteinModel p = new ProteinModel();
 					//load the default file for this ProteinSeqModel.
 					p.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_protein_sequence_rattus_nrovegicus.fasta");
 					// 3DSeq = new List<Residue>();
