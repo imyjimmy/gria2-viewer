@@ -27,6 +27,7 @@ public class Splitting  {
 	private Vector3 CENTER = new Vector3(0f,0f,0f);
 	private PostProcessing pp;
 	private GameObject LoadBox;
+	private GameObject ProteinFocus;
 
 	private SequenceModel seqModel;
 	//@imyjimmy called by PostProcessing.GenerateMeshes(List<Vector3> vertices, List<Vector3> normals, 
@@ -157,8 +158,10 @@ public class Splitting  {
 		float x = 0.0f; float y = 0.0f; float z = 0.0f;
 
 		// oldUpdateSplit(resNum);
-
+		Debug.Log("the residue number: " + resNum + " residueSeq.Count: " + residueSeq.Count);
+		
 		Residue r = residueSeq[resNum];
+		Debug.Log("vertices: " + r.vertices);
 		Debug.Log("updatesplit: r.vertices.Length: " + r.vertices.Count);
 		foreach (int s in r.vertices) {
 			Debug.Log("s: " + meshes[0].vertices[s]);
@@ -232,14 +235,15 @@ public class Splitting  {
 		Mesh focusMesh = diamond(new Vector3(maxX, y_MaxX, z_MaxX), new Vector3(x_MaxY, maxY, z_MaxY), new Vector3(x_MaxZ, y_MaxZ, maxZ),
 			new Vector3(minX, y_MinX, z_MinX), new Vector3(x_MinY, minY, z_MinY), new Vector3(x_MinZ, y_MinZ, minZ), avgCoord);
 
-		GameObject ProteinFocus = new GameObject("ProteinFocus");
+		ProteinFocus = new GameObject("ProteinFocus");
 		ProteinFocus.transform.parent = LoadBox.transform;
 		ProteinFocus.transform.localPosition = avgCoord;
 		ProteinFocus.AddComponent<MeshFilter>();
 		ProteinFocus.AddComponent<MeshRenderer>();
 		
 		// Material material = ProteinFocus.GetComponent<Renderer>().material;
-		ProteinFocus.GetComponent<Renderer>().material = hlResMat;
+		// ProteinFocus.GetComponent<Renderer>().material = hlResMat;
+		ProteinFocus.GetComponent<Renderer>().material = new Material(Shader.Find("Outlined/Silhouetted Diffuse"));
 		var texture = new Texture2D(100, 100, TextureFormat.BGRA32, true);
  		ProteinFocus.GetComponent<Renderer>().material.mainTexture = texture;    		    		
 		
@@ -285,7 +289,7 @@ public class Splitting  {
 	//getResNum for the UV.
 	public int getResidueNum(Vector2 uv) {
 		int result;
-		Debug.Log("Splitting.cs: getResidueForUV(uv): " + uv);
+		Debug.Log("Splitting.cs: getResidueNum(uv): " + uv);
 		if (DNA_Panel == null) {
 			DNA_Panel = DNAPanelController.Instance.DNA_Panel;
 		}
@@ -329,6 +333,15 @@ public class Splitting  {
 			//string niceName, int pos, Nuc n, Seq type
 			int num = seqModel.getPeptidePos("Rattus norvegicus", RNASeqNum, Nucleotide.StrToNuc(nucStr), Seq.RNA);
 			Debug.Log("peptidePos: " + num);
+			
+			if (ProteinFocus != null) {
+				GameObject.Destroy(ProteinFocus);
+			}
+			updateSplit(num);
+
+			Residue r = residueSeq[num];
+			string resName = r.name;
+			RNAPanelController.Instance.setSeqPos(resName);
 		} else {
 			if (DNAPanelController.Instance.DNA_Panel.GetComponent<Renderer>().enabled) {
 				if (seqModel == null) {

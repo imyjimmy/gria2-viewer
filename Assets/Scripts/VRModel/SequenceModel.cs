@@ -18,6 +18,7 @@ namespace VRModel {
 
 		public SequenceAligner seqAligner;
 		public Dictionary<string, Consensus> alignments;
+		public Consensus currentAlignment;
 
 
 		// private static SequenceModel _instance;
@@ -106,29 +107,30 @@ namespace VRModel {
 				} else { //dna model, uses start index.
 					offset = (m as DNAModel).indexStart;
 				}
-			
-			Consensus alignment;
 			string key = name + "," + name + ":" + type.ToString() + "," + Seq.AA.ToString();
-			Debug.Log("getPeptidePos, key: " + key);
-			
-			if (alignments.TryGetValue(key, out alignment)) {
-				index = alignment.getResNum(pos - offset , n);
-				if ( index == -1 ) {
-					return -1; //"-"
-				}
-			} else { //make the alignment object.
-				if (proteinSeq == null) {
-					registerProteinModel();
-				}
+			if (currentAlignment == null || !currentAlignment.id.Equals(key)) {
+				Consensus alignment;
+				
+				Debug.Log("getPeptidePos, key: " + key);
+				
+				if (alignments.TryGetValue(key, out alignment)) {
+					currentAlignment = alignment;
+				} else { //make the alignment object.
+					if (proteinSeq == null) {
+						registerProteinModel();
+					}
+						alignment = seqAligner.alignTo3DProtein(name, type, proteinSeq._3DSeq);
+						alignment.id = key;
+						alignments[key] = alignment; //warning, overwrite the old val at the given key!
+					}
+					currentAlignment = alignment;
 
-				alignment = seqAligner.alignTo3DProtein(name, type, proteinSeq._3DSeq);
-				alignment.id = key;
-				alignments[key] = alignment; //warning, overwrite the old val at the given key!
-			}
-
-			index = alignment.getResNum(pos - offset , n);
-			if ( index == -1 ) {
-				return -1; //"-"
+				index = alignment.getResNum(pos - offset , n);		
+			} else {
+				index = currentAlignment.getResNum(pos - offset , n);
+				if (index == -1) {
+					Debug.Log("incorrect!!");
+				}
 			}
 
 			return index;
@@ -160,6 +162,7 @@ namespace VRModel {
 				dna = DNAModel.Instance;
 			}
 			// niceNameDNA = dna.niceName;
+			Debug.Log("SeqModel: registered DNA.");
 			return dna;
 		}
 
@@ -168,6 +171,7 @@ namespace VRModel {
 				rna = RNAModel.Instance;
 			}
 			// niceNameRNA = rna.niceName;
+			Debug.Log("SeqModel: registered RNA.");
 			return rna;
 		}
 
@@ -176,6 +180,7 @@ namespace VRModel {
 				proteinSeq = ProteinModel.Instance;
 			}
 			// niceNameProtein = ProteinModel.niceName;
+			Debug.Log("SeqModel: registered Protein");
 			return proteinSeq;
 		}
 

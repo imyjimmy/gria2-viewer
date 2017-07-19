@@ -33,6 +33,7 @@ namespace VRModel.Algorithms {
 		//pairwise
 		private int[,] matrix;
 		private Direction[,] cell_origin;
+		private List<string> result;
 
 		//MSA
 		private Dictionary<string, string> msaPairs;
@@ -55,8 +56,8 @@ namespace VRModel.Algorithms {
 
 		public void populatePAM() {
 			Debug.Log("inside populatePAM");
-			if (pam100 == null) {
-				pam100 = new Dictionary<string, int>();
+			if (pam100.Count == 0) {
+				populatePAM();
 			}
 			string column = string.Empty;
 			string line = string.Empty;
@@ -224,7 +225,7 @@ namespace VRModel.Algorithms {
 		*  next major step.
 		*  j is the column, i is the row.
 		*/
-		public void getAlignment(string key1, string key2, string seq1, string seq2) { //first, get the max value of the bottom row of 'matrix'		
+		public void getAlignment(string key1, string seq1, string key2, string seq2) { //first, get the max value of the bottom row of 'matrix'		
 			int max = 0;
 			int max_j_index = 0;
 			int max_i_index = 0;
@@ -328,8 +329,9 @@ namespace VRModel.Algorithms {
 			string terminal = "";
 				if (i < this.matrix.GetLength(0)-1) { //not the bottom row
 						// System.out.println("not the bottom row");
+					Debug.Log("terminalGapstring, seq1: " + seq1 + "\ni: " + i + "\nmatrix Length(0): " + this.matrix.GetLength(0));
 					for (int k = i; k < this.matrix.GetLength(0)-1; k++) {
-						
+
 						terminal += "" + "-" + seq1[k];
 								// System.out.println("terminal: " + terminal);
 					}
@@ -354,7 +356,7 @@ namespace VRModel.Algorithms {
 		//j is the column, i is the row.
 		private void traverse(int i, int j, int max, string key1, string key2, string seq1, string seq2, string output) {
 			if (cell_origin[i, j] == Direction.START) {
-				seqModel.alignments[id] = prettyPrintAlignment(key1, key2, max, output);
+				prettyPrintAlignment(key1, key2, max, output);
 			} else if (cell_origin[i, j] == Direction.D) {
         	output += Char.ToString(seq1[i-1]) + Char.ToString(seq2[j-1]);
         	// System.out.println("diag case reached: " + i + "," + j);
@@ -421,8 +423,7 @@ namespace VRModel.Algorithms {
 			}
 		}
 
-	    private Consensus prettyPrintAlignment(string key1, string key2, int max, string alignStr) {
-			Consensus c;
+	    private void prettyPrintAlignment(string key1, string key2, int max, string alignStr) {
 			string reverse = "";
 			for (int i = alignStr.Length-1; i>=0; i--) {
 			  reverse += Char.ToString(alignStr[i]);
@@ -437,12 +438,11 @@ namespace VRModel.Algorithms {
 			  }
 			}
 			
-			c = new Consensus();
-			c.id = id;
-			c.aas = new List<string>();
-			c.aas.Add(top);
-			c.aas.Add(bottom);
-			return c;
+			result = new List<string>();
+			Debug.Log("SeqAligner: " + alignStr);
+			Debug.Log("SeqAligner: " + top + " , " + bottom);
+			result.Add(top);
+			result.Add(bottom);
 	    }
 
 	    private FASTAModel getFASTAModel(Seq type) {
@@ -468,6 +468,9 @@ namespace VRModel.Algorithms {
 		*  ==========================
 		*/
 		public Consensus alignTo3DProtein(string name, Seq type, List<Residue> _3DSeq) {
+			if (pam100 == null) {
+				populatePAM();
+			}
 			FASTAModel model = getFASTAModel(type);
 			string key = model.niceName[name];
 			string seq = model.data[key][1];
@@ -493,6 +496,7 @@ namespace VRModel.Algorithms {
 
 				mapping.Add(nuc);
 				mapping.Add(aa);
+
 				c.nucMapAA = mapping;
 
 				startPairwise(name, type, name, Seq.AA);
@@ -501,6 +505,7 @@ namespace VRModel.Algorithms {
 					Debug.Log("pairwise algorithm did not work!!!");
 				}
 				
+				c.aas = result;
 				seqModel.alignments[id] = c;
 			}
 
@@ -538,6 +543,7 @@ namespace VRModel.Algorithms {
 				}
 			}
 
+			Debug.Log("startPairwise: seq1: " + seq1 + "," + seq2);
 			createMatrices(seq1, seq2);
 			initializeMatrices();
 			needlemanWunsch(seq1, seq2, type1, type2);

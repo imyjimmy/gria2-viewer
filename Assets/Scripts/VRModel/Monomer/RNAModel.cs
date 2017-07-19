@@ -48,10 +48,10 @@ namespace VRModel.Monomer {
 
 		public void inferTranslation(string val) {
 			translatedSeq = new List<string>();
-			for (int i=0; i< val.Length - 2; i++) {
-				string triplet = "" + val[i] + val[i+1] + val[i+2];
-				Debug.Log("RNAModel.inferTranslation: triplet: " + triplet);
+			for (int i=0; i< (val.Length - 2) / 3; i++) {
+				string triplet = "" + val[3*i] + val[3*i+1] + val[3*i+2];
 				string aa = GeneticCode.DNAtoAA[triplet];
+				Debug.Log("RNAModel.inferTranslation: triplet: " + triplet + " aa: " + aa);
 				translatedSeq.Add(aa);
 			}			
 		}

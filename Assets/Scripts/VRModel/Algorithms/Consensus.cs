@@ -14,19 +14,22 @@ namespace VRModel.Algorithms {
 		public List<string> nucs { get; set; }
 		public List<int[]> cds { get; set; }
 		public List<List<string>> nucMapAA { get; set; }
-		public List<string> nucXaa { get; set; } // {"ATG", "ACG"}
+		public List<string> nucXaa { get; set; } //
 		public List<string> aas { get; set; }
 		
 		public Consensus() {
-			// nucXaa = new List<List<string>>{ new List<string>(), new List<string>()};
+			nucXaa = new List<string>();
 		}
 
 		public int getResNum(int pos, Nuc n) {
-			if (nucXaa == null) {
+			if (nucXaa.Count == 0) {
 				AAConsensusNucList();
 			}
 
-			string nuc = Char.ToString(nucXaa[pos / 3][pos % 3]);
+			Debug.Log("pos: " + pos); 
+			Debug.Log("nucXaa[0]: " + nucXaa[0]);
+			Debug.Log(" nucXaa[0].Length: " + nucXaa[0].Length);
+			string nuc = Char.ToString(nucXaa[0][(pos / 3) + (pos % 3)]);
 			if (Nucleotide.NucToStr(n).Equals(nuc)) { //matches our data struct, implying correct alignment
 
 				return pos/3;
@@ -45,8 +48,8 @@ namespace VRModel.Algorithms {
 						numDashes++;
 					}
 				}
-
-				nuc = Char.ToString(nucXaa[(pos + numDashes) / 3][(pos + numDashes) % 3]);
+				Debug.Log("numDashes: " + numDashes);
+				nuc = Char.ToString(nucXaa[0][((pos + numDashes) / 3) + (pos + numDashes) % 3]);
 				if (Nucleotide.NucToStr(n).Equals(nuc)) {
 					return (pos + numDashes) / 3;
 				}
@@ -56,10 +59,15 @@ namespace VRModel.Algorithms {
 		}
 
 		//populates nucXaa list using nucMapAA. assumes first string in aas list is going back to RNA.
-		public void AAConsensusNucList() {  
+		public void AAConsensusNucList() {
 			string _1stStr = aas[0]; 	//| "LL-COOL-J" | <--Protein seq from mRNA translation.
 										//| "LLXCOOLXJ" | <--3D Protein seq from pdb file.
 			List<string> codons = nucMapAA[0];
+			Debug.Log("AAConsensusNucList: " + _1stStr); 
+			foreach (string s in codons){
+				Debug.Log("codon: " + s);
+			}
+
 			string nucFromAA = "";
 
 			int numDashes = 0;

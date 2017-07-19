@@ -140,7 +140,7 @@ namespace VRController {
 	        	Vector2 uv = hit.textureCoord;
 	        	
 	        	uv.x = texture.width - uv.x*texture.width;
-	        	uv.y = (uv.y + textureOffset) * texture.height; //* 0.0255f 
+	        	uv.y = uv.y * texture.height + textureOffset; //* 0.0255f 
 
 	        	Debug.Log("RNA. textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
 	        	Debug.Log("RNA.  int coords: " + (int) uv.x + ", " + (int) uv.y);
@@ -175,6 +175,13 @@ namespace VRController {
 			int toReturn = ((int) uv.y) * textureX + (int) uv.x;
 			// Debug.Log("getSeqPos(uv): " + uv + " pos: " + toReturn);
 			return toReturn;
+		}
+
+		public void setSeqPos(string name) {
+			Canvas c = RightIndexUI.GetComponentInChildren(typeof(Canvas)) as Canvas;
+			GameObject label = (GameObject) c.transform.FindChild("Label").gameObject;
+			Text t = label.GetComponent<Text>();
+			t.text += " res: " + name;
 		}
 
 		public string getNucAcidForUV(Vector2 uv) {
@@ -259,7 +266,7 @@ namespace VRController {
 		public void UpdateMeshTexture(float v) {
 			MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
 			mesh_renderer.material.SetTextureOffset("_MainTex", new Vector2(0.0f, -1.0f * v));
-			textureOffset = -1.0f * v;
+			textureOffset = ((-1.0f * v) * seqLength / textureX) / numRows;
 		}
 
 		public void BuildTexture() {
