@@ -29,13 +29,14 @@ namespace VRModel.Algorithms {
 			Debug.Log("pos: " + pos); 
 			Debug.Log("nucXaa[0]: " + nucXaa[0]);
 			Debug.Log(" nucXaa[0].Length: " + nucXaa[0].Length);
-			string nuc = Char.ToString(nucXaa[0][(pos / 3) + (pos % 3)]);
+			string nuc = Char.ToString(nucXaa[0][pos]);
 			if (Nucleotide.NucToStr(n).Equals(nuc)) { //matches our data struct, implying correct alignment
 
 				return pos/3;
 			} else {
 				//something wrong
 				//NOTE: it could be the case that the alignment went like so:
+				// 012   345          678   9
 				// ATG | GAG        | --- | GTA       | GGT |      //sequence mRNA
 				// M   |  somehting | L   | something | something  //sequence according to 3D protein
 				//                    ^ 
@@ -49,7 +50,7 @@ namespace VRModel.Algorithms {
 					}
 				}
 				Debug.Log("numDashes: " + numDashes);
-				nuc = Char.ToString(nucXaa[0][((pos + numDashes) / 3) + (pos + numDashes) % 3]);
+				nuc = Char.ToString(nucXaa[0][((pos + numDashes) / 3)]);
 				if (Nucleotide.NucToStr(n).Equals(nuc)) {
 					return (pos + numDashes) / 3;
 				}
