@@ -27,7 +27,7 @@ namespace VRModel.Monomer {
 			{"-", Nuc.X}
 		};
 
-		public static readonly Dictionary<Nuc, Color32> defaultColor = new Dictionary<Nuc, Color32> {
+		private static readonly Dictionary<Nuc, Color32> defaultColor = new Dictionary<Nuc, Color32> {
 			{Nuc.A, new Color32(68,155,255,255)}, 
 			{Nuc.C, new Color32(224,81,62,255)},
 			{Nuc.T, new Color32(244,220,110,255)},
@@ -35,9 +35,21 @@ namespace VRModel.Monomer {
 			{Nuc.X, new Color32(99,99,99,255)}
 		};
 
-		// public static readonly Dictionary<Nuc, Color32> defaultColor32 = new Dictionary<Nuc, Color32> {
+		private static readonly Dictionary<Nuc, Color32> dimColor = new Dictionary<Nuc, Color32> {
+			{Nuc.A, new Color32(60,101,147,255)},
+			{Nuc.C, new Color32(175,84,72,255)},
+			{Nuc.T, new Color32(183,169,108,255)},
+			{Nuc.G, new Color32(79,135,100,255)},
+			{Nuc.X, defaultColor[Nuc.X]}
+		};
 
-		// };
+		private static readonly Dictionary<Nuc, Color32> litColor = new Dictionary<Nuc, Color32> {
+			{Nuc.A, new Color32(25,132,255,255)},
+			{Nuc.C, new Color32(255,65,40,255)},
+			{Nuc.T, new Color32(255,224,89,255)},
+			{Nuc.G, new Color32(74,247,140,255)},
+			{Nuc.X, defaultColor[Nuc.X]}
+		};
 
 		public static Nuc CharToNuc(char c) {
 			return strNuc[Char.ToString(c)];
