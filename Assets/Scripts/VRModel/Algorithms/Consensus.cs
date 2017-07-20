@@ -76,8 +76,9 @@ namespace VRModel.Algorithms {
 				if (_1stStr[i].Equals('-')) {
 					numDashes++;
 					nucFromAA += "---";
-				} 
-				nucFromAA += codons[i-numDashes];
+				} else {
+					nucFromAA += codons[i-numDashes];	
+				}
 			}
 
 			nucXaa.Add(nucFromAA);
