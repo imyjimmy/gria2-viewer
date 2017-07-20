@@ -49,8 +49,13 @@ namespace VRModel.Algorithms {
 						numDashes++;
 					}
 				}
+
+				if (i == pos-1 && numDashes % 3 != 0) {			//eg : --- | -- - |
+					numDashes = ((numDashes / 3) + 1)*3;		//            ^
+				}
+
 				Debug.Log("numDashes: " + numDashes);
-				nuc = Char.ToString(nucXaa[0][((pos + numDashes) / 3)]);
+				nuc = Char.ToString(nucXaa[0][pos + numDashes]);
 				if (Nucleotide.NucToStr(n).Equals(nuc)) {
 					return (pos + numDashes) / 3;
 				}
