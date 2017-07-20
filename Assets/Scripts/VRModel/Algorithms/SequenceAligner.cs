@@ -467,6 +467,17 @@ namespace VRModel.Algorithms {
 		* Public Methods for interaction with other modules (particularly SequenceModel) below
 		*  ==========================
 		*/
+		public Consensus getCDS(string name, string id) {
+			Consensus c;
+			if (!seqModel.alignments.TryGetValue(id, out c)) {
+				c = new Consensus();
+			}
+			startPairwise(name, Seq.DNA, name, Seq.RNA);
+			c.nucs = result;
+			c.id = id;
+			return c;
+		}
+
 		public Consensus alignTo3DProtein(string name, Seq type, List<Residue> _3DSeq) {
 			if (pam100 == null) {
 				populatePAM();
@@ -502,7 +513,7 @@ namespace VRModel.Algorithms {
 				startPairwise(name, type, name, Seq.AA);
 				
 				if (c == null) {
-					Debug.Log("pairwise algorithm did not work!!!");
+					Debug.Log("pairwise algorithm did not work!!!"); //not sure how it follows that if c is null, alg didnt work.
 				}
 				
 				c.aas = result;

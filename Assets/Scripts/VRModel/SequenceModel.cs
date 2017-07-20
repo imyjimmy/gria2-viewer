@@ -57,6 +57,22 @@ namespace VRModel {
 			return Nuc.A;
 		}
 
+		public List<string> getCDS(string name) {
+			List<string> toReturn;
+			string key = name + "," + name + ":" + Seq.DNA.ToString() + "," + Seq.RNA.ToString();
+			Consensus c;
+			if (!alignments.TryGetValue(key, out c)) {
+				c = seqAligner.getCDS(name, key);
+			} else {
+				//
+			}
+			
+			c.id = key;
+			toReturn = c.nucs;
+			alignments[key] = c;
+			return toReturn;
+		}
+
 		//niceName: rattus, mus musculus, etc.
 		//int pos: the position we are interested in
 		//Nuc n : whether it's A|T|C|G
@@ -64,10 +80,9 @@ namespace VRModel {
 		public string getPeptide(string name, int pos, Nuc n, Seq type) {
 			string result;
 			string key = name + "," + name + ":" + type.ToString() + "," + Seq.AA.ToString();
-			
 			int index;
 			int offset = 0;
-			FASTAModel m = registerModel(type); //lol
+			FASTAModel m = registerModel(type); //could be either DNA or RNA.
 			if (m.GetType() == typeof(RNAModel)) {
 				offset = (m as RNAModel).exonStartIndices[0];
 			} else { //dna model, uses start index.

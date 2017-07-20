@@ -2,6 +2,7 @@
 namespace VRController {
 	using UnityEngine;
 	using UnityEngine.UI;
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using Hover.Core.Items.Types;
@@ -10,6 +11,7 @@ namespace VRController {
 
 	using VRModel;
 	using VRModel.Monomer;
+	using VRModel.Algorithms;
 
 	public class DNAPanelController : MonoBehaviour {
 		private static DNAPanelController _instance;
@@ -48,6 +50,7 @@ namespace VRController {
 		public DNAModel DNA_Model;
 		private string key;
 		private int seqLength;
+		private SequenceModel seqModel;
 
 		//textures...
 		private int textureX = 64;
@@ -56,6 +59,7 @@ namespace VRController {
 		public float tileSize = 1.0f;
 		public bool viewGenerated = false;
 		public float uvPos = 0.0f;
+		private float textureOffset = 0.0f;
 
 		public Vector2 oldLookUV = new Vector2(-100.0f, -100.0f);
 		public Vector2 oldUVRightIndex = new Vector2(-100.0f, -100.0f);
@@ -162,7 +166,7 @@ namespace VRController {
 	        	Vector2 uv = hit.textureCoord;
 	        	
 	        	uv.x = texture.width - uv.x*texture.width;
-	        	uv.y = uv.y * texture.height; //* 0.0255f 
+	        	uv.y = uv.y * texture.height + textureOffset; //* 0.0255f @imyjimmy
 
 	        	Debug.Log("textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
 	        	// Debug.Log("int coords: " + (int) uv.x + ", " + (int) uv.y);
@@ -298,6 +302,7 @@ namespace VRController {
 		public void UpdateMeshTexture(float v) {
 			MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
 			mesh_renderer.material.SetTextureOffset("_MainTex", new Vector2(0.0f, -1.0f * v));
+			textureOffset = -1.0f * v * (float) ((seqLength / textureX) / numRows);
 		}
 
 		public void BuildTexture() { //, ParseDNA parseDNA) {
@@ -328,6 +333,46 @@ namespace VRController {
 			Debug.Log("updating slider, value: " + v);
 			UpdateMeshTexture(v);
 			//1.0 = 0.0%, 0.0 = 100.0%;
+		}
+
+		/* EXPERIMENTAL GET CDS */
+		public void getCDS() {
+			if (seqModel == null) {
+				seqModel = new SequenceModel();
+			}
+			List<string> cds = seqModel.getCDS(key);
+			BuildCDSTexture(cds);
+		}
+
+		public void BuildCDSTexture(List<string> cds) {
+			Debug.Log("inside build CDS texture");
+			string sequence1 = cds[0];
+			string sequence2 = cds[1];
+
+			var texture = new Texture2D(textureX, textureY, TextureFormat.BGRA32, true);
+ 			GetComponent<Renderer>().material.mainTexture = texture;    		
+
+ 			//@todo: get new textureX, textureY values from alignment.
+   	  		texture.SetPixel(textureX, textureY, Color.black); // mark the end of this texture.
+   	  		
+			Debug.Log("sequence2: " + sequence2);
+			if (sequence1.Length != sequence2.Length) {
+				throw new Exception("two sequences from alignment are not the same length.");
+			}
+
+			for (int i=0; i< sequence1.Length; i++) {
+				Nuc n1 = Nucleotide.CharToNuc(sequence1[i]);
+				Nuc n2 = Nucleotide.CharToNuc(sequence2[i]);
+
+				if ( n1 == n2) {
+					texture.SetPixel(i % textureX, i / textureX, Nucleotide.litColor[n1]);
+				} else {
+					texture.SetPixel(i % textureX, i / textureX, Nucleotide.dimColor[n1]);
+				}
+			}
+
+     		texture.filterMode = FilterMode.Point;
+    	 	texture.Apply();	
 		}
 	}
 

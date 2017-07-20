@@ -48,7 +48,7 @@ namespace VRController {
 		private int numRows; // 18
 		public float tileSize = 1.0f;
 		public bool viewGenerated = false;
-		private float textureOffset;
+		private float textureOffset = 0.0f;
 
 		public Vector2 oldLookUV = new Vector2(0.0f, 0.0f);
 		public Vector2 oldUVRightIndex = new Vector2(-100.0f, -100.0f);
@@ -130,7 +130,6 @@ namespace VRController {
 	            	return null;
 				}
 				
-				
 				RaycastHit hit = raycastHit.Value;
 				Renderer renderer = hit.transform.GetComponent<Renderer>();
 				MeshCollider meshCollider = hit.transform.GetComponent<MeshCollider>();
@@ -140,7 +139,7 @@ namespace VRController {
 	        	Vector2 uv = hit.textureCoord;
 	        	
 	        	uv.x = texture.width - uv.x*texture.width;
-	        	uv.y = uv.y * texture.height + textureOffset; //* 0.0255f 
+	        	uv.y = uv.y * texture.height + textureOffset; //* 0.0255f @imyjimmy
 
 	        	Debug.Log("RNA. textureCoord: " + uv + " color: " + texture.GetPixel((int)uv.x, (int)uv.y));
 	        	Debug.Log("RNA.  int coords: " + (int) uv.x + ", " + (int) uv.y);
@@ -268,7 +267,7 @@ namespace VRController {
 			mesh_renderer.material.SetTextureOffset("_MainTex", new Vector2(0.0f, -1.0f * v));
 			textureOffset = ((-1.0f * v) * seqLength / textureX) / numRows;
 		}
-
+		
 		public void BuildTexture() {
 			string[] val = RNA_Model.data[key];
 			string sequence = val[1];

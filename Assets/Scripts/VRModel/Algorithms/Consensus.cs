@@ -48,10 +48,9 @@ namespace VRModel.Algorithms {
 					if ( _1stStr[i].Equals('-')) {
 						numDashes++;
 					}
-				}
-
-				if (i == pos-1 && numDashes % 3 != 0) {			//eg : --- | -- - |
-					numDashes = ((numDashes / 3) + 1)*3;		//            ^
+					if (i == pos-1 && numDashes % 3 != 0) {			//eg : --- | -- - |
+						numDashes = ((numDashes / 3) + 1)*3;		//            ^
+					}
 				}
 
 				Debug.Log("numDashes: " + numDashes);
