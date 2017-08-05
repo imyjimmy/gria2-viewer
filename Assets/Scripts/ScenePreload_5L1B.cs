@@ -96,7 +96,9 @@ public class ScenePreload_5L1B : MonoBehaviour {
 		Material mat = (Material) stuff[0];
 		RequestPDB requestPDB = (RequestPDB) stuff[1];
 		//5l1b_short
-		StartCoroutine(requestPDB.LoadPDBWWW("file:///C://Users/imyjimmy-vr/Documents/vr-projects/gria2-viewer/Assets/StreamingAssets/Gria2Data/5l1b_short.pdb"));  //5l1b //1l2y
+		//StartCoroutine(requestPDB.LoadPDBWWW("file:///C://Users/imyjimmy-vr/Documents/vr-projects/gria2-viewer/Assets/StreamingAssets/Gria2Data/5l1b_short.pdb"));  //5l1b //1l2y
+
+		StartCoroutine(requestPDB.LoadPDBWWW("file:///C://Users/imyjimmy-vr/Documents/vr-projects/gria2-viewer/Assets/StreamingAssets/CACNB2Data/5v2p.pdb"));  //5l1b //1l2y
 
 		// StartCoroutine(requestPDB.LoadPDBWWW("file:///C://Users/imyjimmy-vr/Documents/vr-projects/gria2-viewer/Assets/StreamingAssets/Gria2Data/1l2y.pdb"));  //5l1b //1l2y
 

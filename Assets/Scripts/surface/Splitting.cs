@@ -144,7 +144,7 @@ public class Splitting  {
 		this.meshes.Add(mesh);
 
 		//fix residue entry at currentIndex.
-		fixResidueEntry(currentIndex, verts.Count, norms.Count);
+		// fixResidueEntry(currentIndex, verts.Count, norms.Count);
 	}
 
 	//@imyjimmy proof of concept of adding/ changing the mesh.

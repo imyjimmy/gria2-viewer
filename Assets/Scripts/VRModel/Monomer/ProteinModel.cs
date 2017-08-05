@@ -18,7 +18,7 @@ namespace VRModel.Monomer {
 				if (_instance == null) {
 					ProteinModel p = new ProteinModel();
 					//load the default file for this ProteinSeqModel.
-					p.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_protein_sequence_rattus_nrovegicus.fasta");
+					p.readFile(Application.dataPath + "/StreamingAssets/CACNB2Data/CACNB2_Protein_rattus_norvegicus.fasta");
 					// 3DSeq = new List<Residue>();
 					_instance = p;
 				}

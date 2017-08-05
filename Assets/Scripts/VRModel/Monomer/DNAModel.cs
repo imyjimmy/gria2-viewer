@@ -26,9 +26,9 @@ namespace VRModel.Monomer {
 				if (_instance == null) {
 					DNAModel dnaModel = new DNAModel();
 					//load the default file for this DNAModel.
-					dnaModel.readFile(Application.dataPath + "/StreamingAssets/Gria2Data/gria2_dna_rattus_nrovegicus.fasta");
-					dnaModel.indexStart = 179704629;
-					dnaModel.indexEnd = 179584302;
+					dnaModel.readFile(Application.dataPath + "/StreamingAssets/CACNB2Data/CACNB2_DNA_rattus_norvegicus.fasta");
+					dnaModel.indexStart = 81673862;
+					dnaModel.indexEnd = 82019219;
 					_instance = dnaModel;
 				}
 				return _instance;
