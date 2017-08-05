@@ -383,49 +383,51 @@ public class Splitting  {
 		//List<Residue>
 		int i = 0;
 		while (i < residueSeq.Count) {
-			if (tIndex > residueSeq[i].triangles[1]) {
-				//nothing happens, keep going.
-			} else { //tIndex <= residueSeq[i].triangles[1]
-				//tri index must be less than or eq to the value in triangles[1] for the residue at index i.
-				if (residueSeq[i].triangles[0] > tIndex) {
-					//error case. this can't happen;
-				} else {
-					//a scenario where the triangle index splits a residue between two meshes.
-					//[0,1,2,3,4,5,6,7,8,9,10], length = 11
-					//         ^
-					//         |
-					//       tIndex
-					//[0,1,2,3],[4,5,6,7,8,9,10]
-					Residue r = residueSeq[i];
-					int last = r.triangles[1];
+			if (residueSeq[i].triangles != null) {
+				if (tIndex > residueSeq[i].triangles[1]) {
+					//nothing happens, keep going.
+				} else { //tIndex <= residueSeq[i].triangles[1]
+					//tri index must be less than or eq to the value in triangles[1] for the residue at index i.
+					if (residueSeq[i].triangles[0] > tIndex) {
+						//error case. this can't happen;
+					} else {
+						//a scenario where the triangle index splits a residue between two meshes.
+						//[0,1,2,3,4,5,6,7,8,9,10], length = 11
+						//         ^
+						//         |
+						//       tIndex
+						//[0,1,2,3],[4,5,6,7,8,9,10]
+						Residue r = residueSeq[i];
+						int last = r.triangles[1];
 
-					r.triangles[1] = tIndex-1;
-					r.triangles.Add(tIndex);
-					r.triangles.Add(last); //last is now "first"
+						r.triangles[1] = tIndex-1;
+						r.triangles.Add(tIndex);
+						r.triangles.Add(last); //last is now "first"
 
-					last = r.vertices[1];
-					r.vertices[1] = r.vertices[0]+vertLength-1;
-					r.vertices.Add(0);
-					r.vertices.Add(last - vertLength);
+						last = r.vertices[1];
+						r.vertices[1] = r.vertices[0]+vertLength-1;
+						r.vertices.Add(0);
+						r.vertices.Add(last - vertLength);
 
-					last = r.normals[1];
-					r.normals[1] = r.normals[0]+normLength-1;
-					r.normals.Add(0);
-					r.normals.Add(last - normLength);
-					
-					r.meshIndices.Add(this.meshes.Count-1);
-					r.meshIndices.Add(this.meshes.Count);
+						last = r.normals[1];
+						r.normals[1] = r.normals[0]+normLength-1;
+						r.normals.Add(0);
+						r.normals.Add(last - normLength);
+						
+						r.meshIndices.Add(this.meshes.Count-1);
+						r.meshIndices.Add(this.meshes.Count);
 
-					residueSeq[i] = r;
+						residueSeq[i] = r;
 
-					//go through all the previous residue Seqs and update their mesh numbers.
-					for (int y = 0; y < i; y++) {
-						residueSeq[y].meshIndices.Add(this.meshes.Count-1);
+						//go through all the previous residue Seqs and update their mesh numbers.
+						for (int y = 0; y < i; y++) {
+							residueSeq[y].meshIndices.Add(this.meshes.Count-1);
+						}
+
+						break;
 					}
 
-					break;
 				}
-
 			}
 			i++;
 		}
