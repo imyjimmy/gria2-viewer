@@ -10,7 +10,10 @@ namespace VRModel.Algorithms {
 	using VRModel;
 
 	using VRModel.Monomer;
-
+	
+	//Instances of this class execute pairwise alignments using the Needleman-Wunsch algorithm.
+	//Gets data from a SequenceModel instance, and populates a Consensus object upon completion.
+	//SequenceModel object stores hashes of Consensus objects. See Consensus documentation.  
 	public class SequenceAligner {
 		public SequenceModel seqModel;
 		public string id; // Consensus id in case of doing multiple comparisons in the seqModel.
@@ -35,13 +38,14 @@ namespace VRModel.Algorithms {
 		private Direction[,] cell_origin;
 		private List<string> result;
 
-		//MSA
+		//MSA @todo: implement MSA.
 		private Dictionary<string, string> msaPairs;
 		private Dictionary<string, string> msaPileup;
 		private Dictionary<string, float> msaScores;
 		private Dictionary<string, float> msaDistances;
 		private Dictionary<string, float> msaTransformDistances;
 
+		//sets inital parameters
 		public SequenceAligner(SequenceModel _seqModel) {
 			seqModel = _seqModel;
 			Debug.Log("SequenceAligner(): seqModel: " + seqModel);
@@ -54,6 +58,7 @@ namespace VRModel.Algorithms {
 			pam100 = new Dictionary<string, int>();
 		}
 
+		//PAM100 is a matrix of amino acid substitution likelihoods. Not all amino acids undergo mutation at the same rate.
 		public void populatePAM() {
 			Debug.Log("inside populatePAM");
 			if (pam100.Count == 0) {
@@ -423,7 +428,8 @@ namespace VRModel.Algorithms {
 			}
 		}
 
-	    private void prettyPrintAlignment(string key1, string key2, int max, string alignStr) {
+		//prints the alignment by adding it to result List.
+	    	private void prettyPrintAlignment(string key1, string key2, int max, string alignStr) {
 			string reverse = "";
 			for (int i = alignStr.Length-1; i>=0; i--) {
 			  reverse += Char.ToString(alignStr[i]);
@@ -443,14 +449,15 @@ namespace VRModel.Algorithms {
 			Debug.Log("SeqAligner: " + top + " , " + bottom);
 			result.Add(top);
 			result.Add(bottom);
-	    }
+	    	}
 
-	    private FASTAModel getFASTAModel(Seq type) {
-	    	FASTAModel seq;
-	    	switch (type) {
+		//We need to get the data model so we can actually perform the pairwise alignments.
+	    	private FASTAModel getFASTAModel(Seq type) {
+	    		FASTAModel seq;
+	    		switch (type) {
 				case Seq.DNA:
 				seq = seqModel.dna; //assumes that these have already been registered. 
-									//see private registermodel function in SequenceModel.
+							//see private registermodel function in SequenceModel.
 				break;
 				case Seq.RNA:
 				seq = seqModel.rna; 
@@ -462,11 +469,15 @@ namespace VRModel.Algorithms {
 				throw new ArgumentOutOfRangeException();
 			}
 			return seq;
-	    }
+		}
+		
 		/* ==========================
 		* Public Methods for interaction with other modules (particularly SequenceModel) below
 		*  ==========================
 		*/
+		//for a DNA sequence, get the coding regions 
+		//(pairwise align with corresponding mRNA sequence of Gria2 of the same species)
+		//@todo: untested and probably doesn't work yet.
 		public Consensus getCDS(string name, string id) {
 			Consensus c;
 			if (!seqModel.alignments.TryGetValue(id, out c)) {
@@ -477,7 +488,11 @@ namespace VRModel.Algorithms {
 			c.id = id;
 			return c;
 		}
-
+		
+		// translate(mRNA) <== pairwise-align ==> 3D Seq
+		// Consensus object will be loaded with the aa seq to aa seq (from 3d protein) alignments
+		// The first aa seq will actually have to map back to mRNA nucleotides. But that's job of Consensus.
+		// Not sure if it's the best way to do this however. Open to better ideas.
 		public Consensus alignTo3DProtein(string name, Seq type, List<Residue> _3DSeq) {
 			if (pam100 == null) {
 				populatePAM();
@@ -523,6 +538,7 @@ namespace VRModel.Algorithms {
 			return c;
 		}
 
+		//pairwise alignments begin here. 
 		public void startPairwise(string name1, Seq type1, string name2, Seq type2) {	
 			FASTAModel model1;
 			FASTAModel model2;
@@ -561,6 +577,7 @@ namespace VRModel.Algorithms {
 			getAlignment(name1, seq1, name2, seq2);
 		}
 
+		//@todo: implement this.
 		public void startMSA() {
 			
 			//get keys.
