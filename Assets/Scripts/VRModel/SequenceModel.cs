@@ -9,8 +9,12 @@ namespace VRModel {
 
 	public enum Seq {DNA, RNA, AA};
 	// public DNA
+	
 	//maps DNA, RNA, Peptide sequences.
 	//interacts with DNAModel, etc.
+	//Holds references to DNAModel, RNAModel, etc. this allows it to call a SequenceAligner instance and very easily pass 
+	//in the apropriate data models to use. 
+	//Other modules will interact with pairwise alignments (and other algorithms in the future) primarily via SequenceModel
 	public class SequenceModel {
 		public DNAModel dna; //@todo: protected?
 		public RNAModel rna;
@@ -52,11 +56,13 @@ namespace VRModel {
 			return null;
 		}
 
+		//@todo get the DNA consensus for a given (position ?)
 		public Nuc getDNA() {
 			//
 			return Nuc.A;
 		}
 
+		//get intron / exon regions DNA Panel is activated and Show CDS is pressed.
 		public List<string> getCDS(string name) {
 			List<string> toReturn;
 			string key = name + "," + name + ":" + Seq.DNA.ToString() + "," + Seq.RNA.ToString();
@@ -150,7 +156,8 @@ namespace VRModel {
 
 			return index;
 		}
-		//public getXPeptide() { ...@todo }
+		
+		//public getXPeptide() { ...@todo } not really sure what this method is planned to be.
 
 		//niceName: rattus, mus musculus, etc.
 		//int pos: the position we are interested in
